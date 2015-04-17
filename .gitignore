@@ -1,2 +1,6 @@
 _site/
 .sass-cache/
+import.xml
+import.rb
+Gemfile
+Gemfile.lock
