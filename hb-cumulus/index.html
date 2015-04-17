@@ -1,0 +1,176 @@
+---
+layout: page
+title: 'Habari Plugin: HB-Cumulus'
+date: 2008-12-12 03:48:59.000000000 -08:00
+tags:
+- plugin
+- HB-Cumulus
+- Flash
+- tag cloud
+- Habari
+type: page
+published: true
+---
+<p>HB-Cumulus is a Flash-based tag cloud for <a href="http://habariproject.org">Habari</a> that displays your tag cloud in a rotating sphere just like the one shown here.  </p>
+<p>HB-Cumulus is a port of the brilliant <a href="http://wordpress.org/extend/plugins/wp-cumulus/">WP-Cumulus</a> by <a href="http://www.roytanck.com">Roy Tanck</a>.</p>
+<div class="alertbox">
+<h3>Security Vulnerabilities in HB-Cumulus 1.8 and Lower</h3>
+<p>This week an announcement was made on <strong><a href="http://seclists.org/fulldisclosure/2011/Sep/101" target="_blank">Seclist.org about a XSS and HTML Injection vulnerability</a></strong> in all the plugins that use the original tagcloud.swf from WP-Cumulus (which includes HB-Cumulus).</p>
+<p>The XSS vulnerability was fixed a long long time ago in HB-Cumulus - 19 December 2009 - so if you are running HB-Cumulus 1.4 or earlier, you <strong>MUST</strong> upgrade.</p>
+<p>The HTML Injection issue isn't really much of an issue and I go into details <strong><a href="http://lildude.co.uk/security-vulnerabilities-in-hb-cumulus-14-and-lower" target="_blank">here</a></strong> as to why I don't believe this is a real issue to be concerned about.  I have however modified the <code>tagcloud.swf</code> that comes with HB-Cumulus 1.9 and later to mitigate this issue.</div>
+<figure class="center"><!-- hb-cumulus --><br />
+<figcaption>HB-Cumulus in action</figcaption>
+</figure>
+<h2>Features</h2>
+<p>I've implemented all the functionality offered by WP-Cumulus 1.23 and a bit more. Functionality includes the ability to set...</p>
+<ul>
+<li>your own width and height</li>
+<li>your own foreground, background (or transparent) and highlight colours</li>
+<li>a rotation speed to suit your needs</li>
+<li>the keywords to exclude</li>
+<li>the number of keywords to display</li>
+<li>the minimum and maximum font sizes to use</li>
+</ul>
+<p>... all within the Habari plugin configuration options.  There is even a preview of the cloud within the configuration section so you can see your changes taking effect as you make your changes.</p>
+<p>At this time, HB-Cumulus is the ONLY port of Roy's WP-Cumulus that is NOT vulnerable to the HTML Injection vulnerability detailed at <a href="http://seclists.org/fulldisclosure/2011/Sep/101" target="_blank">http://seclists.org/fulldisclosure/2011/Sep/101</a> as I've fixed it.</p>
+<h2>Limitations</h2>
+<p>Sadly, there is a limitation: non-latin characters may not show up.  To quote Roy's own words on the <a href="http://wordpress.org/extend/plugins/wp-cumulus/faq/">WP-Cumulus FAQ</a> page:</p>
+<blockquote><p>Because of the way Flash handles text, only Latin characters are supported in the current version. This is due to a limitation where in order to be able to animate text fields smoothly the glyphs need to be embedded in the movie.</p></blockquote>
+<p>You can however modify the flash code yourself by following Roy's instructions <a href="http://www.roytanck.com/2008/08/04/how-to-add-more-characters-to-wp-cumulus/">here</a>.  Unfortunately, I can't do this as I don't have the necessary tools to modify the flash files.</p>
+<p>You may want to check the above post for other character sets that have already been created.</p>
+<p>Apparently, <a href="http://typophile.com/node/45368">Flash 10 introduces a new text-element type</a> that may resolve the issue with non-embedded characters.  As soon as Roy updates WP-Cumulus to support this, I'll update HB-Cumulus.</p>
+<h2>Download</h2>
+<h3>For Habari 0.7 and Trunk:</h3>
+<p class="center"><a class="button red" href="http://lildude.co.uk/downloads/git/plugins/hb-cumulus-1.9.zip" title="Download hb-culumus-1.9.zip">HB Cumulus<br />1.9 (zip)</a>   <a class="button red" href="http://lildude.co.uk/downloads/git/plugins/hb-cumulus-1.9.tar.bz2" title="Download hb-culumus-1.9.tar.bz2">HB Cumulus<br />1.9 (tar.bz2)</a></p>
+<p>You can now also download and contribute to HB-Cumulus via <a href="https://github.com/lildude/HB-Cumulus" target="_blank">GitHub</a>.</p>
+<div style="clear: both"></div>
+<p>Note: The cloud you see at the top of this page is running the above version on the latest SVN trunk build (which is later than 0.7.1).</p>
+<h2>Installation</h2>
+<ol>
+<li>Download either the zip or tar.bz2 to your server</li>
+<li>Extract the contents to a temporary location (not strictly necessary, but just being safe)</li>
+<li>Move the <code>hb-cumulus</code> directory to <code>/path to habari/user/plugins/</code></li>
+<li>Refresh your plugins page, activate the plugin and configure it to suit your needs</li>
+</ol>
+<p>That's it.  You're ready to implement the cloud into your site.</p>
+<h2>Upgrade</h2>
+<p>The upgrade procedure is as per the installation procedure, but please ensure you de-activate the plugin first.  This will ensure your current settings are merged with any new options that may be added with later releases and reduce the chances of encountering errors.</p>
+<h2>Usage</h2>
+<p>There are three ways you can use HB-Cumulus:</p>
+<ol>
+<li><strong>Using Blocks</strong><br />
+    You can show the tag cloud in any area offered by your theme by adding the HB-Cumulus block to that area within the Theme configuration.</li>
+<li><strong>Embed directly into any page or post:</strong><br />
+    You can show the cloud in any page or post by putting the following code into the post/page content:</p>
+<pre class="prettyprint">&lt;!-- hb-cumulus --&gt;</pre>
+<p>     This tag is NOT case sensitive, so don't worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.</li>
+<li><strong>Via the your theme files directly:</strong><br />
+     If your theme does not have support for blocks, you can show the cloud anywhere on your site within your theme files, for example in the sidebar using:</p>
+<pre class="prettyprint">$theme-&gt;hbcumulus();</pre>
+<p>    This IS case sensitive, so you\'ll need to be sure you get it 100% correct.</li>
+</ol>
+<h2>Additional Information</h2>
+<p>There are a couple of things worth noting for reference purposes:</p>
+<ul>
+<li>Deactivating the plugin will remove your saved options from Habari.</li>
+<li>The following options are provided by default:
+<ul>
+<li>Width: 500px <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Height: 375px <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Tag Colour: #FFFFFF - to ensure reliable behaviour, HB-Cumulus will only accept 6 character HTML colours <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Second Colour: #FFFFFF (Optional) <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Highlight Colour: #FFFFFF (Optional) <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Background Colour: #333333 <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Speed: 100 - percentage <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Transparent: FALSE <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>Distribute Tags Evenly: FALSE <a title="See WP-Cumulus Notes" href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">*</a></li>
+<li>List of tags to hide: <not set> - this can be a space or comma separated list</not></li>
+<li>Minimum Font Size: 8pt</li>
+<li>Maximum Font Size: 25pt</li>
+<li>Number of Tags to show: 30 - set to 0 or nothing to show all tags.</li>
+</ul>
+<p>More information about the options marked with * can be found on the WP-Cumulus <a href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">notes page</a>.
+</li>
+<li>Hb-Cumulus will work with Habari 0.7 and later.  It'll probably work with earlier releases too, but this is no longer supported.</li>
+<li>Habari has no concept or categories at the moment, so it'll only show tags.  If and when Habari gets categories, I'll update the plugin to support categories too.</li>
+</ul>
+<h2>Revision History</h2>
+<ul>
+<li>1.9
+<ul>
+<li>Revert back to using a HB-Cumulus specific tagcloud.swf file as HB-Cumulus<br />
+      to resolve the mild HTML Injection vulnerability detailed at <a href="http://seclists.org/fulldisclosure/2011/Sep/101" target="_blank">http://seclists.org/fulldisclosure/2011/Sep/101</a></li>
+<li>Updated help documentation to list all implementation methods</li>
+<li>Removed redundant code.</li>
+</ul>
+</li>
+<li>1.8
+<ul>
+<li>Clear cache whenever an entry or tag is created, updated or deleted.</li>
+<li>Call the swfobject.js from Google's hosting if users choose this method to render the cloud.</li>
+<li>HB-Cumulus now downloads the tagcloud.swf file directly from the WP-Cumulus SVN repository so it doesn't need to be bundled anymore.</li>
+</ul>
+</li>
+<li>1.7
+<ul>
+<li>Improved compatibility with new Habari 0.7 form configuration forms.</li>
+<li>Fixed calling a non-static method statically.  This issue came to light due to a change in the underlying Vocabulary code in Habari.</li>
+</ul>
+</li>
+<li>1.6
+<ul>
+<li>Added block support for the svn version</li>
+</ul>
+</li>
+<li>1.5
+<ul>
+<li>Updated tagcloud.swf to that provided with WP-Cumulus 1.23</li>
+<li>Updated swfobject to version 2.2</li>
+<li>Improved HTML validity</li>
+<li>Updated code to compatible with new tags related functionality within Habari SVN code (aka 0.7 when it's released).</li>
+</ul>
+</li>
+<li>1.4
+<ul>
+<li>Tidied up code a bit better and minimised swfobject.js</li>
+<li>Made compatible with Habari SVN code (aka 0.7 when it's released)</li>
+</ul>
+</li>
+<li>1.3
+<ul>
+<li>Updated tagcloud.swf to that provided with WP-Cumulus 1.20, which includes the following relevant fixes:<br />
+			<em>"Fixed the mouse pointer not changing to a hand when hovering tags."</em><br />
+			<em>"Adds Turkish language support to the Flash movie."</em></li>
+<li>Like the WP-Cumulus plugin, I've also added a "Compatibility" option.  When this is enabled, the plugin will not use the SWFObject Javascript to embed the Flash.</li>
+</ul>
+</li>
+<li>1.2
+<ul>
+<li>Updated tagcloud.swf to that provided with WP-Cumulus 1.1.8, which includes a change that... <em>"Improves mouse detection in transparent mode"</em></li>
+<li>Also sorted out the documenting of the licensing of the various components</li>
+<li>Updated directory structure to better separate the 3rd party components and the HB-Cumulus code</li>
+<li>Tidied up code to adhere closer to the Habari coding standards</li>
+</ul>
+</li>
+<li>1.1
+<ul>
+<li>Fixed bug in plugin de-activation that caused HB-Cumulus settings to be deleted when other plugins were de-activated.</li>
+</ul>
+</li>
+<li>1.0
+<ul>
+<li>Initial release.</li>
+</ul>
+</li>
+</ul>
+<p>That's it folks.  If you encounter any problems please log an issue on <a href="https://github.com/lildude/HB-Cumulus" target="_blank">GitHub</a>.</p>
+<p><!-- or queries, please feel free to leave a comment on the post that relates to the release you're using:</p>
+<ul>
+<li><strong><a href="http://lildude.co.uk/hb-cumulus-15/">HB-Cumulus 1.5</a></strong></li>
+<li><strong><a href="http://lildude.co.uk/hb-cumulus-14/">HB-Cumulus 1.4</a></strong> (Comments now closed)</li>
+<li><strong><a href="http://lildude.co.uk/hb-cumulus-13/">HB-Cumulus 1.3</a></strong> (Comments now closed)</li>
+<li><strong><a href="http://lildude.co.uk/hb-cumulus-12/">HB-Cumulus 1.2</a></strong> (Comments now closed)</li>
+<li><strong><a href="http://lildude.co.uk/hb-cumulus-11/">HB-Cumulus 1.1</a></strong>  (Comments now closed)</li>
+<li><strong><a href="http://lildude.co.uk/announcing-hb-cumulus-10/">Announcing HB-Cumulus 1.0</a></strong> (Comments now closed)</li>
+</ul>
+<p>--></p>
