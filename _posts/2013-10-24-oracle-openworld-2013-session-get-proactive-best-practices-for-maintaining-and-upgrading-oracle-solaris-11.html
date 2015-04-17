@@ -1,0 +1,119 @@
+---
+layout: post
+title: 'Oracle OpenWorld 2013 Session - Get Proactive: Best Practices for Maintaining
+  and Upgrading Oracle Solaris 11'
+date: 2013-10-24 08:40:46.000000000 -07:00
+tags:
+- Oracle
+- OpenWorld
+- presentation
+type: post
+published: false
+---
+<p>This post contains the speaker notes for the technical portion of the <a href="https://oracleus.activeevents.com/2013/connect/sessionDetail.ww?SESSION_ID=8255" target="_blank">Get Proactive: Best Practices for Maintaining and Upgrading Oracle Solaris</a> session presented by me and my director, Dr Rob Hulme, at Oracle OpenWorld 2013.</p>
+<p>The notes in this post are written to be read alongside the slide deck embedded below (<a href="http://lildude.co.uk/user/sites/lildude.co.uk/files/downloads/OpenWorld-2013.pdf">download</a>) starting on slide 18.</p>
+<div class="center"><iframe src="http://docs.google.com/viewer?url=http%3A%2F%2Flildude.co.uk%2Fuser%2Fsites%2Flildude.co.uk%2Ffiles%2Fdownloads%2FOpenWorld-2013.pdf&embedded=true" width="800" height="500" style="border: none;"></iframe></div>
+<hr />
+<h3>SLIDE 18: Installing Oracle Solaris 11</h3>
+<p>As with previous releases of Solaris, there are multiple methods to install Solaris 11.</p>
+<p>If you're using x86 hardware, you can use the Live media in the form of the CD/DVD image or a USB image and then use either the graphical or text based installers to install the OS.  You can of course just "play" with the LiveCD without damaging the OS actually installed on the disk.</p>
+<p>If you're using SPARC, unfortunately, you only have the option of the text based installer when installing from a DVD.  At this time there is no support for installing Solaris 11 onto SPARC using a USB memory stick - it's in the pipeline - and there's no LiveCD.</p>
+<p>If you prefer hands off automatic installation, you can use the new Automated Installer (AI).  This is a highly customisable replacement for Jumpstart for Solaris 11 clients.  If you're already using Jumpstart, Oracle provides a convenient Jumpstart Migration Utility called js2ai which will convert your Solaris 10 jumpstart rules and profiles to a format compatible with AI manifest entries which you can then use to install Solaris 11 clients. You can find details on transitioning from Jumpstart to AI in the <a href="http://docs.oracle.com/cd/E26502_01/html/E28981/index.html" target="_blank">Transitioning From Oracle Solaris 10 Jumpstart to Oracle Solaris 11.1 Automated Installer</a> guide.</p>
+<p>Before you get too worried about having to have two installation servers, jumpstart can co-exist on a Solaris 11 server and be used to install Solaris 10 and lower clients. Your Solaris 11 AI server can be an jumpstart server, but your Solaris 10 jumpstart server can NOT be an AI server.</p>
+<p>If the default OS images aren't quite what you would like or need, you can also use the Distribution Constructor to build your own customized Solaris 11 distribution which you can then install via the same methods you can the normal Solaris 11 distribution.</p>
+<p>Unfortunately, Flash archives aren't an option available to install Solaris 11 clients.  However good news: Unified Archives, a far superior archive-based replacement is planned for Solaris 11.2.  Unified Archives will allow you to clone, migrate and recover systems as you could with Flash archives, but also zones.  You'll be able to include several different instances within a single archive and then install just the instance you want using something like Automated Installer. You'll also be able to create bootable recovery media from a Unified Archive.  As you can no doubt imagine, this is some pretty exciting stuff so keep an eye out for Solaris 11.2 if you're missing this functionality.</p>
+<hr />
+<h3>SLIDE 19: Migrating from Solaris 10 to Solaris 11</h3>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E36219/index.html" target="_blank">Migrating for Solaris 10 to Solaris 11</a> isn't very hard, though it can be a little time consuming.</p>
+<p>You start off by installing Oracle Solaris 11 onto a system and configuring it to suit your needs.  If you're happy and able to run everything within Solaris 11, then you're all set and ready to go.</p>
+<p>If however you have a requirement to still run applications certified for Solaris 10, then you can migrate your Solaris 10 physical systems to <a href="http://docs.oracle.com/cd/E26502_01/html/E29024/gjfbq.html" target="_blank">Solaris 10 branded zones on Solaris 11</a>. This is great for consolidation and allows you to continue to use Solaris 10 for those applications that require Solaris 10, whilst still taking advantage of the enhancements and functionality Solaris 11 offers.  If you've migrated a physical system to a Solaris 10 zone in the past, you'll be familiar with this process.</p>
+<p>If you are currently using Solaris 10 zones on Solaris 10, these can be painlessly <a href="http://docs.oracle.com/cd/E26502_01/html/E29024/gjogf.html" target="_blank">migrated across to Solaris 10 branded zones too</a>.  If you've migrated a Solaris 10 zone between Solaris 10 systems, you'll find this process very familiar.</p>
+<p>Unfortunately, you can't migrate your Solaris 8 or 9 branded zones to Solaris 11, so you'll need to keep a Solaris 10 system or two to run your legacy applications that require Solaris 8 or 9.</p>
+<p>To minimise downtime, you can also perform what I call a <a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/howto-solaris-live-install-1599365.html" target="_blank">"side-by-side" installation of Solaris 11 onto a system running Solaris 10</a>.  This is where you install Solaris 11 onto an identical host first, create an archive of the root pool, transfer it to a spare disk in your Solaris 10 system and then reboot from that new disk.  This approach is very useful if your systems are already configured with applications, zones and their data on external sources and you don't wish or need to migrate your current Solaris 10 host into a branded zone.  You can simply detach your zones and filesystems before rebooting and then attach once booted from Solaris 11.  Keep in mind, that this should only be used as a one-way process.</p>
+<hr />
+<h3>SLIDE 20: ZFS Boot Environments</h3>
+<p>One of the best features of Solaris 11 is <a href="http://docs.oracle.com/cd/E26502_01/html/E29052/index.html" target="_blank">ZFS boot environments</a>.  If you've used Live Upgrade in the past, you'll be familiar with boot environments but only in a "bolt-on" sense.</p>
+<p>In Solaris 11 ZFS boot environments are a first class citizen.  It's functionality built into the OS and used extensively by the package management system to reduce risk and keep the system in a sane and safe state. For example, any pkg update that would result in a change to the kernel will always result in a new BE.  This is to protect you.</p>
+<p>So why would you want to use boot environments beyond the realms of IPS?  Simple: to reduce risk and provide you with a quick and efficient recovery or rollback mechanism in the event something goes wrong. As boot environments take advantage of ZFS functionality, they're incredibly quick to create and very space efficient, so you can go wild and create as many as you want, within reason of course... you've got to be able to <a href="http://docs.oracle.com/cd/E26502_01/html/E29052/administer.html" target="_blank">manage all these boot environments</a>.</p>
+<p>As IPS uses boot environments to protect itself from the effects of updates, we highly recommend you do so too.  The use of boot environments is good practice and should be part of your change control process.</p>
+<p>And best of all, ZFS boot environments are fully integrated into zones too.</p>
+<hr />
+<h3>SLIDE 21: Package <del>and Patch</del> Management / Image Packaging System (IPS)</h3>
+<p>The <a href="http://docs.oracle.com/cd/E26502_01/html/E28984/index.html" target="_blank">Image Packaging System</a> is the new package management system on Solaris 11.  It is a fully integrated single-tier network centric repository based replacement for the old SVR4 packaging system used on previous releases of Solaris. It is predictable, efficient and provides guaranteed failsafe updates.  IPS takes advantage of the ZFS snapshot and boot environments to ensure safe and reliable updates.</p>
+<p>Along with managing and maintaining the packages on your system, it has automatic dependency checking and package validation too.  In the event you think something isn't working as expected or you've accidentally changed the permissions of a file, you can use the pkg(1) command to verify and correct things.</p>
+<p>As with boot environments, IPS is fully integrated with zones too.  In fact, you can have completely different pkgs in your zones as the zones have their own software stack completely independent of the global zone.  This is why there is essentially no such thing as a sparse-root zone on Solaris 11 - you don't need it.  This is also why you must ensure you have a complete and up-to-date repository accessible from your global zone as this is how your zones are installed: straight from the repository.  This is a major change from the way things worked on Solaris 10.</p>
+<hr />
+<h3>SLIDE 22: Package <del>and Patch</del> Management / <del>Patching</del> Updating</h3>
+<p>Patching is a dirty word on Solaris 11.  Forget it and don't ever use that term in the context of Solaris 11 pkgs. There is no such thing as patching, just pkg updates.  If a bug needs to be fixed, a whole new revision of the pkg is released and you would update the whole pkg.</p>
+<p>As IPS now stores package meta-data in the pkg itself, and this is stored on the repository server, you can now query this information.  One of the meta-data fields is the bugid.  If you know the ID of a bug that affects a Solaris 11 component and you're curious to see if it has been fixed yet, or which version of a pkg fixes the issue, you can actually query the repo directly:</p>
+<pre class="terminal"># pkg search -f ':set:com.oracle.service.bugid:7146824'
+INDEX                    ACTION VALUE   PACKAGE
+com.oracle.service.bugid set    7146824 pkg:/library/security/openssl@1.0.0.7-0.175.0.5.0.3.0
+#</pre>
+<p>Interim Diagnostic or Relief (IDR) updates still exist and these are supplied as and when needed in the form of a package format file, also called a p5p file.  Installation and removal instructions are normally included with each IDR and they're also documented in <a href="https://support.oracle.com/rs?type=doc&id=1452392.1" target="_blank">Doc ID 1452392.1</a>. "pkg info" on the IDR will also detail its removal procedure.</p>
+<p>As with IDRs on earlier releases, IDRs may also block updates whilst they're in place so always check if the updates you're about to apply supersede any of your IDRs.  If they don't you may need to request an updated IDR before performing your next update.</p>
+<p>A useful tip: keep your IDRs in a separate repository local to the boot environment to which they are relevant. For example, if you have an IDR to address an issue with Oracle 11gR2 RAC on Solaris 11.1.7.5.0 (Solaris 11.1 SRU7.5), keep it local to the relevant BEs running Oracle 11gR2.  This avoids IDRs being unnecessarily propagated to LDoms or Zones for which they are irrelevant.</p>
+<hr />
+<h3>SLIDE 23: Package and Patch Management / Service Repository Updates (SRU)</h3>
+<p>Service repository updates (SRUs) are the formal method of obtaining package updates and bug fixes.  SRUs are cumulative, in that they include the fixes provided in earlier SRUs, and are issued on a monthly basis.</p>
+<p>If an SRU resolves an issue for which an IDR was issued, the SRU will automatically supersede the IDR.  Unlike on Solaris 10 and earlier, there is no need to remove the IDR before applying the update.  Before upgrading, you can check the contents of the SRU you're about to apply to see which IDRs it supersedes by searching for packages whose base name is the IDR number, eg 'idr&lt;number&gt;'.  If such a package exists, then the IDR has been superseded and the fixes incorporated into the IDR.  As I mentioned before, if you have an IDR that doesn't appear to be superseded, contact support to see if you need an updated IDR or note.</p>
+<p>Each quarterly SRU is an Oracle Critical Patch Update and will have the pkg meta-data updated to include references to CVEs fixed in that update. You can query the IPS repository to determine the pkg revision that resolves a CVE as you can with checking for bug fixes:</p>
+<p>As of Solaris 11.1 SRU 6.4, the versioning scheme for Solaris 11 updates has changed slightly.  Instead of referring to updates as Solaris 11.1 SRU6.4, we now refer to them as Solaris 11.1.6.4.0.  This makes the Solaris versioning scheme consistent with other Oracle products and also re-affirms that SRUs are updates, not patches.</p>
+<hr />
+<h3>SLIDE 24: Keeping your Solaris 11 Systems Up To Date / Oracle Repository Servers</h3>
+<p>Keeping your Solaris 11 systems update-to-date is incredibly easy.  Where and how you obtain these updates is up to you.</p>
+<p>The best and most reliable source to use is the Oracle Support repository at <a href="https://pkg.oracle.com/solaris/support/" target="_blank">https://pkg.oracle.com/solaris/support/</a></p>
+<p>Once you've registered at <a href="https://pkg-register.oracle.com" target="_blank">https://pkg-register.oracle.com</a> and obtained a certificate and key pair, you can configure your clients to point to this repository server and use it for all their updates.</p>
+<p>The key benefits of using the Oracle support repository is it is maintained by Oracle, always up-to-date with the latest revisions of pkgs and also provides access to all previously released versions of packages and SRUs.</p>
+<hr />
+<h3>SLIDE 25: Keeping your Solaris 11 Systems Up To Date / Local Repository Servers</h3>
+<p>Of course, not everyone can or will want to access the Oracle servers directly for all their updates.  In these cases <a href="http://docs.oracle.com/cd/E26502_01/html/E28985/index.html" target="_blank">creating a local repository</a> is the way to go.</p>
+<p>With a local repository you are in full control of the repository server your clients use so you can customize it to suit your needs like adding your own packages and limiting which updates your clients can access.  It also has the added benefit that updates will use a lot less external bandwidth and your clients won't need to traverse the internet which will result in quicker updates and quicker zone installations.</p>
+<p>Updating your local repository servers can be done by pulling the updates directly from the Oracle repository server or via SRU ISO images.</p>
+<p>On the topic of local repositories and SRUs, here's a useful tip: if you are not going to use the Oracle repository servers to update your clients, setup a local repository server that contains ALL Solaris 11 releases and SRUs.  Whilst you can update each of your clients from the individual SRU ISO images, it's not the most effective or efficient method and it WILL cause you more trouble and heart-ache in the long run, examples of which I'll come onto later.</p>
+<p>Remember, there is no such thing as patching on Solaris 11, so it is best to not treat SRUs as you did the recommended patchset.  Get out of the habit of transferring the SRU ISO to each of your clients and applying it and instead get into the habit of using a centralized repository server.</p>
+<p>One of our customers with over 1000 Solaris servers recently told us that it used to take 2 months to rollout a new patchset across their enterprise.  Switching to Solaris 11 and a centralized local repository took that time down to about 10 days.</p>
+<hr />
+<h3>SLIDE 26: Keeping your Solaris 11 Systems Up To Date / Updating Oracle Solaris 11</h3>
+<p>Once you've got your clients pointing at a valid and complete repository, you can safely update your systems using "pkg update". It is quick, easy and safe. If you want to perform a dry run and see what would happen, just add the "-nv" arguments.  The same process is used for applying SRUs and complete upgrades, though upgrades may have pre-requisites like requiring an updated pkg package, as is the case for the <a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/howto-update-11dot1-ips-1866781.html" target="_blank">Solaris 11 to Solaris 11.1 upgrade</a>, but once you've met the pre-requisites, the upgrade process is identical.</p>
+<p>It is best to perform a complete update of your system and apply the entire SRU.  SRUs are tested by Oracle as a unit providing you with a common baseline to work with.  "dim-sum" updating, that is picking and choosing which pkgs you'll update, will give you in a unique and untested package configuration.  You're also likely to encounter problems due to the dependency locking.  So the best thing to do is stick with the fully tested SRU as a whole.</p>
+<hr />
+<h3>SLIDE 27: Keeping your Solaris 11 Systems Up To Date / Oracle Enterprise Manager Ops Center</h3>
+<p>If you want a more advanced product to manage your systems, zones, LDOMs, VMs, repositories and updates, then look no further than <a href="http://www.oracle.com/technetwork/oem/ops-center/index.html" target="_blank">Oracle Enterprise Manager Ops Center.</a></p>
+<p>This single tool includes a lot of functionality you might want to use when installing, provisioning and updating a large estate of Solaris 11 machines and guest domains.  You can configure the various IPS repos (which will sync with the Oracle servers), mirror repos, proxy repos and even configure all the AI scripts etc associated with installing Solaris 11 with Ops Center.</p>
+<p>This is a very useful and powerful tool, and best of all, it's free and support is included as part of the OS support contract.  So feel free to <a href="http://www.oracle.com/technetwork/oem/ops-center/oem-ops-center-188778.html" target="_blank">download</a>, experiment, and <a href="http://docs.oracle.com/cd/E27363_01/nav/howto.htm" target="_blank">learn</a>.</p>
+<hr />
+<h3>SLIDE 28: How to Resolve Common pkg(1) Errors / Example 1</h3>
+<p>Now if you don't follow the best practises I've outlined in this presentation, especially when it comes to the repository side of things, you're likely to encounter some well known problems.</p>
+<p>Here is the first example of a very common error.  I've truncated the output to fit on the slide, but you should be able to get the gist of things.</p>
+<p>In this case, take note of the highlighted version numbers.  This is your biggest clue to interpretting most of the pkg(1) errors.</p>
+<p>In this example we can see that the client on which we're trying to install the compability/ucb pkg is running Solaris 11.1.9.5.0 as we can see from the last line.</p>
+<p>The reason the pkg has failed to install is because the repository it is accessing is not offering a sufficiently new revision of the compatibility/ucb pkg.  This happens when the client is running a later revision of Solaris 11 than that that the repository offers.  This commonly happens when clients are updated directly from an SRU ISO and continue to point to the Oracle release repository.</p>
+<p>To resolve this, you need to update your repository or point your client to the Oracle support repository.</p>
+<hr />
+<h3>SLIDE 29: How to Resolve Common pkg(1) Errors / Example 2</h3>
+<p>In this example, take note of the last line.  This is telling us that one of the pkgs we are trying to install can't be found in the repository this client is pointing to.</p>
+<p>This commonly occurs when the only repository the client has access to is one comprising JUST the contents of an SRU.  Remember, SRUs are just updates to a repository.  They are NOT complete repository images.  This is is why you shouldn't treat SRUs like patchsets.</p>
+<p>To resolve this situation, you would need to create a local repository that contains the full IPS repository contents and all the SRUs you've applied to your clients, or point your client at the Oracle support repository.</p>
+<p>I've documented a few more examples in <a href="https://support.oracle.com/rs?type=doc&id=1574718.1" target="_blank">Doc ID 1574718.1</a> and will continue to update this document as I encounter more examples of common problems.</p>
+<p>Once you get into the habit of remembering that you should always have access to a complete full up-to-date repository, you should encounter very few update issues.</p>
+<hr />
+<h3>References</h3>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E28981/index.html" target="_blank">Transitioning From Oracle Solaris 10 JumpStart to Oracle Solaris 11.1 Automated Installer</a></p>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E36219/index.html" target="_blank">Transitioning From Oracle Solaris 10 to Oracle Solaris 11.1</a></p>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E29024/gjfbq.html" target="_blank">Oracle Solaris 10 Zones</a></p>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E29024/gjogf.html" target="_blank">Migrating an Oracle Solaris 10 native Non-Global Zone Into an Oracle Solaris 10 Zone</a></p>
+<p><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/howto-solaris-live-install-1599365.html" target="_blank">How to Live Install from Oracle Solaris 10 to Oracle Solaris 11 11/11</a></p>
+<p>C<a href="http://docs.oracle.com/cd/E26502_01/html/E29052/index.html" target="_blank">reating and Administering Oracle Solaris 11.1 Boot Environments</a></p>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E29052/administer.html" target="_blank">Administering Boot Environments</a></p>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E28984/index.html" target="_blank">Adding and Updating Oracle Solaris 11.1 Software Packages</a></p>
+<p><a href="https://support.oracle.com/rs?type=doc&id=1452392.1" target="_blank">How to install IDRs (.p5p based) on Solaris 11 (Doc ID 1452392.1)</a></p>
+<p><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/o11-018-howto-update-s11-1572261.html" target="_blank">How to Update Oracle Solaris 11 Systems From Oracle Support Repositories</a></p>
+<p><a href="http://pkg-register.oracle.com/help/" target="_blank">Certificate Generator Online Help</a></p>
+<p><a href="http://docs.oracle.com/cd/E26502_01/html/E28985/index.html" target="_blank">Copying and Creating Oracle Solaris 11.1 Package Repositories</a></p>
+<p><a href="https://support.oracle.com/rs?type=doc&id=1501435.1" target="_blank">Oracle Solaris 11.1 Support Repository Updates (SRU) Index (Doc ID 1501435.1)</a></p>
+<p><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/howto-update-11dot1-ips-1866781.html" target="_blank">How to Update to Oracle Solaris 11.1 Using the Image Packaging System</a></p>
+<p><a href="http://www.oracle.com/technetwork/oem/ops-center/index.html" target="_blank">Oracle Enterprise Manager Ops Center 12c</a></p>
+<p><a href="https://support.oracle.com/rs?type=doc&id=1574718.1" target="_blank">How to Interpret, Understand and Resolve Common pkg(1) Errors on Solaris 11 (Doc ID 1574718.1)</a></p>
+<p><a href="https://blogs.oracle.com/Solaris11Life/entry/top_tips_for_updating_solaris" target="_blank">Top Tips for Updating Solaris 11 Systems</a></p>
+<p><a href="http://www.oracle.com/technetwork/server-storage/solaris11/documentation/how-to-517481.html" target="_blank">Oracle Solaris 11 How-To Articles</a></p>

@@ -1,0 +1,107 @@
+---
+layout: post
+title: 'HOWTO: Patch Solaris 10 Wanboot Miniroot Image'
+date: 2007-07-10 08:49:43.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- HOWTO
+type: post
+published: true
+---
+<p>Details on patching the Solaris wanboot/netinstall miniroot image for jumpstart are a bit scarce as, generally speaking, there should be no reason to patch the wanboot miniroot. However due to various issues with Solaris 10 releases, patching of the miniroot has become necessary.</p>
+<p>This post details how to patch the wanboot/netinstall miniroot image.</p>
+<p><!--more--><br />
+1.  Create just the boot image:</p>
+<p><code># /cdrom/cdrom0/s0/Solaris_10/Tools/setup_install_server -b /path/to/boot-dir</code></p>
+<p>2.  Patch the boot image:</p>
+<p><code># PKG_NONABI_SYMLINKS=true patchadd -C /path/to/boot-dir/Solaris/Tools/Boot &lt;patchid&gt;</code></p>
+<p>... where <code>&lt;patchid&gt;</code> is the patch ID, eg <code>118833-36</code>.</p>
+<p>3.  Generate the wanboot image:</p>
+<p><code># cd /path/to/boot-dir/Solaris_10/Tools<br />
+# ./setup_install_server -w /path/to/miniroot-dir/ /path/to/tmp-dir</code></p>
+<p>4.  Copy miniroot to desired location</p>
+<p><code># cp /path/to/miniroot-dir/miniroot /var/apache/htdocs/wanboot10/miniroot</code></p>
+<p>You miniroot should now be patched.</p>
+<p>Here's the output you can expect to see (it may differ slightly on your system):</p>
+<div class="terminal">
+<pre><code># cd /cdrom/cdrom0/s0/Solaris_10/Tools/
+# ./setup_install_server -b /export/s10-boot
+Verifying target directory...
+Calculating space required for the installation boot image
+Copying Solaris_10 Tools hierarchy...
+Copying Install Boot Image hierarchy...
+Install Server setup complete
+# PKG_NONABI_SYMLINKS=true patchadd -C 
+/export/s10-boot/Solaris_10/Tools/Boot /var/tmp/118833-36
+
+Executing prePatch script...
+Checking installed patches...
+Executing prepatch script...
+Verifying sufficient filesystem capacity (dry run method)...
+Installing patch packages...
+
+Patch 118833-36 has been successfully installed.
+See /export/s10-boot/Solaris_10/Tools/Boot/var/sadm/patch/118833-36/log 
+for details
+Executing postpatch script...
+Reboot client to install driver.
+
+Patch packages installed:
+   SUNWaudd
+   SUNWcakr
+[ ... Truncated ... ]
+   SUNWwbsup
+   SUNWxge
+# cd /export/s10-boot/Solaris_10/Tools
+# ./setup_install_server -w /export/s10-miniroot /export/s10-tmp
+Verifying target directory...
+Calculating the required disk space for the Solaris_10 product
+Calculating space required for the installation boot image
+Copying the CD image to disk...
+Copying Install Boot Image hierarchy...
+Starting WAN boot Image build
+Calculating space required for WAN boot Image
+Copying WAN boot Image hierarchy...
+819024 blocks
+Removing unneeded packages from WAN boot Image hierarchy
+Creating the WAN boot Image file
+Image size is 349459456 bytes
+Copying WAN boot to Image file...
+691376 blocks
+WAN boot Image creation complete
+
+         The WAN boot Image file has been placed in
+                 /export/s10-miniroot/miniroot
+
+         Ensure that you move this file to a location
+         accessible to the web server, and that the
+         WAN boot configuration file wanboot.conf(4)
+         for each WAN boot client contains the entries:
+
+                 root_server=&lt;URL&gt;
+                         where &lt;URL&gt; is an HTTP or HTTPS URL
+                         scheme pointing to the location of the
+                         WAN boot CGI program
+
+                 root_file=&lt;miniroot&gt;
+                         where &lt;miniroot&gt; is the path and file
+                         name, relative to the web server
+                         document directory, of 'miniroot'
+
+         You should also make sure you have initialized
+         the key generation process by issuing (once):
+
+                 # /usr/sbin/wanbootutil keygen -m
+
+Install Server setup complete
+#</code></pre>
+</div>
+<p>You may get the following error when running the "<code>setup_install_server -w</code>":</p>
+<pre>
+ERROR: The product distribution does not contain
+        a product table of contents
+</pre>
+<p>This will be due to the lack of <code>.cdtoc</code> in <code>/export/s10-boot</code>.  You can copy this directly from the cdrom.</p>
+<div class="alert">
+<strong>NOTE:</strong> If you intend on applying the kernel patch (118833-36), please be sure to read note #78 in the README (you do read the READMEs don't you?).</div>

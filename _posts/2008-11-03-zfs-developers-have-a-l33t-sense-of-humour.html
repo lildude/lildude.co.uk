@@ -1,0 +1,26 @@
+---
+layout: post
+title: ZFS Developers Have a L33T Sense of Humour
+date: 2008-11-03 04:18:30.000000000 -08:00
+tags:
+- Software
+- ZFS
+- zdb
+- uberblock
+type: post
+published: true
+---
+<p>I've been tatting around with zdb for a while now and I've only just noticed that the ZFS developers have a "L33T" sense of humour.</p>
+<p>Ever noticed what the "Uberblock" section of the output of "<code>zdb zpoolname</code>" reports?  Here's an excerpt from one of my pools:</p>
+<pre>
+[...]
+Uberblock
+
+        magic = 0000000000bab10c
+        version = 13
+        txg = 2450224
+        guid_sum = 2051813114395829123
+        timestamp = 1225469746 UTC = Fri Oct 31 16:15:46 2008
+[...]
+</pre>
+<p>Noticed what the magic number says: 0000000000bab10c = OOOOOOberbloc = Uberblock. :-)</p>

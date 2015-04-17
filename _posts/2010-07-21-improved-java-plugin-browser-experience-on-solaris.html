@@ -1,0 +1,27 @@
+---
+layout: post
+title: Improved Java Plugin Browser Experience On Solaris
+date: 2010-07-21 03:56:48.000000000 -07:00
+tags:
+- Software
+- Java
+- plugin
+- Firefox
+type: post
+published: true
+---
+<p>For years I've been running Firefox from my home directory with a symlink in <code>${HOME}/.mozilla/plugins</code> pointing to for <code>/usr/java/jre/plugin/i386/ns7/libjavaplugin_oji.so</code> the Java plugin.</p>
+<p>Whilst this has worked, it's been no where near the pain free experience that using the Java plugin on Windows and Mac OS X is.  Until now.</p>
+<p>The other day I discovered that my Java plugin was no longer working and Firefox wasn't showing it in the <code>about:plugins</code> list either. A bit of research soon revealed the cause:  I'd just upgraded to Firefox 3.6 and Firefox 3.6 dropped support for this old style plugin in favour of the "Next-Generation Java Plug-In".  Huh??  What next generation plugin?</p>
+<p>A bit more research soon revealed a bit more <a href="http://java.sun.com/developer/technicalArticles/javase/java6u10/#plugin">information</a>...</p>
+<blockquote><p>Java SE 6u10 includes a brand-new implementation of the Java Plug-in, which is used by default as long as you are using Firefox 3 or Internet Explorer. The next-generation plug-in runs applets outside of the browser in one or more separate processes. Applets still appear inside of the web browser window as they always have, but this means that it is now possible to use different JRE versions, command-line arguments, and configurations to run different applets. The isolation provided by running the web browser and the JRE -- two very large, very complex pieces of software -- in separate process spaces improves the reliability of both, and gives applets the same flexibility and control over JRE configurations that other Java software has always enjoyed.</p></blockquote>
+<p>Sounds good, especially if you're running Windows. But I'm not. In order to get this plugin, I had to do more investigating and found <a href="http://java.sun.com/javase/6/webnotes/install/jre/manual-plugin-install-solaris.html">Manual Installation and Registration of Java Plugin for Solaris</a>.  </p>
+<p>In short, you need to remove the old symlink (if you're not using Firefox 2) and instead link to the new library in the not-so-obvious location: </p>
+<div class="terminal">
+<pre>$ cd ~/.mozilla/plugins/
+$ ln -s /usr/java/jre/lib/i386/libnpjp2.so .
+$ ls -l libnpjp2.so
+lrwxrwxrwx 1 col staff 34 2010-06-07 10:21 libnpjp2.so -> /usr/java/jre/lib/i386/libnpjp2.so
+$</pre>
+</div>
+<p>A restart of Firefox later and I'm browsing my old Java applet sites with a much better experience and the best bit of all - it's now seamless.  No more prompts to accept applets or anything.  The applet just runs in the browser like Flash does.  The <a href="http://www.javafx.com/samples/">JavaFX demos</a> also look good now.</p>

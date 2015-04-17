@@ -1,0 +1,28 @@
+---
+layout: post
+title: OpenSolaris Update to Build 90
+date: 2008-06-10 03:14:02.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- snv_90
+type: post
+published: true
+---
+<p>Updated packages for snv_90 were pushed to the <a href="http://pkg.opensolaris.org">pkg.opensolaris.org</a> repository over the weekend, so you can update your OpenSolaris 2008.05 installation to the latest revs.</p>
+<p>There are some gotchas though...</p>
+<p><!--more-->
+<ol>
+<li>Do <strong>NOT</strong> use the Package Manager GUI to perform the update; instead use the <code>pkg image-update</code> command. This is because the GUI is not yet able to create the alternate boot env necessary for a clean fallback.  As a result, you'll actually end up updating your running env and won't be able to rollback if something goes wrong.  This will be fixed.</li>
+<li>You need to perform an additional step once the update has completed; you need to update the MBR/GRUB on the new boot environment as follows:
+<p>First, mount the clone under the <code>/mnt</code> directory (use <code>beadm list</code> to show list of boot envs):</p>
+<div class="terminal">$ pfexec mount -F zfs rpool/ROOT/opensolaris-1 /mnt</div>
+<p>Next, update the GRUB configuration on your ZFS boot device(s) using</p>
+<div class="terminal">$ pfexec /mnt/boot/solaris/bin/update_grub -R /mnt</div>
+<p>When you're ready to boot into the updated boot environment, you can reboot(1M) or init(1M) as usual.</p>
+<p>Check the <a href="http://www.opensolaris.org/jive/thread.jspa?threadID=62982&amp;tstart=0">announcement thread</a> beforehand for more details.  </p>
+<p>This is only a one-off step when upgrading to snv_89 or later due to some changed made to GRUB for ZFS boot.</li>
+<li>You may get network timeouts during the upgrade process.  These will cause the upgrade process to fail.  Unfortunately the errors are a bit cryptic due to the python trace dumped, but check the last line; it'll say "<code>timeout: timed out</code>" if you timed out.  You can increase the timeout by setting the <code>PKG_CLIENT_TIMEOUT</code> environment variable to something larger than 30 (seconds).  Try 90 (seconds)</li>
+</ol>
+<p>Happy updating.</p>

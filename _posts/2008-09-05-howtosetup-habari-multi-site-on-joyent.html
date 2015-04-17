@@ -1,0 +1,52 @@
+---
+layout: post
+title: 'HOWTO: Setup Habari Multi-Site on Joyent'
+date: 2008-09-05 02:58:03.000000000 -07:00
+tags:
+- HOWTO
+- Internet
+- hosting
+- blog
+- joyent
+- multi-site
+- Habari
+type: post
+published: true
+---
+<p><img src="/assets/habarilogo.png" alt="Habari Logo" title="Habari Logo" width="56" height="75" class="alignleft" />I think one of the greatest features of <a href="http://www.habariproject.org/">Habari</a> is it's <a href="http://wiki.habariproject.org/en/Multisite">multi-site</a> support.  Unlike Wordpress, Habari has multi-site support out of the box.  This allows you to configure multiple blogs off a single installation of the code with a fair amount of control over how independent each of these blogs are.</p>
+<p>Each new blog can have it's own domainname (they don't even have to be subdomains), database, themes and plugins.  However, if you prefer, they can all share the same set of themes and plugins too thus making managing and maintaining all of your sites a very simple affair.</p>
+<p>In this post I'll detail how you can take advantage of this functionality on <a href="http://www.joyent.com/connector/web-hosting/">Joyent's Shared Accelerator</a> hosting <strong>without</strong> using up more than one of your allowed "websites", thanks to aliasing and Habari.  </p>
+<p>Whilst these instructions are based on Joyent's hosting plan, they may be very similar for your hosting plan too.  Let me know if these instructions work for your hosting solution too.<br />
+<!--more--></p>
+<h3>Habari Installation</h3>
+<p>Naturally, you have to have your first instance of Habari installed.  This is the base installation that will be used for all your other sites too.  I've detailed this step in an earlier post - <a href="http://lildude.co.uk/install-habari-on-joyent/">Install Habari On Joyent</a>.</p>
+<p>This is also the step where you use up one, and only one, of your allocated "websites".</p>
+<h3>Configure Habari</h3>
+<p>Once you've got your base instance installed and running, creating the other sites is very quick and easy.</p>
+<p>NOTE: These instructions assume you've installed Habari into a new domain called "domain1.tld" directly into the "public" directory and that you are going to create a new site called "domain2.tld".</p>
+<ol>
+<li>SSH to your account on your Joyent server and change into the base Habari installation directory:
+<div class="terminal">$ cd ~/domains/domain1.tld/web/public/</div>
+</li>
+<li>Within this directory is the "user" directory which is used to hold your own custom code, plugins, themes and sites.  The sites directory doesn't exist by default, so we'll need to create this.  We'll also need to create a directory for the new site.  The new site's directory name needs to conform with naming rules defined <a href="http://wiki.habariproject.org/en/Multisite">here</a>.
+<p>So lets create the site directory in one simple command:</p>
+<div class="terminal">$ mkdir -p user/sites/domain2.tld</div>
+</li>
+<li>Now at the very least, this new site subdirectory just needs a config.php file. This file must be empty and writable by you (as the webserver process runs under your user ID).  You can create this file as follows:
+<div class="terminal">$ touch user/sites/domain2.tld/config.php</div>
+</li>
+</ol>
+<p>That's it for the command line work. Now to configure the hosting settings via Virtualmin.</p>
+<h3>Configure Virtualmin</h3>
+<ol>
+<li>Open up Virtualmin in your web browser and select your base Habari domain from the drop down, in this example "domain1.tld"</li>
+<li>Click "Create Virtual Server".  This will open up the "Create Virtual Sub-Server" form in the right window.  Now DON'T enter anything yet.</li>
+<li>In the form that opens on the right, you should see a link at the very top that reads "Alias of ...".  Click this link.  This will change the form on the right to a much simpler form.</li>
+<li>Enter the new domain name, as you wish to access it from the internet, eg "domain2.tld", enter a description if you wish and select "Enable PowerDNS domain?" in the "Enabled Features" section.</li>
+<li>Click "Create Server". This will create the virtual server alias, but it won't be enabled.</li>
+<li>To enable it, select the alias from the drop down menu in the right hand column and wait for the screen to refresh.</li>
+<li>Click "Edit Virtual Server" and then select "Web virtual server enabled?" in the "Enabled Features" section</li>
+<li>Click "Save Virtual Server" and allow the page to refresh.  This may take a bit of time.</li>
+</ol>
+<p>Once Virtualmin returns, you're all set to go.  Configure your domain name to point to the Joyent DNS servers and then visit your new website and run through the normal Habari installation/configuration steps.</p>
+<p>You can repeat these steps for each additional site.  Just be warned: you will still be limited by the Joyent usage restrictions WRT CPU, memory and bandwidth, but you won't be limited by the number of websites anymore.</p>

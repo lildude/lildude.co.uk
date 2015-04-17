@@ -1,0 +1,107 @@
+---
+layout: post
+title: Building zsh On Joyent SmartMachine
+date: 2012-10-30 04:24:45.000000000 -07:00
+tags:
+- zsh
+- Joyent
+- SmartMachine
+- pkgsrc
+type: post
+published: true
+---
+<p>My Joyent SmartMachine is currently running the latest (2012Q1 at time of writing) pkgsrc binary build of the pkgsrc pkgs.  Unfortunately, this comes with a rather old version of zsh: it comes with zsh 4.2.7 and I want at least zsh 4.3.10.</p>
+<p>So how do I solve this?  Simple, build my own pkg from the pkgsrc repo.  So I duly set about following <a href="http://wiki.joyent.com/wiki/display/jpc2/Building+your+Own+Packages" target="_blank">Joyent's instructions</a> and all seemed to go well until the actual build part:</p>
+<pre class="terminal"># pk build shells/zsh-current
+20121030-111106: this is ref: refs/heads/trunk, gcc 4.7.0, 64bit ABI, for /opt/local
+20121030-111106: skipping 'zfs rollback' functionality, ZFS not delegated properly
+20121030-111106: * shells/zsh-current
+20121030-111107:   * shells/zsh-current: start
+20121030-111504:     shells/zsh-current: BUILD_FAILED in shells/zsh-current
+#</pre>
+<p>A quick look at the log file in log file in /opt/pk/logs/20121030-111106_build_/shells_zsh-current_.log soon revealed the problem:</p>
+<pre>=> Automatic manual page handling
+=> Generating post-install file lists
+=> Checking file-check results for zsh-4.3.17
+ERROR: ************************************************************
+ERROR: The following files are in /opt/local but not in the PLIST:
+ERROR:         /tmp/pkgsrc/shells/zsh-current/work/.destdir/opt/local/lib/zsh/4.3.17/zsh/curses.so
+*** Error code 1
+
+Stop.
+bmake: stopped in /opt/pkgsrc/shells/zsh-current
+*** Error code 1
+
+Stop.
+bmake: stopped in /opt/pkgsrc/shells/zsh-current</pre>
+<p>Looks like a problem with the PLIST file.  So I had a look in this file and found the following curses.so entry:</p>
+<pre class="terminal"># grep curses /opt/pkgsrc/shells/zsh-current/PLIST
+${PLIST.dynamic}${PLIST.curses}lib/zsh/${PKGVERSION}/zsh/curses.so
+#</pre>
+<p>Doesn't look like that is right, or at least it isn't on my SmartMachine so I changed the line to...</p>
+<pre>${PLIST.dynamic}lib/zsh/${PKGVERSION}/zsh/curses.so</pre>
+<p>... and attempted the build again and voila...</p>
+<pre class="terminal"># pk build shells/zsh-current
+20121030-112407: this is ref: refs/heads/trunk, gcc 4.7.0, 64bit ABI, for /opt/local
+20121030-112407: skipping 'zfs rollback' functionality, ZFS not delegated properly
+20121030-112407: * shells/zsh-current
+20121030-112408:   * shells/zsh-current: start
+20121030-112819:     shells/zsh-current: BUILD_OK
+#</pre>
+<p>... it's worked.</p>
+<p>To actually install the pkg, I then still had to manually build the pkg_summary.gz (I think the docs may be missing a step somewhere) before I could install the pkg...</p>
+<pre class="terminal"># for a in /opt/pk/packages/trunk/x86_64/All/*.tgz; do pkg_info -X $a >> /opt/pk/packages/trunk/x86_64/All/pkg_summary; done
+# gzip pkg_summary 
+# pkgin -f update
+pkg_summary.gz                                                                    100%  445KB 444.8KB/s 444.8KB/s   00:01    
+cleaning database from http://pkgsrc.joyent.com/sdc6/2012Q2/x86_64/All entries...
+cleaning database from file:///opt/pk/packages/trunk/x86_64/All entries...
+processing remote summary (http://pkgsrc.joyent.com/sdc6/2012Q2/x86_64/All)...
+updating database: 100%
+pkg_summary.gz                                                                    100% 2477     2.4KB/s   2.4KB/s   00:00    
+processing remote summary (file:///opt/pk/packages/trunk/x86_64/All)...
+updating database: 100%
+# pkgin av | grep zsh
+zsh-4.2.7nb2         The Z shell
+zsh-4.3.17           The Z shell
+# </pre>
+<p>This means I can now install my version of zsh...</p>
+<pre class="terminal"># pkgin in zsh-4.3.17
+calculating dependencies... done.
+
+1 packages to be upgraded: zsh-4.2.7nb2
+
+1 packages to be installed: zsh-4.3.17 (7931K to download, 0B to install)
+
+proceed ? [Y/n] y
+downloading packages...
+symlinking file:///opt/pk/packages/trunk/x86_64/All/zsh-4.3.17.tgz...
+removing packages to be upgraded...
+removing zsh-4.2.7nb2...
+zsh-4.2.7nb2: unregistering info file /opt/local/info/zsh.info
+zsh-4.2.7nb2: removing /opt/local/bin/zsh from /etc/shells
+pkg_install warnings: 0, errors: 0
+installing packages...
+installing zsh-4.3.17...
+zsh-4.3.17: adding /opt/local/bin/zsh to /etc/shells
+zsh-4.3.17: registering info file /opt/local/info/zsh.info
+===========================================================================
+$NetBSD: MESSAGE,v 1.3 2006/03/11 13:20:15 uebayasi Exp $
+
+`/opt/local/share/doc/zsh/NEWS' contains a summary of important changes
+for this version of zsh.
+
+Note that the completion system can now be setup and configured using
+the "compinstall" function.  Please read the zshcompsys(1) manual page
+for information on how this works.
+
+===========================================================================
+pkg_install warnings: 0, errors: 0
+reading local summary...
+processing local summary...
+updating database: 100%
+# zsh --version
+zsh 4.3.17 (x86_64-sun-solaris2.11)
+#</pre>
+<p>As you can see, I now have my build of ZSH.</p>
+<p>Oh yes, the same thing happens when attempting to build zsh 5.0 so you'll need to do the same thing as above.</p>

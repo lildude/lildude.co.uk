@@ -1,0 +1,33 @@
+---
+layout: post
+title: Thunderbird 3 is a Greedy Pig
+date: 2010-03-31 01:42:07.000000000 -07:00
+tags:
+- Software
+- Thunderbird
+- email
+- IMAP
+- disk
+- space
+type: post
+published: true
+---
+<p>I've been using <a href="http://www.mozillamessaging.com/thunderbird/">Thunderbird 3</a> (I'm currently running one of the <a href="http://ftp.mozilla.org/pub/mozilla.org/thunderbird/nightly/3.1b1-candidates/build1/">3.1 RC builds</a> so I can <a href="http://weblogs.mozillazine.org/calendar/2010/02/lightning_builds_move_towards.html">use Lightning</a>) for quite some time now without any obvious problems.  Some of the new functionality is a bit annoying, like the global search thingy that opens the results in a new tab, but otherwise it's been working well for me.  </p>
+<p>I have however just become aware of a problem which most people wouldn't notice, and I certainly didn't until Oracle started enforcing the quota on my home directory: Thunderbird 3.x is a very very greedy pig when it comes to disk space.</p>
+<p><!--more-->In an attempt to drop my home directory usage back to reasonable levels (I didn't even realise I was using so much space :-) ) I discovered that my <code>$HOME/.thunderbird/</code> directory was HUUGE.  It was nearly 3GB!!  A little more digging soon revealed the two culprits:</p>
+<ul>
+<li>the <code>&lt;profile name&gt;/ImapMail/</code> directory at a cool 2.9GB and</li>
+<li>the <code>&lt;profile name&gt;/global-messages-db.sqlite</code> file at nearly 70MB.</li>
+</ul>
+<p>It turns out that Thunderbird enables "Message Synchronization" by default which means a local copy of every one of your emails is saved locally too.  This wasn't the case with Thunderbird 2.  Why the change?  It doesn't make sense, especially for IMAP accounts where the whole beauty of them is the mail stays on the server.</p>
+<p>Anyway, to recover this space I... </p>
+<ol>
+<li>deleted the contents of the <code>$HOME/.thunderbird/ImapMail/mail.domain.tld/</code> folders (where mail.domain.tld is your mail server(s) - I have 4 active IMAP accounts) and</li>
+<li>disabled "Message Synchronization" by unchecking "Keep messages for this account on this computer" in Edit &rarr; Account Settings &rarr; &lt;Account&gt; &rarr; Synchronization and Storage.</li>
+</ol>
+<p>With most of the space consumed by Thunderbird cleared up, I turned my attention to the <code>global-messages-db.sqlite</code> file. This sqlite database file is used for the "Global Search and Indexing" features of Thunderbird 3 and is used to index your messages, attachments, etc for quick and easy searching. I don't use this functionality as I'm a firm believer in using good server side filtering to manage my emails, so I...</p>
+<ol>
+<li>deleted the <code>global-messages-db.sqlite</code> file and</li>
+<li>unchecked "Enable Global Search and Indexer" in Edit &rarr; Preferences &rarr; Advanced &rarr; General</li>
+</ol>
+<p>All done.  Thunderbird is now behaving as I would expect it to and it's no longer attempting to consume vast amounts of disk space.</p>

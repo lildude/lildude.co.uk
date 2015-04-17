@@ -1,0 +1,22 @@
+---
+layout: post
+title: 64-bit Flash Player For Linux - Why?
+date: 2008-11-17 11:18:22.000000000 -08:00
+tags:
+- Solaris
+- General
+- Linux
+- Flash
+- 64-bit
+type: post
+published: true
+---
+<p>As you will have no doubt <a href="http://www.theregister.co.uk/2008/11/17/adobe_64_bit_linux_flash_10_alpha/">heard</a> today, Adobe are making available a 64-bit version of the Flash Player for Linux to those who want to be on the cutting edge (it's still alpha).</p>
+<p>When I heard this, I couldn't help but ask myself "Why? Why on earth do you need a 64-bit Flash player?".  I don't think there is a single Flash application out there that has reached the constraints of a 32-bit environment and I doubt a single Flash developer has wished he had a full 64-bit address space, nor do I think they ever will.</p>
+<p>What's more, Firefox, in which you're likely to be running the Flash player is only 64-bit if you compile it yourself.  Why do you need a 64-bit version of Firefox anyway?  Are there plans for it to gobble up even more memory than it used to?</p>
+<p>Anyway, I headed over to the <a href="http://labs.adobe.com/technologies/flashplayer10/">Adobe Flash Player 10 labs site</a> to see what this was all about, and then I found my answer, I think:</p>
+<p><!--more--></p>
+<blockquote><p>[...] an alpha version of 64-bit Adobe Flash Player 10 for Linux operating systems was released on 11/17/2008 and is available for download. This offers easier, native installation on 64-bit Linux distributions and removes the need for 32-bit emulation. [...]</p></blockquote>
+<p>It's there in the "remove the need for 32-bit emulation" bit.  Huh?  I must be missing something coming from a Solaris background - why do you need to emulate a 32-bit environment?  Why don't you just run both 32-bit and 64-bit applications natively?  Solaris does this very well.  vi, ls, Firefox, ping etc all run perfectly fine compiled as 32-bit binaries on the same machine on which a huge behemoth of a 64-bit Oracle installation, CAD application or earth simulator so why not Linux?  Does the Linux kernel have an all-or-nothing (or should that be all-or-nothing-unless-you're-happy-emulating) approach when it comes to running in 64-bit mode?</p>
+<p>Aside from my lack of knowledge in the Linux kernel world, I can't help but feel this is Adobe pandering to people who use 64-bit computing purely for the "I'm trying to be cool" factor.  Your average general purpose server or desktop machine (like most computer installations) is not going to need to run completely 64-bit, especially when most applications that will be running in the 64-bit environment are just going to be recompiled versions of the 32-bit code, so won't actually be taking advantage of the functionality anyway.</p>
+<p>Anyway, this is their choice and only time will tell how good a decision it is. I wouldn't be surprised if this is just a recompiled version of the 32-bit code either.</p>

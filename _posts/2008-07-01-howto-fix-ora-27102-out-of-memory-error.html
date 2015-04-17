@@ -1,0 +1,36 @@
+---
+layout: post
+title: 'HOWTO: Fix "ORA-27102: out of memory" Error on Solaris 10'
+date: 2008-07-01 06:14:18.000000000 -07:00
+tags:
+- Software
+- Solaris
+- Oracle
+- HOWTO
+- shared memory
+- ORA-27102
+type: post
+published: true
+---
+<p>He's a little bit of helpful advice: if you are installing Oracle, adding a new instance to an already running installation, or tuning the SGA/PGA sizes on Solaris 10, and you find you get the following on starting that instance:</p>
+<p>On the screen ...</p>
+<div class="terminal">
+SQL> startup<br />
+ORA-27102: out of memory<br />
+SVR4 Error: 22: Invalid argument
+</div>
+<p>... and in the Oracle alert log ...</p>
+<pre>
+Error : EINVAL creating segment of size 0x000000009f000000
+fix shm parameters in /etc/system or equivalent
+</pre>
+<p>... <strong>DON'T</strong> call Oracle.  You're likely to experience one or all of the following...</p>
+<p><!--more-->
+<ol>
+<li>You may be referred to Metalink Article 399895.1 and told to implement the workaround stated within.  <strong>DON'T</strong>.  This defeats the whole point of using projects as the workaround just changes things on a system wide basis instead of resolving the actual project configuration issue. There's also no guarantee this method will work in later updates of Solaris 10 as the functionality has technically been obsoleted by projects.</li>
+<li>You may be told this is a known bug, Oracle bug ID 5237047 - Incorrect system requirements for Solaris 10, and is actually a bug in Solaris 10.  You'll probably be told to implement the changes in the above Metalink document. As above: <strong>DON'T</strong>.</li>
+<li>You may even be told this is a known limitation in Solaris 10 in that you can't have a shared memory segment of more than 6GB, and once again referred to the workaround in the above Metalink document.  As above: <strong>DON'T</strong>.</li>
+</ol>
+<p>Believe it or not, I heard all three of these in one conference call this weekend and from what I can tell this is probably due to a complete misunderstanding of how projects work in Solaris 10 (ie a lack of knowledge) or due to some very bad documentation in Oracle's bug/call system. </p>
+<p>However, this post isn't all about what not to do, but rather how you go about resolving this issue.</p>
+<p>In short, you need to change the shared memory allocation for the particular project assigned to your Oracle user or group, depending on which you've chosen to implement.  There is loads of information on setting up projects on <a href="http://docs.sun.com">docs.sun.com</a> and <a href="http://sunsolve.sun.com">Sunsolve</a>, but if you're looking for information specific to Oracle and this error, then check out <a href="http://technopark02.blogspot.com/2006/09/solaris-10oracle-fixing-ora-27102-out.html">this post in Mandalika's scratchpad</a>. It provides clear succinct and correct details on changing the shared memory settings needed to get your Oracle database/instance running.</p>

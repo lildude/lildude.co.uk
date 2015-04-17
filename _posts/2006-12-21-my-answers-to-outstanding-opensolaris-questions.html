@@ -1,0 +1,73 @@
+---
+layout: post
+title: My Answers to Outstanding OpenSolaris Questions
+date: 2006-12-21 10:56:31.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- SPARC
+- Hardware
+- appliances
+- embedded
+- Sun Microsystems
+type: post
+published: true
+---
+<p>I received a comment the other day from <a href="http://duckdown.blogspot.com/">James McGovern</a> pointing me to a <a href="http://duckdown.blogspot.com/2006/02/outstanding-questions-on-opensolaris.html">link on his blog</a> where he has a list of outstanding questions.  I've taken the time to do a bit of research (it is Christmas after all so things are a bit quieter) and this is what I've found:</p>
+<p><!--more--></p>
+<ul>
+<li><strong>Q:</strong> <em>It is now popular for a software vendor to offer an appliance version of their product. It seems as if most appliances run Intel chips. Any reason why they aren't using Sparc chips?</em>
+<p><strong>A:</strong> I can't think of any good reason other than possibly cost and trends.  The following points come to mind:</p>
+<ul>
+<li>Sun doesn't have the resources to produce SPARC CPUs other than for it's own purposes. Unlike Intel, Sun has always been more interested in shipping more systems than parts.  Sun is a systems company after all.</li>
+<li>SPARC has had quite a thriving OEM market for some time now (see the members section on <a href="http://www.sparc.org">SPARC.org</a>) - it's just not well known.</li>
+<li>SPARC has never kept up with the whole "<a href="http://blogs.zdnet.com/Murphy/?p=524">MHz myth</a>" that Intel has focused on over the years.  Accordingly, many people have this mis-conception that SPARC processors are way slower. This isn't really surprising considering the market Intel primarily aims at.</li>
+<li>Not many people know the SPARC architecture is and has been freely available for years. (<a href="http://www.sparc.org">SPARC.org</a>)</li>
+<li>Linux is the current big buzz and it's primarily developed and aimed at x86 machines, so people are already doing the work in the x86 field. Now Ubuntu runs on UltraSPARC T1, things could change.</li>
+<li>A lot of appliance companies already use ARM, PowerPC or Intel.  Adding another processor adds complexity and cost - it's much cheaper to continue working on what you've already got.</li>
+</ul>
+<p>That said, STMicroelectronics have apparently <a href="http://www.linuxdevices.com/news/NS4310115400.html">created a single core version of the UltraSPARC T1</a> (<a href="http://www.opensparc.net/">the world's first GPL'd CPU</a>) called the "S1" which "<em>...can run Ubuntu Linux, and targets embedded devices such as PDAs, set-top boxes, and digital cameras...</em>".</p>
+<p>Watch this space - the T1 is an awesome processor that a lot can be done with.  And by the fact it has been released under the GPL, we should see a lot more people seriously considering it.</p>
+<p>What's more, Sun is effectively entering into part of the appliance market (granted it's x86 not SPARC), specifically the storage market at the moment, with things like the <a href="http://www.sun.com/servers/x64/x4500/">X4500</a> (aka Thumper).
+</li>
+<li><strong>Q:</strong> <em>Does Sun help software companies build price-competitive appliances built on the Sparc chip or does one have to look elsewhere?</em>
+<p><strong>A: </strong> I believe Sun does.  Sun has quite an OEM following (though not to the scale of Intel, ARM or IBM), so there's got to be something there. Why not <a href="https://www.sun.com/software/solaris/oem/inquiry/index.html">drop the OEM team a line or two</a> to find out more.
+</li>
+<li><strong>Q:</strong> <em>I am aware of companies such as MBX Systems that make appliances but can't seem to find any industry analyst information on the appliance building space. Who is king of the hill?<br />
+</em></p>
+<p><strong>A:</strong> I have no idea and wouldn't like to hazard a guess.  The notion of "<em>king of the hill</em>" is also very circumstantial and dependent on what area within the appliance market you're referring to.  Take the home appliance market, AEG would like the market to think it's king of washing machines or fridges, whilst Pace would like the market to think it's king of satellite receivers.
+</li>
+<p><!--wsa:LongPostMiddle--></p>
+<li><strong>Q:</strong> <em>Any software companies out there that make an appliance form factor running Solaris on Intel?</em>
+<p><strong>A:</strong> Probably.  I couldn't say for sure as it's not really a field I've ventured into much. Check out the companies listed on the <a href="http://www.sparc.org">SPARC.org</a> site and the <a href="http://www.sun.com/oem/">Sun OEM site</a> for a start.
+</li>
+<li><strong>Q:</strong> <em>If they also wanted to run Open Solaris on this appliance, what documents should they read so that they can strip the operating system down to bare minimum functionality?</em>
+<p><strong>A:</strong> Minimization has always been a bone of contention when it comes to support at Sun.  However things have changed and there's a lot more talk and agreement on the concept of minimization.  </p>
+<p>A good place to start would be Infodoc <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-9-86177-1">86177</a> (requires a login). </p>
+<p>There's also a fair bit of activity over at the <a href="http://www.opensolaris.org/os/community/appliances/">appliances community</a> on this exact question (I believe started by James in some way too).  </p>
+<p><a href="http://blogs.sun.com/gbrunett/">Glenn Brunette</a> lays down a <a href="http://blogs.sun.com/gbrunett/entry/foundation_for_minimal_solaris_10">good foundation for a minimal Solaris 10</a> build and <a href="http://blogs.sun.com/eric_boutilier/">Eric Boutilier</a> has also a series of posts (<a href="http://blogs.sun.com/eric_boutilier/date/20050301#wip">Part 1</a>, <a href="http://blogs.sun.com/eric_boutilier/date/20050302#building_a_unix_oe_platform">Part 2</a>, <a href="http://blogs.sun.com/eric_boutilier/date/20050303#building_a_unix_oe_platform1">Part 3</a>, <a href="http://blogs.sun.com/eric_boutilier/date/20050304#building_a_unix_oe_platform2">Part 4</a>, <a href="http://blogs.sun.com/eric_boutilier/date/20050307#building_a_unix_oe_platform3">Part 5</a>, <a href="http://blogs.sun.com/eric_boutilier/date/20050308#building_a_unix_oe_platform4">Part 6</a>, <a href="http://blogs.sun.com/eric_boutilier/date/20050308#building_a_unix_oe_platform5">Part 7</a>) on building a minimal Solaris OE - whilst not entirely supported, it's certainly a good read.
+</li>
+<li><strong>Q:</strong> <em>Is anyone working on getting Open Solaris to join an Active Directory Domain? I know that there are several third-party products in this space but curious when it will be native?</em>
+<p><strong>A:</strong> It depends.  If you're referring to using the Active Directory for authentication and authorization with LDAP or Kerberos, then you can already and this is all nicely documented in a <a href="http://www.microsoft.com/technet/solutionaccelerators/cits/interopmigration/unix/usecdirw/08wsdsu.mspx">document by Microsoft</a>. </p>
+<p>If you're using "winbind" on your AD server then you've got no choice but to use Samba and I believe the Samba supplied with OpenSolaris now works with AD (I stand to be corrected, I've not tested this).  Some how I don't think Sun will ever implement "winbind" natively given Microsoft's reputation for sharing code.
+</li>
+<li><strong>Q:</strong> <em>Are there any coding "best practices" to take advantage of Solaris containers?</em>
+<p><strong>A:</strong> I don't believe so.  Essentially, if it works in the global zone, then it should work in the local zone, with a few exceptions - you've got to keep in mind what you can and can't access from the local zones, and also the fact that there's a single kernel, and accordingly, anything that taps into the kernel, like device drivers, can only be run from the global zone.  Check the <a href="http://docs.sun.com/app/docs/coll/47.16">developer docs</a> for more details. There's also tons of stuff on the <a href="http://developers.sun.com/solaris/index.jsp">Developers Network</a>.
+</li>
+<li><strong>Q:</strong> <em>Does Xen currently working with Open Solaris?</em>
+<p><strong>A:</strong> Yes and no.  Yes it's been shown to work in the lab and with certain publically available code. No in that this code hasn't been integrated into the OpenSolaris codebase. See the <a href="http://www.opensolaris.org/os/community/xen/">XEN community</a> for more details.
+</li>
+<li><strong>Q:</strong> <em>Can Open Solaris support headless and diskless operation?</em>
+<p><strong>A:</strong> Yup. Both of these have been a feature Solaris as far back as I can remember (even on x86).
+</li>
+<li><strong>Q:</strong> <em>Are there legal implications in using Open Solaris in either appliance or embedded designs?</em>
+<p><strong>A:</strong> I couldn't answer that, I'm not a lawyer.  I'd check the <a href="http://www.sun.com/software/solaris/licensing/sla.xml">license T's & C's</a> of the OS and maybe contact the Sun legal department.
+</li>
+<li><strong>Q:</strong> <em>Is there merit in doing a port of Open Solaris to the Z/390 platform?</em>
+<p><strong>A:</strong> If there's the demand for it, I'd say there's merit. There's nothing stopping you from creating your own port in much the same way as people are doing for the PowerPC architecture (see the <a href="http://www.opensolaris.org/os/community/power_pc/">PowerPC community</a>). I suppose the biggest limiting factor is getting enough interest.
+</li>
+</ul>
+<p>Well, those are my answers.  I stand to be corrected if I've missed something obvious.  The ultimate place to go to get answers for all you questions is probably the many forums on <a href="http://www.opensolaris.org">OpenSolaris.org</a>.</p>
+<p>Oh, and naturally, these are my opinions and points of view and don't necessarily reflect those of Sun Microsystems.</p>

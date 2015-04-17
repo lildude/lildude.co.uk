@@ -1,0 +1,19 @@
+---
+layout: post
+title: Don't Force Network Links, Auto-Negotiate
+date: 2006-06-23 09:44:27.000000000 -07:00
+tags:
+- Network
+- auto-negotiation
+- duplex-mismatch
+type: post
+published: true
+---
+<p>Being a predominantly OS and Comms engineer, I get a lot of network calls. One very common issue is duplex mis-match. People are happy and eager to adopt new technology and constantly demand better performance from the kit they have, however they still insist on following archaic administration practices, like forcing switch settings and then start screaming when they're getting crap performance on their new flashy gigabit interface.</p>
+<p>I know exactly why this is - many years ago, when the technology was new and several standard hadn't been ratified, auto-negotiation was unreliable and people chose to force the settings.  This is perfectly acceptable, and the standards for most of the ethernet technologies allow for this.  However, things have moved on now, and auto-negotiation is no longer the monster it used to be. In fact, it is now so reliable, that the new 1000BASE-T standard for copper gigabit does not allow for forced mode 1000BASE-T with autonegotiation disabled running at 1000 Mbps. There are also more and more devices that only support auto-negotiation.</p>
+<p>I think it's about time network administrators update their administration protocols and rules and take into account the reliability of auto-negotiation.  It'll make their life and mine so much easier.</p>
+<p>The <a href="http://www.sun.com/blueprints/">Sun Blueprints Program</a> has a great article on "<a href="http://www.sun.com/blueprints/0704/817-7526.pdf">Ethernet Autonegotiation Best<br />
+Practices</a>".  It summarises auto-negotiation and how it works wonderfully.  It also provides troubleshooting tips.  This is well worth a read if you're a network administrator still forcing switch settings.</p>
+<p>If you insist on forcing your network duplex and speed settings, remember one very important rule:</p>
+<p><strong>BOTH the host and the switch need to be doing the same thing.</strong></p>
+<p>ie, if the switch is forced to 100FDX, then the host MUST also be forced to 100FDX.  If the switch is using auto-negotiation, then so must the host.</p>

@@ -1,0 +1,91 @@
+---
+layout: post
+title: 'HOWTO: Configure Your Raspberry Pi With VNC Without Ever Connecting It To
+  A Keyboard &amp; Monitor'
+date: 2012-07-20 08:03:14.000000000 -07:00
+tags:
+- HOWTO
+- Raspberry Pi
+- RPi
+- raspi
+type: post
+published: true
+---
+<p>So your Raspberry Pi has just arrived in the post and you're anxious to get playing, but alas, you don't have a spare keyboard, mouse and monitor at hand or you can't use any of the monitors and TVs available to you.  This post details how you can use a single computer and network cable to get your Raspberry Pi up and running with VNC without ever having to connect a keyboard, mouse or monitor to it.</p>
+<ol>
+<li>Download the latest Raspberry Pi SD Card image.  I'm using <code>2012-07-15-wheezy-raspbian.zip</code> directly from <a href="http://www.raspberrypi.org/downloads" target="_blank">Raspberry Pi's download page</a>.</li>
+<li>
+<p>Install the OS onto the SD Card as per the <a href="http://elinux.org/RPi_Easy_SD_Card_Setup" target="_blank">RPi Easy SD Card Setup</a> instructions.</p>
+<p>My Dell E6410 laptop has an SD Card slot and I run Ubuntu on it, so this was a simple case of running:</p>
+<pre class="terminal">$ sudo dd bs=1M if=./2012-07-15-wheezy-raspbian.img of=/dev/mmcblk0</pre>
+</li>
+<li>
+<p>(Optional) Manually resize the SD card to consume the full space using parted(1M)</p>
+<pre class="terminal">$ sudo parted /dev/mmcblk0</pre>
+</li>
+<li>The actions you take in this step really depend on how much control you have over your network.
+<ol style="list-style-type:upper-alpha">
+<li>
+<h3>You have no DHCP server on your network and thus need to assign a static IP address:</h3>
+<ol style="list-style-type:lower-roman">
+<li>Mount your newly "installed" SD card</li>
+<li>Modify the <code>etc/network/interfaces</code> file on your SD card and configure the IP address you desire, eg
+<pre>iface eth0 inet static
+address 192.168.1.10
+netmask 255.255.255.0
+network 192.168.1.0
+broadcast 192.168.1.255
+gateway 192.168.1.1</pre>
+<p>Full network configuration instructions can be found on the <a href="http://wiki.debian.org/NetworkConfiguration" target="_blank">Debian wiki</a>.</li>
+<li>Umount your SD card and insert it into your RPi</li>
+</ol>
+</li>
+<li>
+<h3>You have no control of your network and thus have to rely on the DHCP assigned IP address:</h3>
+<ol style="list-style-type:lower-roman">
+<li>Mount your newly "installed" SD card</li>
+<li>Modify the <code>etc/dhcp/dhclient-enter-hooks.d/debug</code> file on the SD card and change <code>RUN="no"</code> on line 10 to <code>RUN="yes"</code> and save the file.</li>
+<li>Insert your newly "installed" SD card into your RPi.</li>
+<li>Connect the network cable and power and boot the RPi.  Leave it for a few minutes to boot completely and obtain an IP address.</li>
+<li>Power off the RPi</li>
+<li>Remove the SD card, insert and mount it on your PC</li>
+<li>Obtain the IP address assigned on the last boot by viewing the contents of the <code>tmp/dhclient-script.debug</code> file.  The contents will look similar to the following:
+<pre><code>Sun Jul 15 19:42:26 UTC 2012: entering /sbin, dumping variables.
+reason='REBOOT'
+interface='eth0'
+new_ip_address='10.167.234.240'		⬅ <strong>HERE'S YOUR IP ADDRESS</strong>
+new_network_number='10.167.224.0'
+new_subnet_mask='255.255.240.0'
+new_broadcast_address='10.167.239.255'
+new_routers='10.167.224.1'
+new_domain_name='your.domain.com'
+new_domain_name_servers='10.167.162.20 10.167.162.36 192.135.82.44'
+new_netbios_name_servers='10.167.172.57 10.167.172.66'
+</code></pre>
+<p>Take note of the IP address. Thanks to the fact that DHCP will always try and reuse IP addresses requested by a client in a short period of time, we can be pretty confident we'll get the same IP address when we next boot the RPi (provided we don't leave it too long).</li>
+<li>umount the SD card, transfer back to the RPi</li>
+</ol>
+</li>
+<li>
+<h3>You have full control of your DHCP server:</h3>
+<p>You don't need me to tell you what to do here :-) </li>
+</ol>
+</li>
+<li>Now you know the IP address of your RPi simply power it up and login using the default login details.</li>
+<li>
+<p>Install VNC Server</p>
+<pre class="terminal">$ sudo apt-get install tightvncserver</pre>
+</li>
+<li>
+<p>Start VNC Server</p>
+<pre class="terminal">$ vncserver :1 -geometry 1024x600 -depth 16 -pixelformat rgb565</pre>
+</li>
+<li>Connect to the VNC server running on your RPi on port 5901 using your remote desktop client of choice. I use Ubuntu's Remote Desktop.</li>
+<li>Enjoy</li>
+</ol>
+<p>For those who like screenshots, here's me connecting to my RPi after following the above...</p>
+<figure class="center"><img alt="RPi over VNC" src="/assets/RPi_over_VNC.png" width="1054" height="714" /><br />
+<figcaption>Raspbian over VNC</figcaption>
+</figure>
+<p>At this point you may want to consider adding your own user and either remove the default user or at least change the default password.  I'll leave that to you to decide.</p>
+<p><strong>Update</strong>: Spammers have spoiled the party folks.  This post has suddenly become very popular with spammers so I've disabled comments on it.  If you wish to comment, please feel free to comment via Twitter (@lildude) or via <a href="https://plus.google.com/114832296216697565318/posts" target="_blank">Google+</a></p>

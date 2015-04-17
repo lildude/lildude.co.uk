@@ -1,0 +1,42 @@
+---
+layout: post
+title: 'HOWTO: Integrate 3rd Party Applications Into Habari'
+date: 1969-12-31 16:00:00.000000000 -08:00
+tags:
+- General
+type: post
+published: false
+---
+<p>It would really depend on what you're trying to do and the application<br />
+you're trying to integrate. One word of warning: this isn't a simple<br />
+thing to do and would require a fair amount of understanding of both<br />
+PHP and the 3rd party application.</p>
+<p>Essentially, what you've need to do is workout what function/method<br />
+your non-Habari application uses to display it's output and then work<br />
+this into your theme by including the necessary php files and commands<br />
+into the page.pagename.php file and then calling the appropriate<br />
+output methods.</p>
+<p>In very simplistic terms, you'll need to do the following (assuming<br />
+the application you're trying to integrate uses a single function to<br />
+display all output):</p>
+<p>1.  Create a new empty page within the Habari admin interface<br />
+2.  Create a template for your theme - this is the page.pagename.php<br />
+file I mentioned before.  The name of the file is dependent on the<br />
+name you've given your page within Habari and will be responsible for<br />
+calling the header and footer (thus making the page blend in) - see<br />
+the theming details in the wiki for more details.<br />
+3.  include()/require() your external application file near the top<br />
+4.  call the "output" function of your 3rd party application within<br />
+the page.pagename.php where you want the output to occur</p>
+<p>As I said before, this is a very simplistic approach and your usage is<br />
+likely to vary a bit from this, especially if you're external<br />
+application requires things like URL arguments etc.</p>
+<p>Unfortunately, providing specific details is very hard given the<br />
+variety of methods applications use to print their output.  Some<br />
+applications will require more work in the page.pagename.php file than<br />
+others. You'll have to work this out yourself and may want to check<br />
+the external application's index.php (or similar) file to see how<br />
+they're displaying the content.</p>
+<p>Unfortunately, it's not on the wiki pages either, like the similar<br />
+functionality isn't actually documented on the Wordpress site, but can<br />
+be used in a similar way (I've done this on several Wordpress sites).</p>

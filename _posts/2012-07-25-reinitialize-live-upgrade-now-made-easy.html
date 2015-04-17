@@ -1,0 +1,114 @@
+---
+layout: post
+title: Reinitialize Live Upgrade Now Made Easy
+date: 2012-07-25 05:10:08.000000000 -07:00
+tags:
+- Solaris
+- Live Upgrade
+type: post
+published: true
+---
+<p>The latest Live Upgrade patch (<a href="https://getupdates.oracle.com/all_unsigned/121430-81.zip" target="_blank">121430-81</a> / <a href="https://getupdates.oracle.com/all_unsigned/121431-82.zip" target="_blank">121431-82</a>) came out last night and in it we get some nice new functionality: you can now re-initialize your live upgrade configuration in one simple command.</p>
+<p>To re-initialize your Live Upgrade configuration, you used to have to run through the process I documented in <a href="https://support.oracle.com/CSP/main/article?cmd=show&type=NOT&id=11417657.1" target="_blank">Doc ID 1417657.1</a>.  With <a href="https://getupdates.oracle.com/all_unsigned/121430-81.zip" target="_blank">121430-81</a> / <a href="https://getupdates.oracle.com/all_unsigned/121431-82.zip" target="_blank">121431-82</a>, you no longer need to follow that document, you can simply use <code>ludelete(1M)</code> with its two new arguments:</p>
+<pre>     -R              Delete all the Alternate  Boot Environments 
+                     (ABEs) present in the system.
+                     Reinstate the system back to a state  where 
+                     no ABEs  are present  in the system. The -R 
+                     option would  ask for  confirmation  before 
+                     proceeding to delete all the ABEs.
+
+     -F              Forceful deletion of a BE even if  it is the
+                     last  BE on that disk.   This  option can be 
+                     used with a single BE  or with  -R option to 
+                     delete  all the ABEs.    When  used with  -R 
+                     option, it forcefully deletes all  Alternate 
+                     BEs   in the   system   without   asking for 
+                     confirmation.</pre>
+<p>Unfortunately the <code>lu*(1M)</code> man pages haven't been updated yet, but the above will appear in them when they are updated, probably with different spacing.</p>
+<p>So lets take this new functionality for a spin...</p>
+<pre class="terminal"># showrev -p | grep "^Patch: 121430-81"
+Patch: 121430-81 Obsoletes: 121435-04, 121437-02 Requires:  Incompatibles:  Packages: SUNWlur, SUNWluu, SUNWlucfg
+#
+#
+# lustatus
+Boot Environment           Is       Active Active    Can    Copy      
+Name                       Complete Now    On Reboot Delete Status    
+-------------------------- -------- ------ --------- ------ ----------
+s10s_u10wos_17b            yes      yes    yes       no     -         
+Jul12_CPU                  yes      no     no        yes    -       
+#
+#
+# lufslist s10s_u10wos_17b
+               boot environment name: s10s_u10wos_17b
+               This boot environment is currently active.
+               This boot environment will be active on next system boot.
+
+Filesystem              fstype    device size Mounted on          Mount Options
+----------------------- -------- ------------ ------------------- --------------
+/dev/zvol/dsk/rpool/swap swap        536870912 -                   -
+rpool/ROOT/s10s_u10wos_17b zfs        5170458112 /                   -
+rpool/export            zfs         279652352 /export             -
+rpool/export/home       zfs             31744 /export/home        -
+rpool                   zfs        7080212480 /rpool              -
+#
+#
+# lufslist Jul12_CPU
+               boot environment name: Jul12_CPU
+
+Filesystem              fstype    device size Mounted on          Mount Options
+----------------------- -------- ------------ ------------------- --------------
+/dev/zvol/dsk/rpool/swap swap        536870912 -                   -
+rpool/ROOT/Jul12_CPU    zfs            414208 /                   -
+rpool/export            zfs         279652352 /export             -
+rpool/export/home       zfs             31744 /export/home        -
+rpool                   zfs        7080212480 /rpool              -
+#
+#
+# zfs list
+NAME                                   USED  AVAIL  REFER  MOUNTPOINT
+rpool                                 6.59G  13.0G   106K  /rpool
+rpool/ROOT                            4.82G  13.0G    31K  legacy
+rpool/ROOT/Jul12_CPU                   404K  13.0G  4.82G  /
+rpool/ROOT/s10s_u10wos_17b            4.82G  13.0G  4.82G  /
+rpool/ROOT/s10s_u10wos_17b@Jul12_CPU   174K      -  4.82G  -
+rpool/dump                            1.00G  13.0G  1.00G  -
+rpool/export                           267M  13.0G   267M  /export
+rpool/export/home                       31K  13.0G    31K  /export/home
+rpool/swap                             528M  13.4G  86.3M  -
+#
+#
+# ludelete -R
+	This utility will reset the Live Upgrade subsystem back to clean
+	install on the current BE.
+	All other Boot Environments, history and customizations will be
+	removed and reset.
+
+	Press Y if you really want continue.
+Y
+INFORMATION: Checking the BE configurations.
+INFORMATION: Getting the BE list to be destroyed
+
+INFORMATION: If some redundant zfs datasets remain for BE <jul12_cpu>, please destroy them manually
+INFORMATION: Deleting the Boot Environment Jul12_CPU
+Updating boot environment configuration database.
+Updating boot environment description database on all BEs.
+Updating all boot environment configuration databases.
+#
+#
+# lustatus
+ERROR: No boot environments are configured on this system
+ERROR: cannot determine list of all boot environment names
+#
+#
+# zfs list
+NAME                         USED  AVAIL  REFER  MOUNTPOINT
+rpool                       6.59G  13.0G   106K  /rpool
+rpool/ROOT                  4.82G  13.0G    31K  legacy
+rpool/ROOT/s10s_u10wos_17b  4.82G  13.0G  4.82G  /
+rpool/dump                  1.00G  13.0G  1.00G  -
+rpool/export                 267M  13.0G   267M  /export
+rpool/export/home             31K  13.0G    31K  /export/home
+rpool/swap                   528M  13.4G  86.3M  -
+#</jul12_cpu></pre>
+<p>So what has this done? It's completely removed all traces of my live upgrade configuration from <code>/etc/lutab</code> (this file is actually deleted) and the files in <code>/etc/lu/</code>.  It has also removed any ZFS datasets directly associated with my boot environments.  It has also updated my OBP aliases (and GRUB if I were using x86) to only show the currently active boot environment.  Essentially my system now looks as it would if you'd never configured Live Upgrade on it.</p>
+<p>This is great news and is something we've been wanting for a while now.  Sadly it means my document is now obsolete :-( . Oh well, I'll be writing plenty more.</p>

@@ -1,0 +1,32 @@
+---
+layout: post
+title: 'HOWTO: Create a Solaris 10 RAM Disk Image'
+date: 2007-01-17 08:51:50.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- HOWTO
+- ramdisk
+type: post
+published: true
+---
+<p>Many people have heard of and have used <a href="http://en.wikipedia.org/wiki/RAM_disk">RAM disk</a> images under Linux, but did you know you can do the same thing with Solaris 10?  Well, it's a little known fact, but you can, which is great for the potential of using Solaris 10 or OpenSolaris on embedded devices or even on security devices like firewalls.</p>
+<p>Here is a quick method (courtesy of Peter Buckingham on one of our internal aliases) on creating a RAM disk image under Solaris 10 x86/x64 or OpenSolaris x86/x64:</p>
+<p><!--more--></p>
+<ol>
+<li>Install Solaris onto a disk based system</li>
+<li>Tar it up (except for <code>proc</code>)</li>
+<li>Modify <code>/boot/solaris/bootenv.rc</code> and remove "<code>bootpath</code>"</li>
+<li>Modify <code>/lib/svc/method/fs-usr</code> and change <code>mountfs</code> to remount <code>/</code> instead</li>
+<li>Modify <code>/etc/vfstab</code> and<br />
+                 - change <code>rootfs</code> to be <code>/devices/ramdisk:a</code><br />
+	         - remove swap<br />
+	         - remove <code>/tmp</code> so it's not swap backed</p>
+</li>
+<li>Now use the <code>/boot/solaris/bin/root_archive</code> command to build the RAM disk image:
+<p>eg <code># /boot/solaris/bin/root_archive pack solaris.img &lt;dir&gt;</code></p>
+<p>... where &lt;dir&gt; is the directory you've got your working filesystem in.</li>
+</ol>
+<p>Now you have a RAM disk image, there's nothing really stopping you from loading it from the network via pxegrub/pxelinux, or from a local disk.</p>

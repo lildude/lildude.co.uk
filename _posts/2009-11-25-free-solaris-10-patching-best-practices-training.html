@@ -1,0 +1,33 @@
+---
+layout: post
+title: Free Solaris 10 Patching Best Practices Training
+date: 2009-11-25 07:25:44.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- patching
+- Live Upgrade
+- training
+- Solaris 10
+type: post
+published: true
+---
+<p>If you think Solaris patching is a complete nightmare, have a bit of spare time on your hands (don't worry, you can still check emails etc) and really want to get up speed on Sun's best practices for patching on Solaris 10, then check out the <strong>FREE</strong> <a href="https://learning.sun.com/solc/tblocontainer/1179270477">Solaris 10 Patching Best Practices (WS-2700-S10)</a> training course.</p>
+<p>It's a little on the cheesy side and uses some pretty poor Second Life like images, but it provides some useful information on how to make your patching experience considerably easier.  The main emphasis is on using Live Upgrade for all your patching and maintenance and works around 5 key points they call the "patching philosophy":</p>
+<ol>
+<li>Use Solaris Live Upgrade</li>
+<li>Avoid patching live systems with zones when possible (use Live Upgrade)</li>
+<li>Avoid "Dim Sum" Patching  ( ie mix and matching of patches)</li>
+<li>Consistently apply Solaris 10 Best Practices</li>
+<li>Don't hesitate to seek guidance</li>
+</ol>
+<p>The best practices mentioned in point 4 are:</p>
+<ol>
+<li>Install the latest patch and package utility patches first (SPARC: 119254 / X86: 119255)</li>
+<li>Upgrade to the latest Solaris 10 Update release during your next major maintenance window</li>
+<li>Keep as up to date as possible with the contents of the Sun Alert patch cluster in between major maintenance windows.</li>
+<li>Use Live Upgrade to patch or upgrade an inactive boot environment</li>
+<li>If you are going to use Live Upgrade to patch a system with non-global zone that are running Solaris 10 8/07 (update 4) or an earlier Solaris 10 update release, apply the Solaris 10 Live Upgrade Zones Starter Patch Bundle</li>
+</ol>
+<p>... which is essentially what is detailed in the <a href="http://www.sun.com/bigadmin/features/articles/patch_management.jsp">Patch Management Best Practices</a> document on <a href="http://www.sun.com/bigadmin/">BigAdmin</a>, which I might add has a great <a href="http://www.sun.com/bigadmin/patches/solaris/index.jsp">patching section</a>.</p>
+<p>Most of the course revolves around using Live Upgrade and guides you through the process of creating the boot environments, upgrading, applying patches and activating the various boot environments.  If you're a little unsure about using Live Upgrade, this is a great free course to help you, and help you setup a good patching strategy at the same time. As an added bonus, there's also a section on Deferred Activation Patching and the Kernel patch.</p>

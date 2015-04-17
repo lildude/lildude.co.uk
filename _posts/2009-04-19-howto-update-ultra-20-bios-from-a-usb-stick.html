@@ -1,0 +1,44 @@
+---
+layout: post
+title: 'HOWTO: Update Ultra 20 BIOS From a USB Stick'
+date: 2009-04-19 05:01:28.000000000 -07:00
+tags:
+- OpenSolaris
+- Solaris
+- Hardware
+- update
+- Ultra 20
+- BIOS
+- usb
+type: post
+published: true
+---
+<p>Updating the firmware on an <a href="http://www.sun.com/desktop/workstation/ultra20/" target="_blank">Ultra 20</a> is a really simple matter: download the "Tools and Drivers" ISO image, burn it to DVD (as it's about 1.3GB), boot from the DVD and select option 2 to perform the update. </p>
+<p>However, it very quickly becomes way more complicated if you don't have a DVD burner or spare DVD-R, or even a DVD drive.  So what other option do you have? Boot CD?  Yes, but its way too complicated for the time and effort. Boot Network? Ditto.  Boot USB? Bingo!!! </p>
+<p><!--more-->The "Tools and Drivers" ISO image comes in at about 1.3GB because it includes things like network and graphics drivers for Solaris, Linux and Windows, diagnostic tools and loads of other stuff we really don't need in order to perform the BIOS update.  In fact, all we need is one 79Mb file - the <code>boot.img</code> file.  This is a simple Linux <code>boot.img</code> file so we can create the bootable USB stick as you would on Linux, but from a Solaris/OpenSolaris system...</p>
+<ol>
+<li>Mount the ISO image:
+<div class="terminal">$ pfexec mount -F hsfs /var/tmp/tools_and_drivers.iso /mnt<br />
+$</div>
+<p>If your version of Solaris/OpenSolaris doesn't have lofs support in <code>mount(1M)</code> (I can't remember what rev this was introduced in), you will need to perform the following steps:</p>
+<div class="terminal">$ pfexec lofiadm -d /var/tmp/tools_and_drivers.iso<br />
+/dev/lofi/1<br />
+$ pfexec mount -F hsfs /dev/lofi/1 /mnt<br />
+$ </div>
+</li>
+<li>Insert your USB stick and determine the device path.  There are various methods to do this, but the easiest is to allow the USB device to be automatically mounted and then use <code>mount(1M)</code> to determine the device path, and then <code>umount(1M)</code> the USB device:
+<div class="terminal">$ mount | grep media<br />
+/media/MS1GB on /dev/dsk/c6t0d0p0:1 read/write/nosetuid/nodevices/hidden/nofoldcase/clamptime/noatime/timezone=0/dev=c810d0 on Sun Apr 19 11:33:11 2009<br />
+$ pfexec umount /media/MS1GB<br />
+$</div>
+</li>
+<li>Overwrite your USB stick with the <code>boot.img</code>:
+<div class="terminal">$ pfexec cat /mnt/boot.img > /dev/rdsk/c6t0d0p0<br />
+$</div>
+<p>Note: You need to cat the image to partition 0 (p0) on the raw (rdsk) device.</li>
+</ol>
+<p>That's it.  You now have a bootable USB stick with just enough on it to perform the BIOS update.  Reboot your system, press F8 and select the USB disk from the list of boot options.</p>
+<p>Everything should now appear as if you'd booted from the DVD and you can quickly and easily update your BIOS.</p>
+<p><strong>Update - 27 Jan 2011</strong>: Since Oracle have taken over Sun, locating the "Tools and Drivers" ISO image has become a bit of a challenge.  I've removed the link above as it's not valid.  You now need to use <a href="http://support.oracle.com" target="_blank">My Oracle Support</a> under the "Patches  & Updates" tab.  Select "Product or Family (Advanced Search) and enter the fields as follows:</p>
+<p><img class="center" alt="Ultra 20 M2 Download on My Oracle Support" src="/assets/U20Download.jpg" width="677" height="217" /></p>
+<p>... and click search.  This will return one result which is the ISO image.</p>

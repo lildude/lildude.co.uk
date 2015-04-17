@@ -1,0 +1,31 @@
+---
+layout: post
+title: Solaris Package Dependency Tool Now Available
+date: 2012-05-09 02:12:13.000000000 -07:00
+tags:
+- Solaris
+- packages
+- dependencies
+- pkgdep
+type: post
+published: true
+---
+<p>If you've tried to administer and minimize your Solaris installation, I'm sure you've hit the problem that is easily listing a pkg's dependencies.  Well, not any more.  An 8 year old request for enhancement (RFE)...</p>
+<p><a href="https://supporthtml.oracle.com/epmos/faces/ui/km/BugDisplay.jspx?id=5012345" target="_blank">5012345 request for tool to list package dependencies</a> (My Oracle Support login required)</p>
+<p>... has just been implemented in Solaris 10 and is delivered with patch 119254-84 (SPARC) and 119255-85 (x86).</p>
+<p>This patch introduces the <code>/usr/sbin/pkgdep</code> command with the following usage instructions:</p>
+<pre class="terminal"># /usr/sbin/pkgdep
+
+Usage:
+/usr/sbin/pkgdep [-v] [-c | -m metacluster] [-d package-directory] 
+   [-p product-image-path] [-R root-path] package-name
+
+The following options are supported:
+-c	Print only dependencies not currently installed on the system.
+-d	Specify a directory to check for packages and dependencies.
+-m	Print only dependencies not included in specified metacluster.
+-p	Specify a product image to check for packages and dependencies.
+-R	Specify an alternate system root.
+-v	Print full package descriptions.
+#</pre>
+<p>As the usage message indicates, the usage itself is not very complicated.  If you're curious, this is a Perl script, so if something isn't working as you expect, have a look at the source and see why.</p>

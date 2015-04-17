@@ -1,0 +1,52 @@
+---
+layout: post
+title: Right-align a HTML List With the Bullet on the Right
+date: 2010-08-26 04:12:30.000000000 -07:00
+tags:
+- Coding
+- html
+- CSS
+- bullet
+type: post
+published: true
+---
+<p>In the process of developing my new theme, I encountered a bit of a challenge: how can I right-align an unordered list with the bullet on the right using only CSS and HTML, but without using images?</p>
+<p>This is the desired effect and is actually a screenshot of the result I was after:</p>
+<figure class="center"><img alt="Related posts" src="/assets/related.png" width="613" height="133" /><br />
+<figcaption>Right-aligned list with bullet on the right</figcaption>
+</figure>
+<p>One of the primary requirements I put upon myself for this theme was to make sure it is as quick as possible with as few external images as possible.  The idea was to harness the power of the browser and force myself to investigate the possibilities of using CSS and HTML where-ever possible without having to revert to images or javascript, unless absolutely necessary.</p>
+<p>The first idea that came to mind was to use the <code>direction</code> property and set the direction to <code>rtl</code> as follows:</p>
+<pre class="prettyprint">
+#related ul { 
+            direction: rtl; 
+            text-align: right; 
+            }
+</pre>
+<p>On the face of it, this seemed to do the trick, the problem comes when you start ending your lists with punctuation, for example:</p>
+<div style="width:100px;margin-left:5em;">
+<ul style="direction:rtl;text-align:right">
+<li>Item 1?</li>
+<li>Item (2)</li>
+<li>Item 3!.</li>
+<li>Item [4]</li>
+</ul>
+</div>
+<p>If you are using a latin character set, you'll notice the punctuation at the end of each item is at the beginning of the line and not at the end.  It would appear this is expected due to the fact I use a ltr character set normally and punctuation is deemed direction agnostic so it's moved to the front.</p>
+<p>The next solution was to use a background image.  This is the most popular method found on Google, but it involves using an image which I didn't want to do.</p>
+<p>So I racked my brains a bit further and then I remembered the CSS <code>:after</code> pseudo element and with a little bit of tinkering I came up with the following:</p>
+<pre class="prettyprint">
+#related { 
+            list-style-type: none; 
+            text-align: right; 
+            }
+#related li { 
+            content: '  022';   /* This is the numeric representation of &amp;bull; */
+            font-size: 1.3em; 
+            font-weight: bold; 
+            line-height: 1em; 
+            vertical-align: middle; 
+            }
+</pre>
+<p>Note the second stanza in the about above.  The <code>content</code> is the important part.  Everything else is there just to make the bullet look more pleasing and as close to the default bullet as possible. </p>
+<p>This problem posed to be particularly difficult, but with a bit of tinkering I soon worked it out and it seems to work perfectly without the need for a background image (and thus removes one unnecessary HTTP request).</p>

@@ -1,0 +1,36 @@
+---
+layout: post
+title: Ultra Verbose patchadd(1M)
+date: 2009-07-15 06:46:08.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Solaris
+- debug
+- patchadd
+- pkgadd
+- verbose
+type: post
+published: true
+---
+<p>Ever wished you could get patchadd(1M) to give you the same verbose output pkgadd(1M) does with the <code>-v</code> option?  Well believe it or not, you can, it's just not documented.</p>
+<p>I was perusing through the <code>/usr/lib/patch/patchadd</code>  script on Solaris 10 and look what I found...</p>
+<pre>
+function parse_args
+{
+        [...]
+      	-g) PKGADD_DEBUG="yes"; shift;;
+        [...]
+}
+</pre>
+<p>This option isn't documented anywhere, however I do know modifying this script and manually setting this PKGADD_DEBUG variable to yes/true gives you output equivalent to "<code>pkgadd -v</code>" which the pkgadd(1M) man page explains...</p>
+<pre>     -v
+
+         Trace all of the scripts that get  executed  by  pkgadd,
+         located in the pkginst/install directory. This option is
+         used for debugging  the  procedural  and  non-procedural
+         scripts.</pre>
+<p>Sure enough, passing the <code>-g</code> option to patchadd(1M) gives us the same output, without having to modify the <code>/usr/lib/patch/patchadd</code> script itself.</p>
+<p>I did a bit more investigating and this option has been in this (or equivalent) script since Solaris 8 without any public knowledge of it.</p>
+<p>Now this is going to become a very useful option when debugging patches that fail to install where the logs end up being next to useless. I just wish I'd known about it sooner.</p>
+<div class="alert"><strong>WARNING: As this is undocumented, it's completely unsupported and subject to change without notice (no one told us it was there in the first place ;-) ).</strong></div>

@@ -1,0 +1,19 @@
+---
+layout: post
+title: Oracle Solaris 11 Compatibility Checker Tool
+date: 2011-03-22 02:51:54.000000000 -07:00
+tags:
+- Solaris
+- application
+- developer
+- Binary Compatibility
+- ISV
+type: post
+published: true
+---
+<p>For a long long time now Solaris has maintained a <a href="http://www.oracle.com/us/products/servers-storage/solaris/binary-app-guarantee-080255.pdf" target="_blank">Binary Compatibility Guarantee</a>.  In short this is a guarantee that any application built according to recommended guidelines using documented interfaces on an older release of Solaris will run on a newer release of Solaris with minimal, often no, modification.  This is one of the places Solaris trumps Linux.  You won't get such a guarantee from any Linux vendor.</p>
+<p>Anyway, with Solaris 11 this guarantee will still be valid and Oracle are now in the process of encouraging ISVs to validate their applications early by announcing the availability of the <a href="https://www.samplecode.oracle.com/sf/projects/solaris_11_compatibility_tools/" target="_blank">Oracle Solaris 11 Compatibility Checker Tool</a>.</p>
+<p>To quote the <a href="https://www.samplecode.oracle.com/sf/projects/solaris_11_compatibility_tools/" target="_blank">Oracle Solaris 11 Compatibility Checker Tool</a> page...</p>
+<blockquote><p>However with every release there are a few userland commands that have changed, improved, or moved. So it is always important to know if and where your application might see changes, either because of userland changes or in places where it relies on internal APIs that are outside our guaranteed ABI.</p>
+<p>The Oracle Solaris 11 Compatibility Checker Tool allows developers to quickly zero in on such possible incompatibilities and make the required changes. This is achieved by executing a combination of “Source Code analysis”, “Static Binary analysis” and “Runtime analysis” modules of the tool on the applications already available on Oracle Solaris 10. The Runtime analysis module will be made available in a future release of the tool.</p></blockquote>
+<p>If you're an ISV with applications running on Solaris 10, I highly encourage you to check and verify your applications as soon as possible.  Solaris 11 is due out later this year and there are going to be quite a lot of changes, many of which are for the good.  I anticipate customers who are testing Solaris 11 Express now (it comes with full production use support as part of your OS support contract) will be impressed with the new functionality and will be eager to upgrade.  Don't get caught napping.</p>

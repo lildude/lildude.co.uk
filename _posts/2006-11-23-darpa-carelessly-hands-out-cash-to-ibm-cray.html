@@ -1,0 +1,35 @@
+---
+layout: post
+title: DARPA Carelessly Hands out Cash to IBM & Cray
+date: 2006-11-23 05:16:43.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- Hardware
+- In The News
+- dtrace
+- IBM
+- supercomputer
+- HPC
+- Cray
+- DARPA
+- petaFLOPS
+- Sun Microsystems
+type: post
+published: true
+---
+<p>I was a little surprised and saddened to <a href="http://www.theregister.co.uk/2006/11/21/darpa_petascale/">read that DARPA has decided to pump US$250m into Cray and US$244m in IBM</a> for them to work on DARPA's next high performance computing initiative - their "Petascale" program.</p>
+<p>There was a lot of bidding and vying for the investment and it came down to 3 final contenders - IBM, Cray and Sun.  Now being a Sunny, you can understand my disappointment - had Sun got some of this cash, I may have got a pay rise.  That aside, I'm surprised DARPA made their decision based on the idea's pitched.</p>
+<p><!--more--></p>
+<p>IBM pitched their idea based on the current Power processors and their <a href="http://en.wikipedia.org/wiki/GPFS">GPFS</a> clustered filesystem, but promised the IBM system would run on their upcoming Power7 processor. Ummm, what Power7 processor?  </p>
+<p><a href="http://www.power.org/">IBM has just jumped onto the bandwagon</a> Sun has been driving for years (opening their processor specs to the world - first <a href="http://www.sparc.com/">SPARC</a> and now <a href="http://www.opensparc.net/">OpenSPARC</a>) and <q>released its first collaborative specification, the Power Architecture Platform Reference (PAPR)</q> to Linux developers.  What is interesting about this is you need to be registered with them to get hold of the specs and they don't seem to give any details of their so called upcoming Power7 processor on their <a href="http://www.power.org/resources/devcorner/roadmap">Power Architecture Processor Roadmap</a>. So if this Power7 processor exists somewhere, they're keeping schtum about it's capabilities and specs and when it's coming, especially considering that the agreement with DARPA requires that the architecture be commercially available.</p>
+<p>In contrast, compare it to Sun's processor <a href="http://www.sun.com/products-n-solutions/edu/events/2006/erc/presentations/david_yen.pdf">roadmap</a>.  Whilst specs aren't available yet either, at least Sun is telling the world what's coming.</p>
+<p>Cray's bid was also centred about something that doesn't exist yet and something Sun has done before.  Cray's bid was based on the hypothetical product called "<a href="http://www.theregister.co.uk/2006/03/18/cray_cascade/">Cascade</a>". This will essentially be a blade system that will combine Opteron-based servers, FPGAs, vector systems and massively multi-threaded systems into the same chassis and then use a software layer tool to spread the load across the blades to get the best performance.</p>
+<p><!--wsa:LongPostMiddle--></p>
+<p>Whilst Sun doesn't make/use <a href="http://en.wikipedia.org/wiki/FPGA">FPGAs</a> (why would they want to? They're slower, less functional and more power hungry than <a href="http://en.wikipedia.org/wiki/ASIC">ASICs</a>) or vector systems, they've already combined multiple architectures in a <a href="http://www.sun.com/servers/entry/blade/b1600/">blade chassis</a> (now EOL) and will be releasing a new product shortly (<a href="http://www.sun.com/8000p">Sun Blade 8000 P</a>) which can hold Opteron and T1 processors.  This is something that is happening, not "may happen" or is relying on DARPA cash.</p>
+<p>Then there's the topic of problems and failures - we all know these do occur. </p>
+<p>From a hardware perspective Sun has had years of experience providing the world with enterprise class availability features like like memory and CPU hot-swap, redundant system bus and fault tolerant clock-boards that do not require a reboot in most of their mid-range to high end systems like the <a href="http://www.sun.com/servers/highend/sunfire_e25k/features.xml">E25k</a>.  <a href="http://www-03.ibm.com/servers/uk/eserver/pseries/hardware/highend/595/specs.html">IBM's high end p595 lacks some of this functionality</a>. Credit where credit's due, Cray are good for this - they did sell the E10k to Sun after all.</p>
+<p>Then there's software issues - nothing helps with finding software issues and performance problems like <a href="http://www.opensolaris.org/os/community/dtrace/">DTrace</a>.  This has got to be the single best software invention in the last 10 years (<a href="http://online.wsj.com/public/article/SB115755300770755096-R2Ct41cQ4ZIPMwk4_xh0xU_HnQI_20061011.html?mod=tff_main_tff_top">and I'm not alone thinking this</a>) and best of all, it's open source.  IBM is free to add it to any operating system they like, just like <a href="http://www.apple.com/macosx/leopard/xcode.html">Apple</a> and <a href="http://people.freebsd.org/~jb/dtrace/">FreeBSD</a> have done. Somehow I don't think this will be happening any time soon.  How would they explain to their customers that the single best feature they've just added to their OS actually came from their nearest competitor? Even if they did swallow their pride and port DTrace to AIX (hell will freeze over first) or Linux, it's going to cost them: How would they support DTrace? Take whatever <a href="http://www.opensolaris.org">OpenSolaris</a> gives them?  No way. No customer would select this approach over going straight to the source and IBM knows this.</p>
+<p>Whilst I don't know the ins and outs of Sun's tender and the gory details of everyone else's tenders, I can't help but think DARPA has been a bit careless in handing out their cash.  I don't think they've really weighed up the pros and cons.  It will certainly piss them off if Sun takes what they've done at the <a href="http://www.sun.com/customers/servers/tokyo_tech1.xml">Tokyo Institute of Technology</a> even further and beats DARPA to the two petaFLOPS mark. They've certainly got their <a href="http://www.sun.com/smi/Press/sunflash/2006-11/sunflash.20061114.2.xml">soldiers all standing in a row</a>.</p>

@@ -1,0 +1,41 @@
+---
+layout: post
+title: 'HOWTO: Determine If You Are in a Solaris Zone and its Type'
+date: 2011-07-15 23:21:39.000000000 -07:00
+tags:
+- Solaris
+- zone
+- global
+- whole
+- sparse
+type: post
+published: true
+---
+<p>Solaris zones are a great invention and a brilliant use of a system's resources, but there's always been one little niggle that has annoyed sysadmins and application vendors:  </p>
+<p>How do you determine if you are in a zone or not and if you are, what is its type?</p>
+<p>There are a number of methods I've seen being employed from people loopback mounting a file from the global zone which contains this information to making assumptions based on the output of commands like ps(1) or zonename(1) but these are all "hacks" which require some foresight by the admin and doesn't always answer the "what type of zone" question.</p>
+<p>Well, I can say there is an officially supported method that you can use... the pkgcond(1M) command.</p>
+<p>Have a look at this:</p>
+<pre class="terminal"><code>$ pkgcond -n is_what /
+can_add_driver=0
+can_remove_driver=0
+can_update_driver=0
+is_alternative_root=0
+is_boot_environment=0
+is_diskless_client=0
+is_global_zone=1
+is_mounted_miniroot=0
+is_netinstall_image=0
+is_nonglobal_zone=0
+is_path_writable=1
+is_running_system=1
+is_sparse_root_nonglobal_zone=0
+is_whole_root_nonglobal_zone=0
+$</code></pre>
+<p>I bet you can guess straight away where I ran this command :-)</p>
+<p>You can of course query just one parameter:</p>
+<pre class="terminal"><code>$ pkgcond -n is_sparse_root_nonglobal_zone /
+$ echo $?
+0
+$</code></pre>
+<p>Knowing this little titbit of information, you can easily incorporate it into you admin or application scripts in the quiet confidence that you will get the exact answer you want without having to cobble together some fancy script or other methods to determine if you are in a non-global zone or not and if you are, its type.</p>

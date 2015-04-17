@@ -1,0 +1,110 @@
+---
+layout: post
+title: 'HOWTO: Multi-boot Solaris, RHEL, SLES and Nevada'
+date: 2007-05-31 06:37:05.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- HOWTO
+- installation
+- Linux
+- Nevada
+- RedHat
+- Suse
+- multi-boot
+type: post
+published: true
+---
+<p>Once upon a time I let it be known that I'd done a fair bit of "playing" with Linux and as a result I 	attended a RedHat training course.  As a result of this, I've been given the task of being one of the primary x86/x64 engineers in the UK solution centre. With this responsibility came a lovely new Ultra 20 to keep my feet warm and the requirement that I need to be able to offer assistance in supporting all the *NIX varieties that Sun supports on it's hardware.</p>
+<p>Well, never put off my a new opportunity and a chance to <del datetime="2007-05-24T15:22:57+00:00">play with</del> learn something new, I gratefully accepted the Ultra 20 and set myself the task of installing RedHat Enterprise Linux, SuSE Linux Enterprise Server, Solaris 10 and Nevada onto the same disk on the same machine.</p>
+<p>I can happily report, I've done this now and thought I'd share my method.</p>
+<p><!--more--></p>
+<h3>The Partition Table</h3>
+<p>First, the partition/slice table.  As we're installing several operating systems on the one disk, we need to do a bit of planning.  What's more, the current Solaris and OpenSolaris installer will only allow one Solaris partition (primary or extended) per disk.  You can actually cheat and work around this <a href="http://blogs.sun.com/bobn/entry/a_grub_configuration_for_multiple">using GRUB to change the partition types on the fly</a>, but I haven't gone this route.</p>
+<p>This is what I've gone for:<a name="part"></a></p>
+<table style="min-width:500px">
+<tr>
+<th>Part #</th>
+<th>Size</th>
+<th>Type</th>
+<th style="width:120px">Mount Point</th>
+<th style="min-width:150px;">Notes</th>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>20G</td>
+<td>EXT3</td>
+<td>/ (RHEL)<br />/mnt/redhat (SLES)</td>
+<td>This will be the root partition for RHEL</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>50G</td>
+<td>UFS</td>
+<td>s0 - Sol 10 (10G)<br />s1 - Swap (2G)<br />s3 - Nevada (10G)<br />s4 - ABE (10G)<br />s5 - ZFS (4G)<br />s6 - ZFS (4G)<br />s7 - /export (10G)</td>
+<td>s1 will be used by Linux for SWAP too [<a href="##">#</a>]<br />s3/4 are interchangeable and will be used for LiveUpgrading Nevada and Solaris 10<br />s5/6 are so I can play with ZFS without affecting my OS or data<br />s7 will be for Solaris specific apps needed on both Solaris and Nevada</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>20G</td>
+<td>ReiserFS</td>
+<td>/ (SLES)</td>
+<td>I've stuck with the default filesystem for SLES</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>60G</td>
+<td colspan="3">Extended Partition</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>10G</td>
+<td>FAT32</td>
+<td>/mnt/data</td>
+<td>This gives me a partition I can mount on ALL of the operating systems on this machine.  I use it to store all host config info to start off with.</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>50G</td>
+<td>TBA</td>
+<td>TBA</td>
+<td>This is a scratch partition that can be used by any OS for any reason.  It can be formatted with any filesystem as and when it's needed.  I only envision this being used for things like testing other operating systems and other OS functionality.</td>
+</tr>
+</table>
+<h3>The Installation Order</h3>
+<p>Whilst the installation isn't too important, I found the following to be the easiest method and removed the need to reload boot blocks or re-install GRUB.  Ultimately, as Nevada will be my primary OS, I'll use Nevada's GRUB.</p>
+<ol>
+<li>Install RHEL 4u4 and create the basic partition table (<a href="#part">as above</a>).  It doesn't matter what filesystems you use for partitions 2 and 6 as we can reformat these later. Select EXT3 for partition 3 - this isn't too important though as the SLES installer will reformat it later.
+<p>Once the OS has been installed, there is one thing you need to do - change your <code>/etc/fstab</code> so partitions are mounted by device name and number and not label. ie replace <code>LABEL=/</code> with the correct <code>/dev/sd?#</code> device.  This is needed as only RedHat seems to use the labels, and if they are overwritten later (by SLES or Solaris), then RedHat will still boot correctly.</li>
+<li>Install SLES 10 onto partition 3 - reformatted to ReiserFS - as this is the desired default for SLES 10.
+<p>Once the OS is installed and booted, I did the following to ease the next few steps:</p>
+<ul>
+<li>changed the partition type for partition 2 to "be" using fdisk (# fdisk /dev/sda > t > 2 > be > w). This is needed so the Solaris 10 installer can find the Solaris partition.</li>
+<li>copied /boot/grub/menu.lst to /mnt/data - I need this for Nevada as it won't pick up the Linux partitions automatically like Linux does.</li>
+</ul>
+</li>
+<li>Install Solaris 10 11/06 (update 3) onto partition 2. As part of the installation, slice up the partition as specified above.  To get the installer to install into partition 2, I needed to use one of the "text" options as the graphical installer wouldn't play ball nicely.  The text options also give you a lot more freedom with your settings.
+</li>
+<li>Install Nevada onto partition 2, slice 3.  Be sure to preserve all other slices.
+<p>Once the OS was installed I added the RHEL and SLES grub entries into Nevada's <code>/boot/grub/menu.lst</code> from the file I copied earlier to <code>/mnt/data</code>.</li>
+</ol>
+<p><!--wsa:LongPostMiddle--></p>
+<h3>Additional Notes</h3>
+<p><a name="#"></a><strong>Linux Using the Solaris SWAP slice:</strong></p>
+<p>Now you may be curious to know how Linux is going to be able to use the Solaris swap slice for it's own swap partition.</p>
+<p>Well, when Linux creates the devices for each partition, it will detect the presence of the Solaris fdisk partition table on partition 2, and will process this too and create the appropriate devices.  The pseudo-partition numbers start immediately after the last physical partition. This can be seen in <code>/var/log/messages</code> or the <code>dmesg</code> output with lines that look similar to this (your output may differ):</p>
+<p><code>sda: sda1 sda2 sda3 &lt; sda5 sda6 sda7 &gt;<br />
+sda2: &lt;solaris: [s0] sda8 [s1] sda9 [s2] sda10 [s3] sda11 [s4] sda12 [s5] sda13 [s6] sda14 [s7] sda15 &gt;</code></p>
+<p>You can now add the appropriate entry to your /etc/fstab file.</p>
+<p>One more hurdle though - to use it as Linux swap, it must be properly formatted. Run a mkswap from the Linux side to format the swap partition. Fortunately Solaris skips over the header so it won't get mangled.</p>
+<p><strong>Easy SSH:</strong></p>
+<p>As you're multibooting, each OS will have a different SSH host key.  This plays havoc with your known_hosts file, so to ease ssh connections, copy the /etc/ssh/ssh_host_*_key* from one of the operating systems to /etc/ssh/ on each of the other operating systems installed.  </p>
+<p><strong>Problematic NFSv4:</strong></p>
+<p>As part of my configuration, I export a filesystem for access from remote systems.  Unfortunately, the NFSv4 implementation on Linux is just plain wrong and <a href="http://lildude.co.uk/2007/05/nfsv4-on-linux-is-broken/">causes havoc with the Solaris automounter</a>.  Accordingly, I had to <a href="http://lildude.co.uk/2007/05/howto-disable-nfsv4-on-redhat-enterprise-linux-4/">disable NFSv4 on RHEL</a> and SLES.</p>
+<h3>Screenshots</h3>
+<p>Of course we need some screenshots too.  I personally think the SLES desktop is the cleanest and most pleasing on the eye with Nevada coming in a close 2nd.  Solaris 10 is horrible.</p>
+<div class="center">
+<a href="http://www.flickr.com/photos/lildude/513760008/" title="RHEL 4u4"><img src="http://farm1.static.flickr.com/203/513760008_e9f8838cf8_t.jpg" width="100" height="75" alt="RHEL 4 update 4" /></a><a href="http://www.flickr.com/photos/lildude/513760012/" title="SLES 10"><img src="http://farm1.static.flickr.com/197/513760012_4091011957_t.jpg" width="100" height="75" alt="SLES 10" /></a><a href="http://www.flickr.com/photos/lildude/513760018/" title="Solaris 10 11/06"><img src="http://farm1.static.flickr.com/200/513760018_e402df926a_t.jpg" width="100" height="75" alt="Solaris 10 11/06" /></a><a href="http://www.flickr.com/photos/lildude/513760016/" title="Nevada B64"><img src="http://farm1.static.flickr.com/190/513760016_71bd35c5cd_t.jpg" width="100" height="75" alt="Nevada Build 64" /></a>
+</div>

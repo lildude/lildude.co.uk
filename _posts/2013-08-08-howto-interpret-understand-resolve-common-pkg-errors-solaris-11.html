@@ -1,0 +1,103 @@
+---
+layout: post
+title: HOWTO Interpret, Understand and Resolve Common pkg(1M) Errors on Solaris 11
+date: 2013-08-08 05:58:56.000000000 -07:00
+tags:
+- HOWTO
+- pkg
+- Solaris 11
+- updates
+- errors
+type: post
+published: true
+---
+<p>Solaris 11 has been out on the market for nigh on two years and it's an absolutely brilliant evolution in the history of Solaris, however I've come to notice one common issue that really shouldn't be an issue at all: the number of calls we're getting from people not being able to interpret the failure messages that pkg(1M) produces.  </p>
+<p>This post aims to explain how to interpret, understand and resolve the most common pkg(1M) errors.</p>
+<p>Lets start off with interpreting the basic format of the error.  Take the following:</p>
+<h2>Scenario 1: </h2>
+<pre class="terminal"># pkg install compatibility/ucb
+Creating Plan (Solver setup): -
+pkg install: No matching version of compatibility/ucb can be installed:
+  Reject:  pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.151.0.1</span>:20101104T230637Z
+           pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.0.0.0.2.1</span>:20111019T053003Z
+           pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.0.10.1.0.0</span>:20120918T160038Z
+           pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.0.0.24.2</span>:20120919T184131Z
+  Reason:  This version is excluded by installed incorporation 
+pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.9.0.5.2</span>:20130704T025151Z
+#</pre>
+<p>This is the general format of the most important part of most of the failure messages you get from pkg(1M) and they're actually surprisingly easy to interpret when you know what to look out for.</p>
+<p>As a general rule, I look for the very last "Reject" and "Reason" lines, the versions in each and then work backwards from there.  </p>
+<p>In this example, we can see four different versions of the <code>compatibility/ucb</code> pkg didn't install because it is excluded by the installed incorporation: <code>osnet-incorporation</code>.  Now the important part of this is the version strings.  Note how the version in the "Reason" line is later than the version strings in the lines before.  This is the big clue as to why <code>compatibility/ucb</code> pkg failed to install.</p>
+<p>In this case, the <code>compatibility/ucb</code> pkg failed to install because the system on which we are trying to install the pkg is running Solaris 11.1.9.5.1 (aka Solaris 11.1 w/ SRU 9.5.1).  This is later than the revisions offered by the repository the client is referencing and attempting to install the <code>compatibility/ucb</code> from.  In this case, the latest revision the repository is offering is <code>5.11-0.175.1.0.0.24.2</code> which corresponds to Solaris 11.1.0.24 or just Solaris 11.1 without any SRUs.</p>
+<p>This often isn't a problem, however it is in this case because the <code>compatibility/ucb</code> was actually updated in the build up to Solaris 11.1.6.4 (aka S11.1 SRU6.4) which introduced a dependency on <code>osnet-incorporation@0.5.11,5.11-0.175.1.6.0.4.0</code> or later.  As the repository isn't offering any SRUs, this dependency won't be met and the pkg can't be installed.</p>
+<p>The solution is to point the client to a repository server that offers the full IPS repository AND at least SRU 9.5.1 (as this is what is installed on the client) or to make the partial SRU 9.5.1 IPS update image accessible to the client alongside the full release repository... </p>
+<p>NOTE: the client needs to access BOTH. Failure to do so will cause the error we'll address next.</p>
+<p>Of course, the simplest method is to update the client to point to the Oracle support repository at https://pkg.oracle.com/solaris/support (you'll need a <a href="https://pkg-register.oracle.com" target="_blank">certificate and key pair</a> in order to do this) but I understand this isn't always possible.  In situations where your clients can't access the public Oracle servers, I highly recommend you create a local repository server - it can be a zone - and point all your clients to this single internal repository server.</p>
+<p>Here are 3 more commonly seen pkg(1M) errors, their causes and solutions.  I've left these quite short to allow you to interpret the messages yourself to see why the failures have occurred.</p>
+<p><!--more--></p>
+<h2>Scenario 2: The IPS repository is incomplete</h2>
+<pre class="terminal">pkg update: No solution was found to satisfy constraints
+latest incorporations:
+ pkg://solaris/consolidation/cns/cns-incorporation@0.5.11,5.11-0.175.0.10.0.4.0:20120731T142644Z
+ pkg://solaris/consolidation/install/install-incorporation@0.5.11,5.11-0.175.0.10.0.4.0:20120731T141438Z
+ pkg://solaris/consolidation/desktop/gnome-incorporation@0.5.11,5.11-0.175.0.11.0.3.0:20120824T161817Z
+ pkg://solaris/entire@0.5.11,5.11-0.175.0.11.0.4.1:20120901T011439Z
+ pkg://solaris/consolidation/desktop/desktop-incorporation@0.5.11,5.11-0.175.0.11.0.3.0:20120824T161815Z
+ pkg://solaris/consolidation/X/X-incorporation@0.5.11,5.11-0.175.0.10.0.2.1231:20120716T221822Z
+ pkg://solaris/consolidation/ips/ips-incorporation@0.5.11,5.11-0.175.0.11.0.4.0:20120830T143219Z
+ pkg://solaris/consolidation/userland/userland-incorporation@0.5.11,5.11-0.175.0.11.0.4.0:20120830T142828Z
+ pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,5.11-0.175.0.11.0.4.1:20120830T142013Z
+ pkg://solaris/consolidation/sunpro/sunpro-incorporation@0.5.11,5.11-0.175.0.11.0.3.0:20120824T162258Z
+ pkg://solaris/consolidation/l10n/l10n-incorporation@0.5.11,5.11-0.175.0.11.0.1.108:20120810T173009Z
+The following indicates why the system cannot update to the latest version:
+ No suitable version of required package pkg://solaris/consolidation/userland/userland-incorporation@0.5.11,5.11-0.175.0.11.0.4.0:20120830T142828Z found:
+   Reject:  pkg://solaris/consolidation/userland/userland-incorporation@0.5.11,5.11-0.175.0.11.0.4.0:20120830T142828Z
+   Reason:  All versions matching 'incorporate' dependency pkg:/web/server/apache-22@2.2.22,5.11-0.175.0.10.0.2.0 are rejected
+ Reject:  pkg://solaris/web/server/apache-22@2.2.22,5.11-0.175.0.10.0.2.0:20120716T221431Z
+<span style="color:#F00;font-weight:bold">Reason:  A version for 'require' dependency on pkg:/library/apr-util-13/apr-ldap@1.3.9,5.11-0.175.0.0.0.2.537 cannot be found</span></pre>
+<p><strong>Cause:</strong>  The IPS repository the client is referring to is incomplete and most likely offering only a partial IPS repository image.  This commonly occurs when the repository has been incorrectly configured to only provide the contents of a service repository update (SRU) image or the client is referring directly to the SRU IPS ISO image without access to a full IPS repository.  This fails because the SRU IPS images are not complete images; they are partial images.</p>
+<p>A client needs to have access to both a complete IPS repository and any SRUs or repositories containing those updates that the client has installed.</p>
+<p><strong>Solution:</strong>  Ensure the repository your client is references contains the full IPS repository image and any service repository updates (SRUs) you have or wish to install onto your clients.</p>
+<p>Details on creating a local IPS repository can be found in <a href="http://docs.oracle.com/cd/E26502_01/html/E28985/copyrepo.html#scrolltoc" target="_blank">Copying IPS Package Repositories</a>.  The README file supplied with the SRU download and <a href="http://docs.oracle.com/cd/E26502_01/html/E28985/maintainrepo.html#scrolltoc" target="_blank">Maintaining Your Local IPS Package Repository</a> contain details on how you update your local repository with the SRU.</p>
+<p>The full IPS repository image can be downloaded from <a href="http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html" target="_blank">http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html</a></p>
+<p></p>
+<h2>Scenario 3: A pkg fails to install because of a version dependency lock</h2>
+<pre class="terminal"># pkg install compatibility/ucb
+Creating Plan (Solver setup): /
+pkg install: No matching version of compatibility/ucb can be installed:
+  Reject:  pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.6.0.3.2</span>:20130322T212735Z
+  Reason:  This version is excluded by installed incorporation 
+pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.5.0.4.2</span>:20130228T222858Z
+#</pre>
+<p><strong>Cause:</strong>  The pkg you are attempting to install is dependent on a later of a pkg that is not installed. </p>
+<p>In this example, the <code>pkg://solaris/compatibility/ucb@0.5.11,5.11-0.175.1.6.0.3.2</code> pkg can't be installed because it requires <code>pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,5.11-0.175.1.6.0.3.2</code> to be installed first.  At the moment <code>pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,5.11-0.175.1.5.0.4.2</code>, an older revision, is installed.</p>
+<p>This normally happens when a pkg depends on a specific version of another pkg and your repository is offering a later revision than is installed on your system.  By default pkg(1M) will always attempt to install the latest revision of a pkg available.</p>
+<p><strong>Solution:</strong>  There are two possible solutions...</p>
+<ol>
+<li>Update your entire system to the latest revision of Solaris offered by your local repository and then attempt to install your pkg.
+<p>    OR</p>
+</li>
+<li>Install the specific version of your pkg that meets the required dependency version using the syntax: <code>pkg install &lt;pkgname&gt;@&lt;version&gt;</code>
+<p>    For example: <code>pkg install compatibility/ucb@0.5.11-0.175.1.0.0.24.2</code>
+</li>
+</ol>
+<p></p>
+<h2>Scenario 4:  Missing support repository certificate</h2>
+<pre class="terminal"># pkg set-publisher -G http://pkg.oracle.com/solaris/release -g https://pkg.oracle.com/solaris/support solaris
+pkg set-publisher: The origin URIs for 'solaris' do not appear to point to a valid pkg repository.
+Please verify the repository's location and the client's network configuration.
+Additional details:
+
+Unable to contact valid package repository
+Encountered the following error(s):
+Unable to contact any configured publishers.
+This is likely a network configuration problem.
+Framework error: code: 35 reason: error:14094410:SSL routines:SSL3_READ_BYTES:sslv3 alert handshake failure
+URL: 'https://pkg.oracle.com/solaris/support'
+#</pre>
+<p><strong>Cause:</strong> The client is attempting to access the Oracle support repository (https://pkg.oracle.com/solaris/support) without a valid certificate and key pair.</p>
+<p><strong>Solution:</strong> You need to obtain a certificate and key pair from <a href="https://pkg-register.oracle.com" target="_blank">https://pkg-register.oracle.com</a> and update your client to utilize the certificate and key pair as per the detailed at <a href="https://pkg-register.oracle.com/help/" target="_blank">https://pkg-register.oracle.com/help/</a></p>
+<p></p>
+<p>And that's it for the most common errors at the moment.</p>
+<p>Now of course, I've not just sat here and typed this mammoth post out just for the benefit of my readers :-)  I've also set the wheels in motion to get these messages changed by logging Bug/<abbr title="Request For Enhancement">RFE</abbr> <a href="https://support.oracle.com/epmos/faces/ui/km/BugDisplay.jspx?id=17281770" target="_blank">17281770</a> and writing a knowledge document - <a href="https://support.oracle.com/epmos/faces/ui/km/DocumentDisplay.jspx?id=1574718.1" target="_blank">Doc ID 1574718.1</a> (contains most of what is in this post) to try and change things and help customers who need a more formal Oracle document whilst we wait for the changes to happen.</p>
+<p>I plan to keep this post and <a href="https://support.oracle.com/epmos/faces/ui/km/DocumentDisplay.jspx?id=1574718.1" target="_blank">Doc ID 1574718.1</a> updated as differing pkg(1M) errors increase in frequency.</p>

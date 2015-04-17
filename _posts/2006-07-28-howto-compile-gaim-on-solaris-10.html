@@ -1,0 +1,151 @@
+---
+layout: post
+title: 'HOWTO: Compile GAIM On Solaris 10'
+date: 2006-07-28 01:26:49.000000000 -07:00
+tags:
+- Software
+- HOWTO
+type: post
+published: true
+---
+<p><!--redirect_msg--></p>
+<div class="alert">
+<strong>Update</strong>: I was going to provide details on compiling GAIM 2/Pidgin on Solaris 10, but this is no longer required as GAIM is upgraded to Pidgin on Solaris 10 when patch <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-119548-11-1">119548-11</a> (SPARC) or <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-119549-11-1">119549-11</a> (x86) is applied.
+</div>
+<p><img class="alignleft" src="/assets/gaim-logo.png" alt="Gaim Logo" />These instructions come courtesy of <a href="http://blogs.sun.com/roller/page/torrey">Torrey McMahon</a> from his internal page (almost verbatim).  These instructions were so helpful to me, I thought I'd put the details here for later reference and for anyone else to use as the details out on the web are a bit thin for Solaris. </p>
+<p><strong>NOTE:</strong> These are Solaris 10 specific instructions, but you should find with a bit of knob twiddling, you can get the procedure to work on earlier releases.</p>
+<p>These details are for Gaim 1.3.0 to 1.5. I'm still in the process of documenting and getting Gaim 2.0.0 Beta# to cleanly compile with gcc.  Once Gaim 2.0 is officially released, I'll work on getting it to compile cleanly with Sun Studio, and then I'll post the details.</p>
+<p><!--more--></p>
+<h3>For the Not So Brave...</h3>
+<p>... see our friends at <a href="http://www.blastwave.org/">Blastwave</a>. Be warned through, this may be the easiest method, but it does fill <code>/opt/csw/</code> with loads of duplicate files and unnecessary crap. You should probably also go this route if you aren't running Solaris 10.</p>
+<h3>Dependencies</h3>
+<p>You'll need the following before you start trying to build gaim:</p>
+<ul>
+<li><a href="http://www.sun.com/software/solaris/get.jsp">Solaris 10</a> or <a href="http://www.opensolaris.org/">OpenSolaris</a>. If you aren't running Solaris 10 then you'll need to do all sorts of things to get around libraries and programs that were never part of Solaris 8 or Solaris 9. Upgrade to Solaris 10 and come back.</li>
+<li>AO libraries and gmake program from either the companion CD, <a href="http://www.sun.com/software/solaris/freeware/">the external download centre</a>, or a compilation of your own devising. The pkgnames are SFWoggl and SFWgmake if you use the SFW bits.</li>
+<li>The location of your C compiler - these instructions assume you're using the Sun Studio 10 or later compilers (now free for all - get it <a href="http://www.opensolaris.org/os/community/tools/sun_studio_tools/">here</a>)</li>
+<li>Perl, TCL/TK, and GNOME2 installed as Solaris meant them to be or be prepared to hack some of the instructions below.</li>
+<li>The required header and development packages on your system.</li>
+<li>The gaim source code from <a href="http://gaim.sourceforge.net/">SourceForge</a>. The link on the upper right hand side of the white frame always has the latest stable release.</li>
+<li>A location that you can write to that will hold the gaim binaries and libraries.</li>
+<li>If you want spell checking to work you'll need the <a href="http://gtkspell.sourceforge.net/">gtkspell</a> libraries installed.  The short version of how I did this is:
+<ul>
+<li>Set your path to include the <code>/usr/css/bin/make</code> command and the Sun compiler tools.</li>
+<li>Change into the gtkspell dir</li>
+<li>Run "<code>./configure</code>". If all goes well you'll get a bunch of output concerning how the makefiles were created. Note that the default location for gtkspell is <code>/usr/local</code>. If you need to change that run "<code>./configure --help</code>" and look at the syntax.</li>
+<li> Run "<code>make</code>"</li>
+<li> If everything looks good then run "<code>make install</code>"</li>
+<li> You'll probably see errors at the end concerning some html and sgml doc. You can ignore them.</li>
+</ul>
+</li>
+</ul>
+<h3>Setup</h3>
+<p>Gunzip/bunzip2 and untar the source code.</p>
+<p>Set your path to make sure you don't include the "wrong paths" for unbundled items such as older versions of gnome.  I set mine to:</p>
+<pre lang="text">
+          /opt/SUNWspro/bin:\
+          /usr/bin:\
+          /usr/sbin:\
+          /sbin:\
+          /usr/ccs/bin:\
+          /usr/platform/sun4u/sbin:\
+          /usr/sfw/bin:\
+          /usr/dt/bin:\
+          /usr/openwin/bin
+</pre>
+<p>Replace <code>/opt/SUNWspro/bin</code> with the location of your C compiler if it is not in that location.</p>
+<p>Set the <code>CC</code> environment variable to the location of your C compiler or you may use gcc by accident. On my system that is <code>/opt/SUNWspro/bin/cc</code>.</p>
+<p>Set the <code>CXX</code> environment variable to the location of your C++ compiler or you may use gcc by accident. On my system that is <code>/opt/SUNWspro/bin/CC</code>.</p>
+<p>Set the <code>CFLAGS</code> environment variable if you wish to optimize and know what you are doing. I set mine to "<code>-g -w</code>" as it make debugging easier in dbx and takes some of the warning messages out during compile time.  If you want to optimize use "<code>-g -w -xO2</code>" or something similar.</p>
+<p>Set the <code>CXXFLAGS</code> environment variable if you wish to optimize and know what you are doing. I set mine to "<code>-g0 -w</code>" as it make debugging easier in dbx and takes some of the warning messages out during compile time.  If you want to optimize use "<code>-g0 -w -xO2</code>" or something similar.</p>
+<p>Set the <code>MAKE</code> environment variable to the location of gmake. If you're using the SFWgmake pkg it's <code>/opt/sfw/bin/gmake</code>.</p>
+<p>Unset <code>LD_LIBRARY_PATH</code> or strange things may happen between running configure, compiling the program, and actually running it. You shouldn't need to set <code>LD_LIBRARY_PATH</code> to run gaim if you follow the instructions correctly.</p>
+<p>If using gtkspell set the <code>PKG_CONFIG_PATH</code> variable to the location of the gtkspell.pc file which on my system is <code>/usr/local/lib/pkgconfig</code>.</p>
+<p>Change to the directory you have placed the gaim source in. Run the configure script with the areas indicated below replaced with the locations mentioned in the dependencies section above. You may have to turn this into a script that calls configure as the line can get a bit too long for certain terminal input buffers.</p>
+<pre lang="text">
+          ./configure --prefix=&lt;PREFIX&gt; \
+          --with-ao=&lt;AOROOT&gt; \
+          --disable-aotest \
+          --with-tclconfig=/usr/sfw/lib \
+          --with-tkconfig=/usr/sfw/lib \
+          --enable-gnutls=yes \
+          --enable-nss=no
+</pre>
+<ul>
+<li>Replace <code>&lt;PREFIX&gt;</code> with where you want to install gaim.</li>
+<li>Replace <code>&lt;AOROOT&gt;</code> with where you have installed the libao pkgs</li>
+</ul>
+<p>On my system I use this script snippet</p>
+<pre lang="text">
+          ./configure \
+          --with-ao=/opt/sfw \
+          --disable-aotest \
+          --with-tclconfig=/usr/sfw/lib \
+          --with-tkconfig=/usr/sfw/lib \
+          --enable-gnutls=yes \
+          --enable-nss=no
+</pre>
+<p>Note that since I don't use the <code>--prefix</code> flag gaim installs to <code>/usr/local</code>. Make sure to add that and set it correctly if you need to install someplace such as <code>/opt/gaim</code> or your home directory.</p>
+<p><!--wsa:LongPostMiddle--></p>
+<h3>Configure Output</h3>
+<p>After the configure step runs you should see output that states the various plugins and extras were enabled. If not go back through the output and see where things bombed out. Usually, it's a typo or permission on a file you may have recently installed such as the GNUTLS libs. The only things I don't get working are</p>
+<ul>
+<li>NAS audio - Tried but it wanted to drop bits in /usr/openwin, it's kind of crusty and I didn't see the point.</li>
+<li>Kerberos4 support for zepyher - No clue what it is.</li>
+</ul>
+<p>This is the end of output I get from configure with everything working.</p>
+<pre lang="text">
+           gaim 1.3.0
+
+           Build Protocol Plugins........ : yes
+           Protocols to link statically.. :
+           Protocols to build dynamically : gg irc jabber msn napster novell oscar yahoo zephyr
+
+           UI Library.................... : GTK 2.x
+           SSL Library/Libraries......... : GNUTLS
+           
+           Build with Plugin support..... : yes
+           Build with Perl support....... : yes
+           Build with Tcl support........ : yes
+           Build with Tk support......... : yes
+           Build with Audio support...... : yes
+           Build with NAS support........ : no
+           Build with GtkSpell support... : yes
+           
+           Use kerberos 4 with zephyr.... : no
+           Use external libzephyr........ : no
+           
+           Use XScreenSaver Extension.... : yes
+           Use X Session Management...... : yes
+           Use startup notification.......: yes
+           
+           Print debugging messages...... : no
+           
+           Gaim will be installed in /usr/local/bin.
+           Warning: You have an old copy of gaim at /usr/local/bin/gaim.
+           
+           configure complete, now type 'make'
+           $
+</pre>
+<h3>Makefile Hacking</h3>
+<p>Unfortunately, even with all of those script lines you need to hand edit the various Makefiles to get gaim to run correctly without setting <code>LD_LIBRARY_PATH</code>. You only need to perform this hack if you want to use the TCL/TK plugins with gaim.  This is a bug in the TCL/TK implementation on Solaris.</p>
+<p>Edit the <code>config.status</code> file and find the two lines that look like</p>
+<pre lang="text">
+           s,@TCL_LIBS@,-L/usr/sfw/lib -ltcl8.3,;t t
+           s,@TK_LIBS@,-L/usr/sfw/lib -ltk8.3,;t t
+</pre>
+<p>... and change them to read:</p>
+<pre lang="text">
+           s,@TCL_LIBS@,-L/usr/sfw/lib -R/usr/sfw/lib -ltcl8.3,;t t
+           s,@TK_LIBS@,-L/usr/sfw/lib -R/usr/sfw/lib -ltk8.3,;t t
+</pre>
+<p>Once you have edited the file run "<code>./config.status</code>" to update the Makefiles.</p>
+<h3>Build</h3>
+<p>After setting our environment variables, running the configure, and hacking our makefiles it's time to compile. Run <code>gmake</code> and you should see the compile process kick off. If you get any errors then make sure the steps above were done correctly and you have your dependencies resolved. If you change or fix anything - You just noticed you mistyped something in the configure command - make sure to re-run  the configure command and hack the <code>config.status</code> file as above before you re-run <code>gmake</code>.</p>
+<h3>Install</h3>
+<p>After the compile runs, and everything looks good, run</p>
+<div class="terminal">$ gmake  install</div>
+<p>... to place the binaries and libraries in their specified places. If you run this as root make sure that the permissions on the directories and files correct. Any newly created directories will be created with root's umask. When run with directory permission problems gaim will complain about missing plugins.</p>
+<p>It is strongly suggested that you remove the older version of gaim installed with Solaris 10 once you install a new version. If you do not then you'll probably run the older version by accident at some point and cause some interesting issues with your gaim preferences. In other words, as root,</p>
+<div class="terminal"># pkgrm SUNWgnome-im-client SUNWgnome-im-client-share</div>
+<p>Happy "Gaiming".</p>

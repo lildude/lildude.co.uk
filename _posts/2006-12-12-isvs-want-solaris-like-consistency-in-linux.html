@@ -1,0 +1,27 @@
+---
+layout: post
+title: ISVs Want Solaris-like Consistency in Linux
+date: 2006-12-12 10:40:46.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- In The News
+- Linux
+- API
+- device drivers
+type: post
+published: true
+---
+<p>A whole bunch of Linux people - developers, distributors and ISVs, got together recently to have a good ol' chin-wag about the <a href="http://www.eweek.com/article2/0,1895,2071482,00.asp">next step in Linux Standardisation</a> (as part of the <a href="http://www.google.com/url?sa=t&ct=res&cd=1&url=http%3A%2F%2Fportland.freedesktop.org%2F&ei=Deh-RZbiN8XWwgG7weTFBg&usg=__c3NRPPizbqNVB5Y-T1BSZpkLBW0=&sig2=OyVNnoqOTWeEOs7E3eoH4w">Portland Project</a>).</p>
+<p>It would seem the ISVs want...</p>
+<p><!--more--></p>
+<blockquote><p>
+... to be able to count on libraries being there so that they don't need to release a slightly different version for each distribution or each dot upgrade of a distribution.</p></blockquote>
+<p>... and they also want...</p>
+<blockquote><p>... stable, consistent interfaces. How stable? They don't want any interface to be obsoleted. </p></blockquote>
+<p>Hmmm, this sounds remarkably like the features Solaris has and always will have.  This is what has helped keep Solaris binary compatible between releases.  It is also what makes writing device drivers on Solaris soooo much easier than on Linux.</p>
+<p>Take NVidia for example - they maintain only one code branch for their proprietary device drivers for ALL the releases of Solaris, whilst they have to maintain multiple branches for Linux.</p>
+<p>Provided NVidia stick to using the <a href="http://docs.sun.com/app/docs/coll/45.20">documented</a> interfaces, they should never have to change the way their drivers hook into Solaris, unless Sun decide they'll change something, which will usually involve years of fore-warning.</p>
+<p>So, I guess that's another point for Solaris.</p>

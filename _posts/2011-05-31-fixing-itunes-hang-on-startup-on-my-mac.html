@@ -1,0 +1,27 @@
+---
+layout: post
+title: Fixing iTunes Hang on Startup on My Mac
+date: 2011-05-31 11:19:49.000000000 -07:00
+tags:
+- iTunes
+- hang
+- OSX
+type: post
+published: true
+---
+<p>For a very very very long time now, I've been experiencing a really annoying problem with iTunes on my Mac... everytime I start it, it hangs for quite some time and along with it comes the lovely spinning beachball of death.  Well not anymore, today I finally discovered the cause of the problem... one bad MP3 file.</p>
+<p>So how did I discover this?  Well simple really...</p>
+<ol>
+<li>With iTunes NOT running, I started Activity Monitor</li>
+<li>I then ordered the processes by name by clicking the "Process Name" column</li>
+<li>I then started iTunes. As expected, it hung and I got my beachball.</li>
+<li>With the confirmed hang, I then located the iTunes process in Activity Monitor and selected it</li>
+<li>At the top of the Activity Monitor window is a blue "Inspect" button.  I clicked this.</li>
+<li>In the window that opened, I selected the "Open Files and Ports" tab. This shows you all the files and ports this application has opened.</li>
+<li>I then scrolled down to the bottom and found the last file opened... "Live @ Trade.mp3"...
+<p><a href="http://lildude.co.uk/user/sites/lildude.co.uk/files/2011/05/iTunesHang.jpg" target="_blank"><img class="center" alt="iTunes Hang" src="/assets/iTunesHang.jpg" width="1110" height="592" /></a></p>
+</li>
+<li>I let iTunes finish its hang, located the file within iTunes and deleted it completely.</li>
+<li>I then quit iTunes and started it again.</li>
+</ol>
+<p>Bingo!!! iTunes opened up instantly and was completely responsive straight away. So I lost one MP3 file I don't listen to anymore... so what.  At least iTunes is responding as it should.  I'm a happy boy now.</p>

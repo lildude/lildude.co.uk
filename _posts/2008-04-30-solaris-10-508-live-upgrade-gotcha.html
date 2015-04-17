@@ -1,0 +1,27 @@
+---
+layout: post
+title: Solaris 10 5/08 Live Upgrade Gotcha
+date: 2008-04-30 09:50:26.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Solaris
+- Live Upgrade
+- update 5
+type: post
+published: true
+---
+<p>Sun have just released their latest version of Solaris 10 - Solaris 10 5/08 (aka update 5) which includes loads of enhancements, bug fixes and additions.  I'm not going to go into these - you can check the "<a href="http://docs.sfbay.sun.com/app/docs/doc/817-0547/gghpo?a=view">What's New</a>" guide for more details.</p>
+<p><!--more-->The reason for this post is there's a little known enhancement: 7zip support, via the <a href="http://p7zip.sourceforge.net/">p7zip</a> port, has been added to Solaris 10.  Not only has it been added, but it is now extensively used to compress the OS image and pkgs.  It's also used by Live Upgrade and if you're not careful, it <strong>WILL</strong> cause you problems.</p>
+<p>If you wish to Live Upgrade your system to Solaris 10 5/08, you need to ensure you have all the patches detailed in InfoDoc <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-61-206844-1">206844</a>, but also the following p7zip patch (depending on the OS rev you're upgrading FROM):</p>
+<p>Solaris 10:<br />
+SPARC - <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-137321-01">137321-01</a> or later<br />
+x86 - <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-137322-01">137322-01</a> or later</p>
+<p>Solaris 9:<br />
+SPARC - <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-137477-01">137477-01</a> or later<br />
+x86 - <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-137478-01">137478-01</a> or later </p>
+<p>These patches supply the 7zip functionality used by Solaris 10 5/08 and must be applied <strong>BEFORE</strong> you even attempt to create the alternate boot environment.</p>
+<p>Unfortunately, there are no plans to provide these patches for Solaris 8 (as it's now EOL), so if you're going to upgrade to Solaris 10 5/08 from Solaris 8, you need to upgrade to an intermediate revision first, apply the above patches, and then upgrade to 5/08.</p>
+<p>If you're curious, the first sign you'll have that you've forgotten to apply this patch is inetd in your ABE will fail to start and the following message will be spewed onto the console every few seconds:</p>
+<div class="terminal">Apr 28 10:58:41 inetd[306]: Unable to read debug property from config property group. scf_simple_prop_get() failed: entity not found</div>
+<p>Oh, and don't forget to update your patching/packaging patches on your primary OS before attempting the LU.</p>

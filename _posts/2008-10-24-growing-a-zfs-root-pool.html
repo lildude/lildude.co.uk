@@ -1,0 +1,56 @@
+---
+layout: post
+title: Growing a ZFS Root Pool
+date: 2008-10-24 13:36:09.000000000 -07:00
+tags:
+- Software
+- General
+- ZFS
+- root
+- pool
+- zpool
+- grow
+type: post
+published: true
+---
+<p>About a month ago I migrated my Ultra 20's root filesystem from UFS to ZFS using my <a href="http://lildude.co.uk/howto-migrate-a-ufs-root-filesystem-to-zfs/">HOWTO: Migrate a UFS Root Filesystem to ZFS</a> procedure.  Today I performed my first live upgrade since, which worked a treat, however now I'm running a bit low on space.</p>
+<p>Not for much longer...</p>
+<p><!--more-->Following the live upgrade my root pool is looking a little on the leaner side of how I'd like it:</p>
+<div class="console">
+<pre>
+# zfs list
+NAME                    USED  AVAIL  REFER  MOUNTPOINT
+rootpool               8.51G  1.33G    35K  /rootpool
+rootpool/ROOT          7.00G  1.33G    18K  /rootpool/ROOT
+rootpool/ROOT/snv_99   6.93G  1.33G  4.23G  /
+rootpool/ROOT/snvz_98  71.7M  1.33G  4.08G  /.alt.tmp.b-TM.mnt/
+rootpool/dump          1.00G  1.33G  1.00G  -
+rootpool/swap           512M  1.54G   297M  -
+#</pre>
+</div>
+<p>My rootpool is currently made up of a single 10GB slice which was one of the two slices on the same disk that I used to flip-flop between as I live upgraded the system whilst it was still on UFS.</p>
+<p>As I no longer need to do this, thanks to ZFS and the now ZFS aware live upgrade (it uses snapshots and clones), I thought I'd add my now redundant extra slice to the rootpool.</p>
+<p>My first thought was: "<em>I'll just run zpool add and add the slice</em>", which I attempted, however ZFS didn't like this idea:</p>
+<div class="console">
+<pre>
+# zpool add -f rootpool c1d0s4
+cannot add to 'rootpool': root pool can not have multiple vdevs or separate logs
+#</pre>
+</div>
+<p>So I thought: "<em>Well ZFS isn't like UFS in that it doesn't actually lay a filesystem on the entire disk, so in theory if I just change the underlying partitions, they're contiguous, ZFS should pick it up</em>".</p>
+<p>Well, I thought they were contiguous.  As luck would have it, they were separated by a now redundant swap slice, so I blitzed that and merged the 3 into a single slice, without changing the starting cylinder of my original slice, and rebooted.</p>
+<p><strong>Update</strong>: As Mr Zog commented, I neglected to say exactly what I did here, so here's what I did when I "<em>blitzed that and merged the 3 into a single slice</em>":</p>
+<p>I used format(1M) to repartition the disk by going to <code>format -&gt; [select the disk] -&gt; partition</code>. I then deleted the old swap slice (slice 1) and the slice I was trying to add (slice 4) and grew the original root slice (slice 0) by specifying the new final cylinder (the final cylinder of the old slice 4).</p>
+<p>Hey presto!!! </p>
+<p>ZFS has detected this and I now have a much larger root pool, and a lot less wasted space on the disk too:</p>
+<div class="console">
+<pre># zfs list
+NAME                    USED  AVAIL  REFER  MOUNTPOINT
+rootpool               8.52G  13.1G    35K  /rootpool
+rootpool/ROOT          7.00G  13.1G    18K  /rootpool/ROOT
+rootpool/ROOT/snv_99   6.93G  13.1G  4.23G  /
+rootpool/ROOT/snvz_98  71.7M  13.1G  4.08G  /.alt.tmp.b-TM.mnt/
+rootpool/dump          1.00G  13.1G  1.00G  -
+rootpool/swap           512M  13.3G   297M  -
+#</pre>
+</div>

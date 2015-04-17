@@ -1,0 +1,117 @@
+---
+layout: post
+title: 'HOWTO: Migrate a UFS Root Filesystem to ZFS'
+date: 2008-09-26 03:18:44.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- General
+- HOWTO
+- ZFS
+- filesystem
+- root
+- boot
+type: post
+published: true
+---
+<p>Solaris 10 10/08 (u6) is due to be released within the next month of so (I don't have an exact date) and one of the great features to come with it is ZFS boot.  You can already use ZFS boot on Nevada and OpenSolaris defaults to ZFS, but this will be the first release of officially supported Solaris 10 to have ZFS boot.</p>
+<p>People have been waiting for this for a long time, and will naturally be eager to migrate their root filesystem from UFS to ZFS.  This article will detail how you can do this using Live Upgrade.  This will allow you to perform the migration with the least amount of downtime, and still have a safety net in case something goes wrong.</p>
+<p>These instructions are aimed at users with systems <strong>ALREADY</strong> running Solaris 10 10/08 (update 6) or Nevada build 90 (snv_90) or later.</p>
+<p><!--more--><br />
+<h3>Create the Root zpool</h3>
+<p>The first thing you need to do is create your disk zpool.  It MUST exist before you can continue, so create and verify it:</p>
+<div class="terminal">
+<pre># zpool create rootpool c1t0d0s0
+# zpool list
+NAME       SIZE   USED  AVAIL    CAP  HEALTH  ALTROOT
+rootpool    10G  73.5K  10.0G     0%  ONLINE  -
+#</pre>
+</div>
+<p>If the slice you've selected currently has another filesystem on it, eg UFS or VxFS, you'll need to use the <code>-f</code> flag to force the creation of the ZFS filesystem.</p>
+<p>You can use any name you like. I've chosen <code>rootpool</code> to make it clear what the pool's function is.</p>
+<h3>Create The Boot Environments (BE)</h3>
+<p>Now we've got our zpool in place, we can create the BEs that will be used to migrate the current root filesystem across to the new ZFS filesystem.</p>
+<p>Create the ABE as follows:</p>
+<div class="terminal"># lucreate -c ufsBE -n zfsBE -p rootpool</div>
+<p>This command will create two boot environments where: </p>
+<ul>
+<li><code>ufsBE</code> is the name your current boot environment will be assigned. This can be anything you like and is your safety net.  If something goes wrong, you can always boot back to this BE (unless you delete it).</li>
+<li><code>zfsBE</code> is the name of your new boot environment that will be on ZFS and...</li>
+<li><code>rootpool</code> is the name of the zpool you create for the boot environment.
+</li>
+</ul>
+<p>This command will take a while to run as it copies your <code>ufsBE</code> to your new <code>zfsBE</code> and will produce output similar to the following if all goes well:</p>
+<div class="terminal">
+# lucreate -c ufsBE -n zfsBE -p rootpool<br />
+Analyzing system configuration.<br />
+No name for current boot environment.<br />
+Current boot environment is named <ufsbe>.<br />
+Creating initial configuration for primary boot environment <zfsbe>.<br />
+The device </dev/dsk/c1t0d0s0> is not a root device for any boot environment; cannot get BE ID.<br />
+PBE configuration successful: PBE name <ufsbe> PBE Boot Device </dev/dsk/c0t0d0s0>.<br />
+Comparing source boot environment <ufsbe> file systems with the file<br />
+system(s) you specified for the new boot environment. Determining which<br />
+file systems should be in the new boot environment.<br />
+Updating boot environment description database on all BEs.<br />
+Updating system configuration files.<br />
+The device </dev/dsk/c1t0d0s0> is not a root device for any boot environment; cannot get BE ID.<br />
+Creating configuration for boot environment <zfsbe>.<br />
+Source boot environment is <ufsbe>.<br />
+Creating boot environment <zfsbe>.<br />
+Creating file systems on boot environment <zfsbe>.<br />
+Creating <zfs> file system for </> in zone <global> on <mpool/ROOT/zfsBE>.<br />
+Populating file systems on boot environment <zfsbe>.<br />
+Checking selection integrity.<br />
+Integrity check OK.<br />
+Populating contents of mount point </>.<br />
+Copying.<br />
+Creating shared file system mount points.<br />
+Creating compare databases for boot environment <zfsbe>.<br />
+Creating compare database for file system </>.<br />
+Updating compare databases on boot environment <zfsbe>.<br />
+Making boot environment <zfsbe> bootable.<br />
+Creating boot_archive for /.alt.tmp.b-7Tc.mnt<br />
+updating /.alt.tmp.b-7Tc.mnt/platform/sun4u/boot_archive<br />
+Population of boot environment <zfsbe> successful.<br />
+Creation of boot environment <zfsbe> successful.<br />
+#</zfsbe></zfsbe></zfsbe></zfsbe></zfsbe></zfsbe></global></zfs></zfsbe></zfsbe></ufsbe></zfsbe></ufsbe></ufsbe></zfsbe></ufsbe></div>
+<p>The x86 output it not much different. It'll just include information about updating GRUB.</p>
+<p><strong>Update:</strong> Live upgrade patches 121430-65 (SPARC) and 121431-66 (x86) introduce the -D option so you can move /var to it's own dataset.  Thanks to John Ross for reminding me about this.</p>
+<p><strong>Update:</strong> You may get the following error from <code>lucreate</code>:</p>
+<p><code>ERROR: ZFS pool does not support boot environments.</code></p>
+<p>This will be due to the label on the disk.</p>
+<p>You need to relabel your root disks and give them an SMI label.  You can do this using "format -e", select the disk, then go to "label" and select "[0] SMI label".  This should be all that's needed, but whilst you're at it, you may as well check your partition table is still as you want. If not, make your changes and label the disk again.</p>
+<p>For x86 system, you need to ensure your disk has an fdisk table.</p>
+<p>You should now be able to perform the lucreate.</p>
+<p>The most likely reason for your disk having an EFI label is it's probably been used by ZFS as a whole disk before.  ZFS uses EFI labels for whole disk usage, however you need an SMI label for your root disks at the moment (I believe this may change in the future).</p>
+<p>Once the the <code>lucreate</code> has completed, you can verify your Live Upgrade environments with <code>lustatus</code>:</p>
+<div class="terminal">
+<pre># lustatus
+Boot Environment           Is       Active Active    Can    Copy      
+Name                       Complete Now    On Reboot Delete Status    
+-------------------------- -------- ------ --------- ------ ----------
+ufsBE                      yes      yes    yes       no     -         
+zfsBE                      yes      no     no        yes    -         
+#</pre>
+</div>
+<h3>Activate and Boot from ZFS zpool</h3>
+<p>We're almost done.  All we need to do now is activate our new ZFS boot environment and reboot:</p>
+<div class="terminal">
+# luactivate zfsBE<br />
+# init 6
+</div>
+<p>NOTE: Ensure you reboot using "<code>init 6</code>" or "<code>shutdown -i6</code>". Do NOT use "<code>reboot</code>"</p>
+<p>Remember, if you're on SPARC, you'll need to set the appropriate boot device at the OBP.  <code>luactivate</code> will remind you.</p>
+<p>You can verify you're booted from the ZFS BE using lustatus:</p>
+<div class="terminal">
+<pre># lustatus
+Boot Environment           Is       Active Active    Can    Copy      
+Name                       Complete Now    On Reboot Delete Status    
+-------------------------- -------- ------ --------- ------ ----------
+ufsBE                      yes      no     no        yes    -         
+zfsBE                      yes      yes    yes       no     -         
+#</pre>
+</div>
+<p>At this point you can delete the old <code>ufsBE</code> if all went well.  You can also re-use that old disk/slice for anything you want like adding it to the <code>rootpool</code> to create a mirror.  The choice is yours, but now you have your system booted from ZFS and all it's wonderfulness is available on the root filesystem too.</p>

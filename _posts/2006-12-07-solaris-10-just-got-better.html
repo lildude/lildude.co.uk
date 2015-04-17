@@ -1,0 +1,50 @@
+---
+layout: post
+title: Solaris 10 Just Got Better
+date: 2006-12-07 02:10:17.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- zones
+- fsstat
+- LDOM
+- NL7C
+- Sun Microsystems
+- Solaris 10
+- trusted extensions
+type: post
+published: true
+---
+<p>Solaris 10 11/06 is available - well almost.  The final build has been confirmed, the press got to hear about it two days ago, and the downloads will be available sometime on 11 December 2006.</p>
+<p>So what's so special about Solaris 10 11/06, well let me highlight some of the cool new features:</p>
+<p><!--more--></p>
+<ul>
+<li><strong>Solaris Trusted Extensions</strong>: Now you can enforce strict access controls to your data based upon its sensitivity, not just its ownership, without any modification to your applications or filesystems.</li>
+<li><strong>Secure By Default - Limited Networking Profile</strong>: By default, less network services will be running.  Those that are running will be configured to only allow access from the local host by default.</li>
+<li><strong>Sun Java Desktop System Configuration Manager</strong>: A centralised policy distribution and enforcement mechanism for the Java Desktop System included in Solaris which also includes support for offline/mobile workers.</li>
+<li><strong>Network Layer 7 Cache</strong>: NL7C implements HTTP cache for Web sites<br />
+in the Solaris kernel utilizing the advancements in the Solaris 10 IP<br />
+Stack, without requiring any modification of your applications. NL7C is backwards compatible with Sun's previous Network Cache and Acceleration (NCA) project.</li>
+<li><strong>Zone Renaming, Cloning and Moving</strong>: You've been playing with Zones for some time now, but now you can rename, clone (make a copy of) and move (dirs and to a different host) your zones.</li>
+<li><strong>Configurable Zone Privileges</strong>: A limited set of privileges can be applied to zones now, including limited access to certain Global Zone resources, such as devices, or even extremely limited access to the overall system.</li>
+<li><strong>ZFS File System Enhancements</strong>: ZFS gets a speed boost and new functionality in the form of Hot Spares, RAIDZ2 (a.k.a RAID-6), Clone Promotion, and Fast snapshots.</li>
+<li><strong>ACL Support in JDS</strong>: Nautilus can now display and set Access Control Lists for the UFS file system. ZFS and NFSv4 coming soon.</li>
+<li><strong>SNIA Multipath Management API Support</strong>: Allows multipathing management applications to use the common set of APIs across vendor-unique multipathing solutions on Solaris.</li>
+<li><strong>File-System Monitoring Tool</strong>: The new <code>fsstat</code> command allows for quick reporting on important health and throughput statistics of your file systems by filesystem type or mount point.</li>
+<li><strong>Logical Domains for CoolThreads(TM) servers</strong>: Now this is cool and exciting stuff for the UltraSPARC(R) T1 systems; new server virtualization and<br />
+partitioning technology allowing you to subdivide resources (CPUs, memory, I/O and storage) into partitions, known as Logical or Virtual Domains (LDOM/VDOM).</p>
+<p>A couple of quick facts about LDOMs:</p>
+<ul>
+<li>Supports up to 32 Logical Domains per system</li>
+<li>Each guest domain can be created, destroyed, reconfigured, and rebooted independently</li>
+<li>Provides virtual console, Ethernet, disk, and cryptographic acceleration</li>
+<li>Enables live dynamic reconfiguration of virtual CPUs</li>
+<li>Offers Predictive Self Healing capability for each Logical Domain</li>
+</ul>
+<p>Oh and before you ask what's the difference between LDOMs and Zones, well here's an official explanation:</p>
+<blockquote><p>
+Logical Domains and Solaris Containers handle virtualization at different complementary levels and so can be run together to address customer requirements to consolidate application, OS and server. Logical Domains is the server virtualization and partitioning technology that allows customers to run multiple OS instances on a single CoolThreads server; while Solaris Containers is an OS virtualization feature in Solaris 10, it isolates software applications and services using flexible, software-defined boundaries, which enables customers to create many private execution environments within a single instance of the Solaris OS.</p></blockquote>
+</li>
+<li><strong>Java Enterprise Server Updates</strong>: Sun Java System Application Server Platform Edition 8.2 and Sun Java System Message Queue Platform Edition 3.7</li>
+</ul>
+<p>There you have it.  Of course there will be the usual bug fixes and minor RFEs included.</p>

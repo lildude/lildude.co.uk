@@ -1,0 +1,39 @@
+---
+layout: post
+title: Patchadd Dry Run
+date: 2007-02-16 09:45:02.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+type: post
+published: true
+---
+<p>I discovered this little gem today.  Patchadd on Solaris 10 and later has an undocumented and little known <code>-a</code> flag that allows you to perform a dry run to see if a patch would install.</p>
+<p>Here's a little demo using the now vital in.telnetd patch:</p>
+<p><!--more--></p>
+<div class="terminal"><code><br />
+<span style="color: #F00">[devon : /var/tmp/]#</span> patchadd -a 120068-02<br />
+Validating patches...<br />
+<br />
+Loading patches installed on the system...<br />
+<br />
+Done!<br />
+<br />
+Loading patches requested to install.<br />
+<br />
+Done!<br />
+<br />
+Checking patches that you specified for installation.<br />
+<br />
+Done!<br />
+System patches<br />
+117461-08 118367-02 118371-06 118373-01 118812-01 118868-01 118872-02 118918-09<br />
+<br />
+... [ Truncated for brevity ] ...<br />
+<br />
+Dry run exit.<br />
+<br />
+<span style="color: #F00">[devon : /var/tmp/]#</span><br />
+</code></div>
+<p>Looks just like the output you get when you normally apply patches, except for the long list of patches at the end.  My only (minor) criticism of this is it doesn't do the filesystem space check.  I didn't specify the <code>-d</code> option, so I'd expect the space check to be run.</p>
+<p>Unfortunately, earlier releases don't have this, but there's nothing stopping you from adding this functionality by modifying the <code>/usr/lib/patch/patchadd</code> script.  It won't be supported of course ;-) .</p>

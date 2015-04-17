@@ -1,0 +1,51 @@
+---
+layout: post
+title: 'HOWTO: Convert MySQL RC Script to SMF Service'
+date: 2007-10-12 02:19:17.000000000 -07:00
+tags:
+- HOWTO
+type: post
+published: true
+---
+<p>Solaris 10 and later now supplies MySQL as part of the OS, provided you've installed the <code>SUNWmysql[rtu]</code> pkgs, but it's started via a legacy RC script still.  This document details how to create an SMF manifest to start MySQL instead.</p>
+<p><strong>Update:</strong> This process is only needed if you are running Solaris 10, or you wish to use the MySQL 4.x installation that is supplied with Nevada.  Later builds of Nevada (I believe snv_79 and later) now come with MySQL 5.0 and includes a service manifest for this version.</p>
+<p><!--more-->1.  Find all of the current RC scripts:</p>
+<div class="terminal">
+          # find /etc/rc* /etc/init.d | grep -i mysql<br />
+          /etc/rc0.d/K00mysql<br />
+          /etc/rc1.d/K00mysql<br />
+          /etc/rc2.d/K00mysql<br />
+          /etc/rc3.d/S99mysql<br />
+          /etc/rcS.d/K00mysql<br />
+          #
+</div>
+<p>If you've never configured MySQL, you may find these don't exist yet.</p>
+<p>2.  Remove all the old legacy scripts, if they exist.</p>
+<div class="terminal">
+          # for x in `find /etc/rc* /etc/init.d | grep -i mysql`; do rm $x; done
+</div>
+<p>3.  Create the MySQL manifest (<a href="http://lildude.co.uk/downloads/other/mysql.txt">download</a>):</p>
+<div class="terminal">
+          # mkdir /var/svc/manifest/application/database<br />
+          # cp mysql.txt /var/svc/manifest/application/database/mysql.xml
+</div>
+<p>If you've got Postgresql installed already, you'll already have a <code>/var/svc/manifest/application/database</code> directory.</p>
+<p><!--wsa:LongPostMiddle--></p>
+<p>4.  Import the manifest:</p>
+<div class="terminal">
+          # svccfg validate /var/svc/manifest/application/database/mysql.xml<br />
+          # svccfg import /var/svc/manifest/application/database/mysql.xml
+</div>
+<p>5.  Check the service:</p>
+<div class="terminal">
+          # svcs mysql<br />
+          STATE          STIME    FMRI<br />
+          disabled       13:23:17 svc:/application/database/mysql:default
+</div>
+<p>There you have it.  Now to enable it, just ensure you've configured MySQL as per the README at <code>/etc/sfw/mysql/README.solaris.mysql</code> and then enable the service:</p>
+<div class="terminal">
+          # svcadm enable mysql<br />
+          # svcs mysql<br />
+          STATE          STIME    FMRI<br />
+          online         13:29:14 svc:/application/database/mysql:default
+</div>

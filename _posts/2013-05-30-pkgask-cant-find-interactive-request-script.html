@@ -1,0 +1,62 @@
+---
+layout: post
+title: pkgask(1M) Can't Find Interactive Request Script
+date: 2013-05-30 08:55:19.000000000 -07:00
+tags:
+- Solaris
+- installation
+- pkg
+type: post
+published: true
+---
+<p>Here's one that doesn't come up very often, but when it does, it catches people out.</p>
+<p>In an attempt to automate the installation of Solaris pkgs on Solaris 10 and earlier, people turn to the <code>pkgask(1M)</code> command thinking this is what they need to do.  They read the man page and then attempt to create the response file, and it fails as follows...</p>
+<pre class="terminal"># pkgask -r /var/tmp/response -d . SUNWzsh
+
+Processing package instance &lt;SUNWzsh&gt; from &lt;/isos/s10u11/Solaris_10/Product&gt;
+
+Z shell (zsh)(sparc) 11.10.0,REV=2005.01.08.05.16
+pkgask: ERROR: package does not contain an interactive request script
+
+Processing of request script failed.
+No changes were made to the system.
+#
+</pre>
+<p>Believe it or not this is correct and expected behaviour.  The issue here is you're using the wrong tool for the job.</p>
+<p>To quote the <code>pkgask(1M)</code> man page:</p>
+<pre>DESCRIPTION
+     pkgask allows the  administrator  to  store  answers  to  an
+     interactive  package  (one with a request script, that is, a
+     user-created file that must  be  named  request).</pre>
+<p>Now what isn't clear here is <code>pkgask(1M)</code> is only useful for pkgs that include a script called <code>PKGname/install/request</code>.  The request script is usually used to configure the application once the pkg has been installed.</p>
+<p>If we look at the <code>SUNWzsh</code> pkg I used in the example, we'll see that file doesn't exist...</p>
+<pre class="terminal"># ls -l SUNWzsh/install
+total 10
+-rwxr-xr-x   1 root     staff       1097 Dec 21  2009 copyright
+-rwxr-xr-x   1 root     staff        875 Apr 15  2011 depend
+-rw-r--r--   1 root     staff       2369 Jan 17 18:32 i.none
+#
+</pre>
+<p>This means we can't use <code>pkgask(1M)</code> to generate a response file to automate our installation of this pkg.  </p>
+<p>What you actually want is to use an admin file.  To quote the <code>pkgadd(1M)</code> man page...</p>
+<pre>     -a admin
+
+         Define an installation administration file, admin, to be
+         used  in  place  of the default administration file. The
+         token none overrides the use of any admin file, and thus
+         forces  interaction  with  the  user. Unless a full path
+         name is given, pkgadd first looks in the current working
+         directory  for the administration file. If the specified
+         administration file is not in the current working direc-
+         tory, pkgadd looks in the /var/sadm/install/admin direc-
+         tory for the administration file.
+</pre>
+<p>... and later in the man page ...</p>
+<pre>
+     If the default admin file is too restrictive,  the  adminis-
+     tration  file  may  need  to  be modified to allow for total
+     non-interaction during a package installation. See  admin(4)
+     for details.
+</pre>
+<p>So what you actually need to perform a non-interactive installation of this pkg is an admin file.  You will need this for pkgs that contain request scripts too.</p>
+<p>Simply copy the default - <code>/var/sadm/install/admin</code> - to a convenient location and replace all instances of "ask" with a value that suits your needs.  Refer to the <code>admin(4)</code> man page for acceptable values.  You can then install your pkg, non-interactively using "<code>pkgadd -a /path/to/your/admin -d /path/to/pkg YOURpkg</code>".</p>

@@ -1,0 +1,68 @@
+---
+layout: post
+title: Cisco AnyConnect Client Failing on Ubuntu 11.10
+date: 2011-10-29 10:18:02.000000000 -07:00
+tags:
+- Linux
+- Ubuntu
+- VPN
+- Cisco
+type: post
+published: true
+---
+<p>Several weeks ago I took the plunge and upgraded my work laptop to run Ubuntu 11.10 and after switching to Gnome Shell, all has gone well and I've grown accustomed to the way Gnome 3 works.</p>
+<p>One thing that hit me when I initially upgraded was the way the proxy settings are configured and used by Ubuntu 11.10 seemed a bit broken.  The "system wide" settings weren't taking effect as they used to in Ubuntu 11.04.  After a fair amount of hacking around and changing individual applications to use their own settings instead of the centralize setting, all was well. Until this morning.</p>
+<p>This morning was the first time I've used Ubuntu 11.10 to connect to work via the Cisco AnyConnect VPN client.  It used to work on 11.04 so I was very surprised to find it didn't work this morning.  All attempts to connect failed with...</p>
+<p><img class="center" alt="Useless Cisco error message" src="/assets/cisco.png" width="333" height="439" /></p>
+<p>Note the message at the bottom of the window... "Unable to process response from...". Not very useful at all.</p>
+<p>A quick search around Google revealed nothing.  I downloaded and re-installed the client.  No go.  By now, I'd wasted about 30 mins and was now technically late for my shift, so I quickly installed <a href="http://www.infradead.org/openconnect/" target="_blank">OpenConnect</a> and it worked a treat and worked all day.  Performance was a bit poor at times, but I don't know if that was OpenConnect, work or my broadband.</p>
+<p>This evening, once I'd finished my shift, I investigated why the AnyConnect client wasn't connecting.  Rather than trawl through Google even more, I decided to trace executing the client from the command line...</p>
+<div class="terminal">
+<pre>$ strace /opt/cisco/vpn/bin/vpn connect [my.vpn.servername] 2>/tmp/error.log
+Cisco AnyConnect VPN Client (version 2.5.0217) .
+
+Copyright (c) 2004 - 2010 Cisco Systems, Inc.
+All Rights Reserved.
+
+
+  >> state: Disconnected
+  >> warning: No profile is available.  Please enter host to "Connect to".
+  >> notice: VPN Service is available.
+  >> registered with local VPN subsystem.
+  >> state: Disconnected
+  >> notice: VPN Service is available.
+VPN>   >> contacting host (my.vpn.servername) for login information...
+  >> notice: Contacting my.vpn.servername.
+  >> warning: Unable to process response from my.vpn.servername.
+  >> error: Connection attempt failed.  Please try again.
+  >> state: Disconnected
+VPN> %         
+</pre>
+</div>
+<p>Nothing useful there, as I expected, but what about the strace file?  Well, it did have something interesting...</p>
+<pre>
+socket(PF_INET, SOCK_DGRAM|SOCK_NONBLOCK, IPPROTO_IP) = 13
+connect(13, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("8.8.8.8")}, 16) = 0
+poll([{fd=13, events=POLLOUT}], 1, 0)   = 1 ([{fd=13, revents=POLLOUT}])
+<strong>sendto(13, "=*<pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre>\thostnameukdomain"..., 41, MSG_NOSIGNAL, NULL, 0) = 41</strong>
+poll([{fd=13, events=POLLIN}], 1, 5000) = 1 ([{fd=13, revents=POLLIN}])
+ioctl(13, FIONREAD, [100])              = 0
+</pre>
+<p>Huh?? It's attempting to resolve the proxy hostname (obfuscated to hostname.uk.domain by me) which means it's trying to connect to the proxy.  Why is it trying to connect to my proxy?  To try and connect to https://my.vpn.servername. </p>
+<p>Sure enough, unsetting the https_proxy environment variable from the command line allowed me to connect using the CLI invocation of the client.</p>
+<p>So what about the GUI?  Well, as I tend to use my laptop at work more often than not, I decided to just create a wrapper script around <code>/opt/cisco/vpn/bin/vpnui</code> as follows:</p>
+<div class="terminal">
+<pre>
+$ sudo -i
+# mv /opt/cisco/vpn/bin/vpnui{,.orig}
+# cat > /opt/cisco/vpn/bin/vpnui
+#!/bin/sh
+unset https_proxy
+/opt/cisco/vpn/bin/vpnui.orig
+^d
+# chmod +x /opt/cisco/vpn/bin/vpnui
+# exit
+</pre>
+</div>
+<p>Now when I start the VPN client via the GUI, it unsets the proxy just for that shell and we're A-for-Away and I can connect.  I know I could just disable the proxy configuration and initiate the VPN connect, but once I'm connected to the VPN, I'd need to re-enable it again.  Seems like a waste of time to me when I only need the proxy disabled for a moment.</p>
+<p>I have no idea what Ubuntu has done with the proxy configuration in 11.10, but all I know it it's far from perfect and I was definitely not expecting it to be the culprit here.</p>

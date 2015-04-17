@@ -1,0 +1,51 @@
+---
+layout: post
+title: Installing the Recommended Patch Cluster With Zones Parallel Patching
+date: 2009-06-25 09:45:42.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Solaris
+- zones
+- patching
+- parallel
+type: post
+published: true
+---
+<p>As <a href="http://lildude.co.uk/solaris-zones-parallel-patching/">promised on Friday</a>, I've taken the plunge and tested applying the latest patch cluster to a fresh Solaris 10u5 installation running 10 zones using the new zones parallel patching feature.</p>
+<p>To speed things up and to try and prevent any problems I performed the following steps:</p>
+<ol>
+<li>Jumpstarted the OS (SUNWCuser cluster)</li>
+<li>Applied patches 125555-04 and 119254-66 (gives us the parallel functionality)</li>
+<li>Created a basic sparse-root zone without any networking</li>
+<li>Cloned the zone 9 more times</li>
+<li>Create an alternate BE using live upgrade so I had two identical boot environments</li>
+</ol>
+<p>Once I had the machine setup, I booted into single user mode (so all zones will be in the "installed" state) and set off the first cluster installation using the default options (ie no parallel application).</p>
+<p>I then rebooted into single user mode on the alternate boot environment, set num_proc to 10 and applied the patch cluster again.</p>
+<p>How's this for a significant difference in time:</p>
+<p><!--more--><code>num_proc=1</code></p>
+<div class="terminal"># uname -a<br />
+SunOS v4v-t5240b-gmp03 5.10 Generic_127127-11 sun4v sparc SUNW,T5240<br />
+#<br />
+# time ./install_cluster<br />
+[...]<br />
+./install_cluster  8319.85s user 6834.24s system 61% cpu <span style="color:red">6:53:19.48 total</span><br />
+#<br />
+# init 6<br />
+[...]<br />
+# uname -a<br />
+SunOS v4v-t5240b-gmp03 5.10 Generic_141414-01 sun4v sparc SUNW,T5240<br />
+#</div>
+<p><code>num_proc=10</code></p>
+<div class="terminal"># uname -a<br />
+SunOS v4v-t5240b-gmp03 5.10 Generic_127127-11 sun4v sparc SUNW,T5240<br />
+#<br />
+./install_cluster  13768.20s user 8973.91s system 216% cpu <span style="color:red">2:55:22.16 total</span><br />
+#<br />
+# init 6<br />
+[...]<br />
+# uname -a<br />
+SunOS v4v-t5240b-gmp03 5.10 Generic_141414-01 sun4v sparc SUNW,T5240<br />
+#</div>
+<p>This parallel patching is brilliant, pity we had to wait so long for it.</p>

@@ -1,0 +1,29 @@
+---
+layout: post
+title: 'HOWTO: Customise Thunderbird Date Format'
+date: 2005-08-31 07:53:33.000000000 -07:00
+tags:
+- Mozilla
+- HOWTO
+type: post
+published: true
+---
+<p>Customising Thunderbird's date format on Unix and Linux.<br />
+<img class="alignleft" src="http://colinseymour.co.uk/user/files/sthunderbird.png" alt="Small Thunderbird Logo" /></p>
+<p>I use <a href="http://www.mozilla.org/products/thunderbird/">Mozilla Thunderbird</a> as my mail client at work on Solaris 10.  One of the annoying things with Thunderbird is the fact that it relies on the current locale setting to format the date and times on emails. As a result changing the date format is a bit of a pain in the arse.</p>
+<p>Normally, my locale is either set to C or en_GB and as a result, my dates are formatted either as "<code>08/31/05 13:10:23</code>" <code>(%m/%d/%y %H:%M:%S)</code> or "<code>31/08/05 1:10pm</code>" <code>(%d/%m/%y %r)</code>.  Now I'm a bit fussy and prefer my dates to be in the UK format, but my times in the American (C) 24 hour format.</p>
+<p>Today, I finally got round to sorting it out... I ran the following oneliner to iterate through all the available installed locales and print off their date and time format:</p>
+<div class="terminal">$ for x in `locale -a`<br />
+do<br />
+     echo "$x"<br />
+     LC_ALL=$x locale -k d_fmt t_fmt<br />
+     echo "==="<br />
+done > ~/tmp/datefmts.out<br />
+$</div>
+<p>This printed out all the locales and the date and time formats used for each locale and bunged them into a file. A quick squiz through the file revealed just the formatting I want:</p>
+<p><code>===<br />
+ca<br />
+d_fmt="%d/%m/%y"<br />
+t_fmt="%H:%M:%S"<br />
+===</code></p>
+<p>So, now I start Thunderbird using "<code>$  LC_ALL=ca /usr/local/bin/thunderbird &</code>" and I get my desired format.</p>

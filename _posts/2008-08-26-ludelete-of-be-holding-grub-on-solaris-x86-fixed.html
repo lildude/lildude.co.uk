@@ -1,0 +1,95 @@
+---
+layout: post
+title: ludelete of BE Holding GRUB on Solaris x86 Fixed
+date: 2008-08-26 03:25:00.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Solaris
+- Live Upgrade
+- upgrade
+- Nevada
+type: post
+published: true
+---
+<p>My little Ultra 20 under my desk runs with two boot environments and flip-flop between them as I upgrade using Live Upgrade.  The basic procedure is: rename the old inactive BE (lurename), update it with the contents of the currently running BE (lumake), upgrade it to the latest and greatest (luupgrade), activate it (luactivate) and reboot.</p>
+<p>This is quite a pain free experience and has worked well for me.  I never actually delete the alternate BE as I don't need the space.  However, other people need to and ever since GRUB was introduced into Solaris 10 (x86 only) they encounter the following error when attempting to delete the BE that contains the GRUB menu:</p>
+<div class="terminal">
+# ludelete -n snv_22<br />
+ERROR: The boot environment <snv_22> contains the GRUB menu.<br />
+ERROR: You are not allowed to delete this BE.<br />
+Unable to delete boot environment.<br />
+#</snv_22></div>
+<p>This is a long standing issue (I've got a workaround if you want it) that has plagued many a sysadmin using Live Upgrade on Solaris 10 x86 and Nevada.  Well, not any more.</p>
+<p><!--more-->This morning I decided I'd upgrade from snv_94 to snv_96 and I hit a hurdle on the first command - the lurename.  I was presented with this message:</p>
+<div class="terminal">
+# lurename -e snv_88 -n snv_96        </p>
+<p>This system contains only a single GRUB menu for all boot environments. To<br />
+enhance reliability and improve the user experience, live upgrade requires<br />
+you to run a one time conversion script to migrate the system to multiple<br />
+redundant GRUB menus. This is a one time procedure and you will not be<br />
+required to run this script on subsequent invocations of Live Upgrade<br />
+commands. To run this script invoke:</p>
+<p>   /usr/lib/lu/lux86menu_propagate /path/to/new/Solaris/install/image</p>
+<p>		where /path/to/new/Solaris/install/image is an absolute<br />
+path to the Solaris media or netinstall image from which you installed the<br />
+Live Upgrade packages.</p>
+<p>Unable to rename boot environment.<br />
+#</p></div>
+<p>I know this is sad, but I got a little excited.  Finally they've resolved the ludelete and GRUB issue in Nevada. Wooohooo!!!!</p>
+<p>So I did as instructed...</p>
+<div class="terminal">
+# /usr/lib/lu/lux86menu_propagate /cdroms/prefcs/os/nv/combined.nvx_wos/94/<br />
+Validating the contents of the media </cdroms/prefcs/os/nv/combined.nvx_wos/94/>.<br />
+The media is a standard Solaris media.<br />
+The media contains a Solaris operating system image.<br />
+The media contains <solaris> version <11>.<br />
+Installing latest Live Upgrade packages from media<br />
+Updating Live Upgrade packages on all BEs<br />
+Successfully updated Live Upgrade packages on all BEs<br />
+Successfully extracted GRUB from media<br />
+Extracted GRUB menu from GRUB slice<br />
+Installing GRUB bootloader to all GRUB based BEs<br />
+stage1 written to partition 1 sector 0 (abs 41945715)<br />
+stage2 written to partition 1, 265 sectors starting at 50 (abs 41945765)<br />
+stage1 written to partition 1 sector 0 (abs 41945715)<br />
+stage2 written to partition 1, 265 sectors starting at 50 (abs 41945765)<br />
+System does not have an applicable x86 boot partition<br />
+install GRUB to all BEs successful<br />
+Converting root entries to findroot<br />
+Generated boot signature <be_snv_88> for BE <snv_88><br />
+Converting GRUB menu entry for BE <snv_88><br />
+Added findroot entry for BE <snv_88> to GRUB menu<br />
+Generated boot signature <be_snv_94> for BE <snv_94><br />
+Converting GRUB menu entry for BE <snv_94><br />
+Added findroot entry for BE <snv_94> to GRUB menu<br />
+No more bootadm entries. Deletion of bootadm entries is complete.<br />
+Changing GRUB menu default setting to <8><br />
+Done eliding bootadm entries.<br />
+File </boot/grub/menu.lst> propagation successful<br />
+Menu propagation successful<br />
+File </etc/lu/GRUB_slice> deletion successful<br />
+Successfully deleted GRUB_slice file<br />
+File </etc/lu/GRUB_root> deletion successful<br />
+Successfully deleted GRUB_root file<br />
+Propagating findroot GRUB for menu conversion.<br />
+File </etc/lu/installgrub.findroot> propagation successful<br />
+File </etc/lu/stage1.findroot> propagation successful<br />
+File </etc/lu/stage2.findroot> propagation successful<br />
+File </etc/lu/GRUB_capability> propagation successful<br />
+Deleting stale GRUB loader from all BEs.<br />
+File </etc/lu/installgrub.latest> deletion successful<br />
+File </etc/lu/stage1.latest> deletion successful<br />
+File </etc/lu/stage2.latest> deletion successful<br />
+Conversion was successful<br />
+#</snv_94></snv_94></snv_94></be_snv_94></snv_88></snv_88></snv_88></be_snv_88></solaris></div>
+<p>Done. And comparison of the two menu.lst file indicates we've got two identical GRUB menus - one in each of my BEs, which means I'll be able to delete any one of them, if I so wish.</p>
+<div class="terminal">
+# luumount snv_88<br />
+# lumount snv_88<br />
+/.alt.snv_88<br />
+# diff /boot/grub/menu.lst /.alt.snv_88/boot/grub/menu.lst<br />
+No differences encountered<br />
+#</div>
+<p>Finally!!! Live Upgrade on Solaris x86 is fixed and should now work as it does on SPARC - ie without any problems or having to jump through hoops.</p>
+<p>Apparently, this issue is due to be resolved in Solaris 10 update 6 when it's released later this year.</p>

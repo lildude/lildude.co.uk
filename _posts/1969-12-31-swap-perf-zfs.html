@@ -1,0 +1,14 @@
+---
+layout: post
+title: Swap Performance and ZFS
+date: 1969-12-31 16:00:00.000000000 -08:00
+tags: []
+type: post
+published: false
+---
+<p>I just recently loaded a root pool using live upgrade, inspired by this article. All went well, but like any other technologist out there who's been around for a while, I'm concerned about performance.</p>
+<p>Specifically what I'd like to ask is about the performance hit (or improvement) imposed when the swap device is placed within the zpool as a zvol.</p>
+<p>Has anyone done a comparison between the performance of swap within the zpool vs. a dedicated partition (for example placed on the outer cylinders where read-time is traditionally faster)?</p>
+<p>As a system admin on older versions of solaris, it was always a rule of thumb to create more than one swap device (as a partition) on seperate disks, seperate controllers and on the outer edges (cylinders). This to gain parallelism and improve swap performance.</p>
+<p>Albeit I never actually ran a test to prove if this technique really does help swap performance because most of the focus is to prevent swap from occuring at all. But, still, we should know the risks or rewards for using swap within the zfs volume in order to establish our initial system design.</p>
+<p>I have not found anything posted about this issue or any tests to support either approach.</p>

@@ -1,0 +1,17 @@
+---
+layout: post
+title: 'HOWTO: Disconnect from a Zone''s Console Without Dropping Your SSH Connection'
+date: 2011-05-20 09:19:34.000000000 -07:00
+tags:
+- ssh
+- zone
+- console
+- disconnect
+type: post
+published: true
+---
+<p>This problem came up on the Oracle Community forums and I thought it was worth noting here too as it's a useful tip...</p>
+<blockquote><p>I've also learned by myself (and by chance) that the best way to "disconnect" from the ngz console after a init 5 is to issue a ^C before ~.<br />
+If I don't execute a ^C and simply use ~. I'm disconnected from the console and also from the ssh connection, which is certainly annoying. </p></blockquote>
+<p>The trick here is to use a tilda (~) for every hop you made on your way to the zone's console.  So if you're connecting directly from the global zone to the zone's console (<code>zlogin -C</code>), then the disconnect will be <code>~.</code> (tilda dot).  If you're connecting from another host via ssh to the global zone and then only to zone's console, use 2 tildas and one dot, ie <code>~~.</code> - the first <code>~</code> for the ssh hop and the second for the "<code>zlogin -C</code>" hop. If you're connecting as follows:  <code>host1</code> ➜ <code>host2</code> ➜ <code>host3</code> ➜ <code>zlogin -C</code> use three tildas and one dot, ie <code>~~~.</code> </p>
+<p>Keep increasing the number of tildas as you wind your way through all your hosts :-)</p>

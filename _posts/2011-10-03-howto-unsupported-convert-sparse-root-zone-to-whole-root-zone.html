@@ -1,0 +1,200 @@
+---
+layout: post
+title: 'HOWTO: (Unsupported) Convert Sparse-root Zone to Whole-root Zone'
+date: 2011-10-03 01:54:15.000000000 -07:00
+tags: []
+type: post
+published: false
+---
+<div class="warning">NOTE: This procedure is completely UNSUPPORTED.  There is NO officially supported method of converting a sparse-root zone to a whole-root zone. If you encounter problems with your zones after using this procedure, Oracle WILL tell you to rebuild the zone correctly.</div>
+<p>1) Bring the zone to ready state and archive it:</p>
+<p>    bw5n013:/zones # zoneadm list -cv<br />
+      ID NAME             STATUS     PATH                           BRAND    IP<br />
+       0 global           running    /                              native   shared<br />
+       - s10-z3a          installed  /zones/s10-z3a                 native   shared</p>
+<p>    bw5n013:/zones # zoneadm -z s10-z3a ready</p>
+<p>    bw5n013:/zones # cd s10-z3a<br />
+    bw5n013:/zones/s10-z3a # find root -print | cpio -oP@ > /zones/s10-z3a.cpio<br />
+    11107590 blocks</p>
+<p>2) Create a ZFS dataset and configure the new zone:</p>
+<p>    bw5n013:/zones # zfs create rpool/zones/s10-z3a-whole<br />
+    bw5n013:/zones # chmod 700 s10-z3a-whole</p>
+<p>    bw5n013:/zones # zonecfg -z s10-z3a-whole<br />
+    s10-z3a-whole: No such zone configured<br />
+    Use 'create' to begin configuring a new zone.<br />
+    zonecfg:s10-z3a-whole> create<br />
+    zonecfg:s10-z3a-whole> info<br />
+    zonename: s10-z3a-whole<br />
+    zonepath:<br />
+    brand: native<br />
+    autoboot: false<br />
+    bootargs:<br />
+    pool:<br />
+    limitpriv:<br />
+    scheduling-class:<br />
+    ip-type: shared<br />
+    hostid:<br />
+    inherit-pkg-dir:<br />
+            dir: /lib<br />
+    inherit-pkg-dir:<br />
+            dir: /platform<br />
+    inherit-pkg-dir:<br />
+            dir: /sbin<br />
+    inherit-pkg-dir:<br />
+            dir: /usr</p>
+<p>    zonecfg:s10-z3a-whole> set zonepath=/zones/s10-z3a-whole<br />
+    zonecfg:s10-z3a-whole> remove inherit-pkg-dir dir=/lib<br />
+    zonecfg:s10-z3a-whole> remove inherit-pkg-dir dir=/platform<br />
+    zonecfg:s10-z3a-whole> remove inherit-pkg-dir dir=/sbin<br />
+    zonecfg:s10-z3a-whole> remove inherit-pkg-dir dir=/usr</p>
+<p>    I've also recreated the exact networking and delegated datasets configuration.</p>
+<p>    zonecfg:s10-z3a-whole> info<br />
+    zonename: s10-z3a-whole<br />
+    zonepath:<br />
+    brand: native<br />
+    autoboot: false<br />
+    bootargs:<br />
+    pool:<br />
+    limitpriv:<br />
+    scheduling-class:<br />
+    ip-type: shared<br />
+    hostid:<br />
+    net:<br />
+            address: 10.1.1.1/20<br />
+            physical: e1000g0<br />
+            defrouter not specified<br />
+    dataset:<br />
+            name: rpool/zones/users/z3a<br />
+    dataset:<br />
+            name: rpool/oracle/z3a<br />
+    zonecfg:s10-z3a-whole> verify<br />
+    zonecfg:s10-z3a-whole> commit<br />
+    zonecfg:s10-z3a-whole> exit</p>
+<p>    bw5n013:/zones # zoneadm list -cv<br />
+      ID NAME             STATUS     PATH                           BRAND    IP<br />
+       0 global           running    /                              native   shared<br />
+      11 s10-z3a          ready      /zones/s10-z3a                 native   shared<br />
+       - s10-z3a-whole    configured /zones/s10-z3a-whole           native   shared</p>
+<p>3) Extract the archive into place:</p>
+<p>    bw5n013:/zones/s10-z3a-whole # cat ../s10-z3a.cpio | cpio -iP@<br />
+    cpio: Cannot mknod() "root/dev/cpu/self/cpuid", errno 22, Invalid argument<br />
+    cpio: Cannot chown() "root/dev/cpu/self/cpuid", errno 2, No such file or directory<br />
+    cpio: Cannot chmod() "root/dev/cpu/self/cpuid", errno 2, No such file or directory<br />
+    11107590 blocks<br />
+    3 error(s)</p>
+<p>4) Perform the attach:</p>
+<p>    bw5n013:/zones # zoneadm -z s10-z3a halt<br />
+    bw5n013:/zones # zoneadm list -cv<br />
+      ID NAME             STATUS     PATH                           BRAND    IP<br />
+       0 global           running    /                              native   shared<br />
+       - s10-z3a          installed  /zones/s10-z3a                 native   shared<br />
+       - s10-z3a-whole    installed  /zones/s10-z3a-whole           native   shared</p>
+<p>    bw5n013:/zones # zoneadm -z s10-z3a-whole attach -u<br />
+    Getting the list of files to remove<br />
+    Removing 6 files<br />
+    Remove 6 of 6 packages<br />
+    Installing 21 files<br />
+    Add 6 of 6 packages<br />
+    Updating editable files<br />
+    The file </var/sadm/system/logs/update_log> within the zone contains a log of the zone update.</p>
+<p>5) Checking the log:</p>
+<p>    bw5n013:/zones # cat s10-z3a-whole/root/var/sadm/system/logs/update_log<br />
+    Fri Jul  1 08:59:42 BRT 2011</p>
+<p>    ***** inherited *****</p>
+<p>    ***** pkg_rm *****<br />
+    SUNWcakr<br />
+    SUNWcar<br />
+    SUNWced<br />
+    SUNWcpc<br />
+    SUNWkvm<br />
+    SUNWnxge</p>
+<p>    ***** pkg_add *****<br />
+    SUNWcakr<br />
+    SUNWcar<br />
+    SUNWced<br />
+    SUNWcpc<br />
+    SUNWkvm<br />
+    SUNWnxge</p>
+<p>    ***** gz_cp_list *****<br />
+    /usr/platform/i86pc/sbin/eeprom<br />
+    /usr/platform/i86pc/sbin/prtdiag<br />
+    /usr/platform/ncri86pc<br />
+    /usr/platform/i86pc/sbin<br />
+    /usr/platform/i86pc/lib/fs/nfs<br />
+    /usr/platform/i86pc/lib/fs<br />
+    /usr/platform/i86pc/lib<br />
+    /usr/platform/i86pc<br />
+    /usr/platform<br />
+    /usr<br />
+    /platform/i86pc/kernel/misc<br />
+    /platform/i86pc/kernel/drv/amd64<br />
+    /platform/i86pc/kernel/drv<br />
+    /platform/i86pc/kernel<br />
+    /platform/i86pc<br />
+    /platform<br />
+    /kernel/drv/amd64<br />
+    /kernel/drv<br />
+    /kernel<br />
+    /boot/solaris<br />
+    /boot</p>
+<p>    ***** gz_ed_list *****</p>
+<p>    ***** ngz_ed_list *****</p>
+<p>    ***** rmlist *****<br />
+    /a/usr/platform/ncri86pc|none|SUNWkvm<br />
+    /a/usr/platform/i86pc/sbin|none|SUNWkvm<br />
+    /a/usr/platform/i86pc/sbin/prtdiag|none|SUNWkvm<br />
+    /a/usr/platform/i86pc/sbin/eeprom|none|SUNWkvm<br />
+    /a/platform|none|SUNWcar<br />
+    /a/platform/i86pc|none|SUNWcar</p>
+<p>    Removing 6 files<br />
+    ***** remove_pkg *****</p>
+<p>    Removal of <sunwcakr> was successful.</p>
+<p>    Removal of <sunwcar> was successful.</p>
+<p>    Removal of <sunwced> was successful.</p>
+<p>    Removal of <sunwcpc> was successful.</p>
+<p>    Removal of <sunwkvm> was successful.</p>
+<p>    Removal of <sunwnxge> was successful.</p>
+<p>    Installing 21 files<br />
+    ***** cpio *****<br />
+    cpio: Cannot open directory /boot, errno 2, No such file or directory<br />
+    cpio: Error with fstatat() of "/boot", errno 2, No such file or directory<br />
+    64 blocks<br />
+    2 error(s)</p>
+<p>    ***** add_pkg *****<br />
+    ===== SUNWcakr ====</p>
+<p>    Installation of <sunwcakr> on zone <s10-z3a-whole> was successful.<br />
+    ===== SUNWcar ====</p>
+<p>    Installation of <sunwcar> on zone <s10-z3a-whole> was successful.<br />
+    ===== SUNWced ====</p>
+<p>    Installation of <sunwced> on zone <s10-z3a-whole> was successful.<br />
+    ===== SUNWcpc ====</p>
+<p>    Installation of <sunwcpc> on zone <s10-z3a-whole> was successful.<br />
+    ===== SUNWkvm ====</p>
+<p>    Installation of <sunwkvm> on zone <s10-z3a-whole> was successful.<br />
+    ===== SUNWnxge ====</p>
+<p>    Installation of <sunwnxge> on zone <s10-z3a-whole> was successful.</p>
+<p>    ***** finalize *****<br />
+    Updating editable files<br />
+    The file </var/sadm/system/logs/update_log> within the zone contains a log of the zone update.</p>
+<p>6) Booting:</p>
+<p>    bw5n013:/zones # zoneadm -z s10-z3a-whole boot</p>
+<p>    bw5n013:/zones # zlogin -C s10-z3a-whole                     <== In another terminal<br />
+    [Connected to zone 's10-z3a-whole' console]</p>
+<p>    [NOTICE: Zone booting up]</p>
+<p>    SunOS Release 5.10 Version Generic_144489-17 32-bit<br />
+    Copyright (c) 1983, 2011, Oracle and/or its affiliates. All rights reserved.<br />
+    Hostname: s10-z3a<br />
+    NIS domain name is company.com<br />
+    Loading smf(5) service descriptions: 157/157<br />
+    Reading ZFS config: done.<br />
+    Mounting ZFS filesystems: (12/12)</p>
+<p>    s10-z3a console login: user1<br />
+    Password:<br />
+    Last login: Thu Jun 30 14:37:14 from phoenix<br />
+    user1@s10-z3a:~ $ </p>
+<p>This procedure doesn't actually convert the sparse-root zone to a whole-root zone as you can see.  Rather what it does is effectively perform a backup and restore of the zone to a new zone... a bit like a zone migration.  This is time consuming and would actually be quicker to:</p>
+<p>- backup your user and application data<br />
+- create a new whole-root zone<br />
+- restore your application and user data</p>
+<p>This would also be supported by Oracle.</p>
+<p>Credit to Carlos Azevedo on this <a href="https://communities.oracle.com/portal/server.pt/community/view_discussion_topic/216?threadid=214918" target="_blank">Oracle Communities forum</a> (Oracle login required) for finding this method.</s10-z3a-whole></sunwnxge></s10-z3a-whole></sunwkvm></s10-z3a-whole></sunwcpc></s10-z3a-whole></sunwced></s10-z3a-whole></sunwcar></s10-z3a-whole></sunwcakr></sunwnxge></sunwkvm></sunwcpc></sunwced></sunwcar></sunwcakr></p>

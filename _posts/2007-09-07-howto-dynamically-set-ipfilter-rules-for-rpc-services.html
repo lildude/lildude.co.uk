@@ -1,0 +1,41 @@
+---
+layout: post
+title: 'HOWTO: Dynamically Set IPFilter Rules for RPC Services'
+date: 2007-09-07 05:32:42.000000000 -07:00
+tags:
+- OpenSolaris
+- Solaris
+- Security
+- HOWTO
+- firewall
+- NFS
+- RPC
+- IPFilter
+type: post
+published: true
+---
+<p>I'll admit now, none of this work is mine: all credit needs to go to Borgan Chu and <a href="http://blogs.oracle.com/yakshaving/">Shawn Ferry</a>. All this post is doing is making it easier to find all the relevant information as it's scattered around a bit.</p>
+<p>Many people implement firewalls for security reasons, and many people encounter the one nightmare with firewalls that is RPC services, e.g. NFS.  The problem with RPC services is that they use dynamic ports when they run.  This makes it a bit of a nightmare to configure the respective ports as they're likely to change everytime the host reboots or the service restarts.</p>
+<p><!--more-->You could open up a whole range of ports (32767-32850), but this isn't particularly secure and has the drawback that other RPC services are also open too, not just the one particular service you're trying to use.  </p>
+<p>A common alternate approach to this is to use intelligent firewall software like SunScreen (now EOL) or Checkpoint Firewall-1 (costs $$) which allow you to specify the RPC service and it takes care of things. This can be a bit of an overkill for a server that is running the desired RPC service, and acting as a firewall to itself.</p>
+<p>With the introduction of Solaris 10 came IPFilter built into Solaris 10, and accordingly many people are looking to do the same thing with Solaris. Why pay for something when you can have it for free?</p>
+<p>Borgan Chu came up with a script (I can't find the original) which essentially took the output from "<code>rpcinfo -p</code>" on boot up and created the appropriate IPFilter rules.  This worked a treat on bootup, but had several limitations, which Shawn Ferry discusses and resolves in "<a href="http://blogs.oracle.com/yakshaving/entry/dynamic_ipfilter_rules_for_rpc">Dynamic Ipfilter Rules for RPC Services via SMF</a>".</p>
+<p>Unfortunately, Shawn didn't provide all the scripts he uses in his solution when discussing it on his blog, but he did post them on the <a href="http://www.opensolaris.org/jive/forum.jspa?forumID=37">security-discuss forum</a> at <a href="http://www.opensolaris.org">opensolaris.org</a> sometime last year.  Locating these was a bit challenging, but I've done just this and made this post to make it easier for you.</p>
+<p><!--wsa:LongPostMiddle--></p>
+<p>In order to implement Shawn's solution, you need to download the following files (I've copied them locally):</p>
+<p><code><a href="http://lildude.co.uk/shared/scripts/shell/ipfilter_rpcbind">ipfilter_rpcbind</a></code> - This is the service method. Place in <code>/lib/svc/method/</code><br />
+<code><a href="http://lildude.co.uk/shared/scripts/shell/ipfilter_rpcbind.cfg">ipfilter_rpcbind.cfg</a></code> - This is an example config file. Customize and place in <code>/etc/ipf/</code><br />
+<code><a href="http://lildude.co.uk/shared/scripts/shell/ipfilter_rpcbind.xml">ipfilter_rpcbind.xml</a></code> - This is the service manifest. Place in <code>/var/svc/manifest/application/</code></p>
+<p>Next, import the manifest:</p>
+<div class="terminal"># /usr/sbin/svccfg -v import \<br />
+/var/svc/manifest/application/ipfilter_rpcbind.xml</div>
+<p>Set the services you want to watch for refresh:</p>
+<div class="terminal"># /usr/sbin/svccfg -s ipfilter:rpcbind setprop \<br />
+"rpc_services/entities = fmri: (`/usr/bin/svcs -H \<br />
+\*rpc\* \*nis\* \*nfs\* | awk '$NF !~ /bind:default|ipfilter/ \<br />
+{ print $3 }'`)"</div>
+<p>Refresh the service:</p>
+<div class="terminal"># /usr/sbin/svcadm refresh ipfilter:rpcbind</div>
+<p>You should now have SMF and IPFilter working in tandem to dynamically add the necessary IPFilter configuration in order to use your specified RPC service through the firewall on the local machine.</p>
+<p>This method has one major limitation - it only takes into account the RPC services running on that machine.  Accordingly, you can't use this method for a host that is exclusively an IPFilter firewall that is situated between two hosts using an RPC service.</p>
+<p>It is important to remember that IPFilter is not yet as advanced as some of the more intelligent applications like SunScreen and Checkpoint Firewall-1.  You will need to assess you needs and other options, like NFSv4 if you're trying to pass NFS through the firewall, before committing on IPFilter.</p>

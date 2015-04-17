@@ -1,0 +1,88 @@
+---
+layout: post
+title: Compiling Devilspie 0.22 on OpenSolaris/Nevada
+date: 2007-12-20 09:06:49.000000000 -08:00
+tags:
+- OpenSolaris
+- HOWTO
+- Gnome
+- Nevada
+- Metacity
+- devilspie
+- compile
+- x11.pc
+type: post
+published: true
+---
+<p>I've been using <a href="http://burtonini.com/blog/computers/devilspie">Devilspie</a> for quite some time, and detailed steps on <a href="http://lildude.co.uk/compiling-devilspie-010-on-solaris-10/">compiling rev 0.10 to run on Solaris 10</a>.  Well, I'm now using a OpenSolaris/Nevada Sunray server on x86, so I can no longer use my old binary.</p>
+<p>Devilspie has had a complete overhaul since I last built it, so my old instructions don't quite apply anymore.  What's more, Nevada has a little bug that will trip up compiling devilspie without a little bit of work.</p>
+<p>This post will detail how to compile <a href="http://www.burtonini.com/blog/computers/devilspie/devilspie-0.22">Devilspie 0.22</a> on OpenSolaris/Nevada.</p>
+<p><!--more-->
+<ol>
+<li>Download the source code tarball - <a href="http://burtonini.com/computing/devilspie-0.22.tar.gz">devilspie-0.22.tar.gz</a> - and extract it to a directory of your choice.</li>
+<li>Unfortunately, there is an outstanding bug on Nevada in that there is no x11.pc file required for pkg-config.  We can resolve this by creating one of our own.
+<p>Create a file called x11.pc and place the following into it:</p>
+<p><code><br />
+prefix=/usr/openwin<br />
+exec_prefix=${prefix}<br />
+libdir=${exec_prefix}/lib<br />
+includedir=${prefix}/include</p>
+<p>xthreadlib=</p>
+<p>Name: X11<br />
+Description: X Library<br />
+Version: 0.0<br />
+Requires: xproto kbproto inputproto<br />
+Requires.private: xau xdmcp<br />
+Cflags: -I${includedir} -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DXTHREADS -DXUSE_MTSAFE_API<br />
+Libs: -L${libdir} -R${libdir} -lX11<br />
+Libs.private:<br />
+</code></p>
+<p>If you have root access, place this file into the <code>/usr/lib/pkgconfig</code> directory.<br />
+If you don't have root access, place this anywhere you like.  It's only needed temporarily, so I've placed it into the <code>devilspie-0.22</code> directory.</li>
+<li>Now, for some reason, <code>pkg-config</code> doesn't seem to pickup the <code>libwnck-1.0.pc</code> file that exists in <code>/usr/lib/pkgconfig</code>. It expects to find <code>libwnck.pc</code>, so lets help it out.
+<p>If you have root access, symlink <code>/usr/lib/pkgconfig/libwnck-1.0.pc</code> to <code>/usr/lib/pkgconfig/libwnck.pc</code></p>
+<p>If you don't have root access, symlink <code>/usr/lib/pkgconfig/libwnck-1.0.pc</code> to <code>libwnck.pc</code> in the same directory you copied the <code>x11.pc</code> file to.</li>
+<p><!--wsa:LongPostMiddle--></p>
+<li>If you do not have root access, or have placed the two .pc files into a non-standard location, export the <code>PKG_CONFIG_PATH</code> environment variable pointing to the location of these two files.</li>
+<li>Configure Devilspie, but include the X11 libs as follows:
+<div class="terminal">$ LIBS=-lX11 ./configure</div>
+<p>If you forget the LIBS part, make fails with the following error:</p>
+<pre>
+gcc -Wall -Wmissing-prototypes -g -O2   -o devilspie devilspie.o xutils.o  e-sexp.o 
+parser.o logical.o  matchers.o actions.o -lwnck-1 -lgtk-x11-2.0 
+-lstartup-notification-1 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lmlib 
+-lpangocairo-1.0 -lpango-1.0 -lcairo -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 
+Undefined                       first referenced
+ symbol                             in file
+XMoveResizeWindow                   actions.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XGetWindowAttributes                xutils.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XFree                               xutils.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XSync                               xutils.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XGetAtomName                        xutils.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XSendEvent                          xutils.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XGetWindowProperty                  xutils.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XChangeProperty                     actions.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XMoveWindow                         actions.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XInternAtom                         xutils.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+XParseGeometry                      actions.o  (symbol belongs to implicit dependency
+ /usr/openwin/lib/libX11.so.4)
+ld: fatal: Symbol referencing errors. No output written to devilspie
+collect2: ld returned 1 exit status
+*** Error code 1
+make: Fatal error: Command failed for target `devilspie'
+</pre>
+</li>
+<li>If all goes well, you should now be able to run make install to install Devilspie.</li>
+</ol>
+<p>Remember, if you've used a version prior to 0.13, you will need to recreate your configuration file.  The old xml configuration file format has been replaced with the much simpler s-expressions style.</p>
+<p>You can find some very good documentation and examples <a href="http://www.chimeric.de/snippets/linux/devilspie">here</a>.</p>

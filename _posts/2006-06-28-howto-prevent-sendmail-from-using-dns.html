@@ -1,0 +1,75 @@
+---
+layout: post
+title: 'HOWTO: Prevent Sendmail From Using DNS'
+date: 2006-06-28 02:54:31.000000000 -07:00
+tags:
+- Software
+- HOWTO
+type: post
+published: true
+---
+<p>This HOWTO details disabling DNS in Sendmail 8.12.x and later.</p>
+<p>By default, Sendmail 8.12.x and later will always attempt to use MX records if it detects "<code>dns</code>" in the hosts line in the <code>/etc/nsswitch.conf</code> on Solaris. (I believe the same applies on Linux, but I've not verified this yet.)</p>
+<p>At an ISP this isn't normally a problem as the ISP has access to reliable DNS servers and will forward DNS requests when necessary, however in the corporate world this can be a real problem with things like firewalls getting in the way, and internal only DNS servers.</p>
+<p>In the event Sendmail can't canonify the recipient domain, it will queue the email and report something along the lines of:</p>
+<div class="terminal">
+    $ echo `date` | mailx -v -s "Test - `date`" bob.smith@domain.com<br />
+    $ domain.com: Name server timeout<br />
+    bob.smith@domain.com... Transient parse error -- message queued for future delivery<br />
+    bob.smith@domain.com... queued<br />
+    $
+</div>
+<p>Now the easiest way is to remove "<code>dns</code>" from the hosts line in <code>/etc/nsswitch.conf</code>, however this also means you can't use DNS for your local domains.</p>
+<p>The better way is to change Sendmail's configuration and this is what I'll detail here.</p>
+<div class="alert">
+<strong>NOTE</strong>: This process is demonstrated using Solaris 10, however the configuration changes will apply to all operating systems, just the location of the <code>.mc</code> files, the method of generating the <code>.cf</code> files and restarting Sendmail may vary slightly.
+</div>
+<div class="alert">
+<strong>NOTE</strong>: Sendmail on Solaris 10 (and OpenSolaris) now runs in "Local Only Mode" by default, ie remote clients will not be allowed to connect to port 25 on this host but outbound delivery will still take place (see <code>sendmail(1M)</code> for more details).  If you wish to continue running in "Local Only Mode", replace all references to <code>subsidiary.mc</code> and <code>sendmail.cf</code> below with <code>local.mc</code> and <code>local.cf</code> respectively.
+</div>
+<p>1.  Change into the directory that contains the macro configuration (<code>.mc</code>) files:</p>
+<div class="terminal">
+    # cd /usr/lib/mail/cf
+</div>
+<p>2.  Make a copy of the <code>subsidiary.mc</code> and <code>submit.mc</code> files</p>
+<div class="terminal">
+    # cp subsidiary.mc nodns-subsidiary.mc<br />
+    # cp submit.mc nodns-submit.mc
+</div>
+<p>3.  Add the following lines to the new <code>nodns-subsidiary.mc</code> file just above the "<code>confFALLBACK_SMARTHOST</code>" line:</p>
+<pre class="text">
+    FEATURE(`nocanonify')dnl
+    define(`SMART_HOST', `[mailhost]')dnl
+</pre>
+<p>4.  Ensure you have an entry in your /etc/hosts file for the hostname "<code>mailhost</code>".</p>
+<p>5.  Comment out the "<code>confFALLBACK_SMARTHOST</code>" line by placing "dnl" at the beginning of the line in the new <code>nodns-subsidiary.mc</code> file.</p>
+<p>6.  Add the following line to the new <code>nodns-submit.mc</code> file after all the other "<code>define</code>" lines:</p>
+<pre class="text">
+    define(`confDIRECT_SUBMISSION_MODIFIERS', `C')dnl
+</pre>
+<p><!--wsa:LongPostMiddle--></p>
+<p>7.  Generate the new <code>.cf</code> files (note the filename used is the same as the file we edited, except the extension is now <code>.cf</code> instead of <code>.mc</code>):</p>
+<div class="terminal">
+    # /usr/ccs/bin/make nodns-subsidiary.cf<br />
+    test ! -f nodns-subsidiary.cf || /usr/bin/mv nodns-subsidiary.cf nodns-subsidiary.cf.prev<br />
+    /usr/ccs/bin/m4 ../m4/cf.m4 nodns-subsidiary.mc > nodns-subsidiary.cf<br />
+    # /usr/ccs/bin/make nodns-submit.cf<br />
+    test ! -f nodns-submit.cf || /usr/bin/mv nodns-submit.cf nodns-submit.cf.prev<br />
+    /usr/ccs/bin/m4 ../m4/cf.m4 nodns-submit.mc > nodns-submit.cf<br />
+    #
+</div>
+<p>8.  Make a backup of the current files:</p>
+<div class="terminal">
+    # cp /etc/mail/sendmail.cf /etc/mail/sendmail.cf.orig<br />
+    # cp /etc/mail/submit.cf /etc/mail/submit.cf.orig
+</div>
+<p>9.  Put the new files into place:</p>
+<div class="terminal">
+    # cp /usr/lib/mail/cf/nodns-subsidiary.cf /etc/mail/sendmail.cf<br />
+    # cp /usr/lib/mail/cf/nodns-submit.cf /etc/mail/submit.cf
+</div>
+<p>10.  Restart Sendmail</p>
+<div class="terminal">
+    # svcadm refresh sendmail
+</div>
+<p>Thats it.  Sendmail will no longer query DNS and will instead blindly forward all emails destined for users remote to the local machine to the "<code>mailhost</code>".  It's then up to this machine to query a reliable interface facing DNS server.  This is commonly a machine managed by an ISP.</p>

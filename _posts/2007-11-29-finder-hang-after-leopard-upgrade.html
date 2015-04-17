@@ -1,0 +1,25 @@
+---
+layout: post
+title: Finder Hang After Leopard Upgrade
+date: 2007-11-29 08:50:40.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- apple
+- leopard
+- hang
+- Finder
+- not-responding
+- DivX
+- plistbuddy
+- Mac OS X
+type: post
+published: true
+---
+<p>I've just upgraded to OS X Leopard, but I made a school boy error - I forgot to ensure all my applications were Leopard compatible BEFORE I did this.</p>
+<p>The upgrade went smoothly, however I couldn't login as myself into the graphical interface.  I could login remotely over SSH, but any attempts to login via the GUI resulted in Finder hanging and giving me the lovely bouncing beach ball.  For some reason, my other users didn't have this problem.  </p>
+<p>At first I thought this was due to the login startup items I have, but moving loginwindow.plist out of the way didn't make a blind bit of difference, if anything it made things worse.</p>
+<p>I gave myself a crash course in PlistBuddy, by following the source code examples <a href="http://bbs.applescript.net/viewtopic.php?id=18380">here</a> and the man page, and deleted all the entries from the <code>~/Library/Preferences/loginwindow.plist</code>, but this didn't resolve the issue.</p>
+<p>A bit more Googling was to be had and then I stumbled upon <a href="http://macosx.com/forums/1422581-post19.html">this gem</a>... the cause of my problem.  DivX!  For some reason DivX was causing Finder to hang.</p>
+<p>Once I moved DivX out of the way, everything worked a treat and I could login as normal.</p>
+<p>The thing that puzzles me still is the DivX files I moved were in the systemwide <code>/Library</code> directory - why weren't my other user's affected?</p>

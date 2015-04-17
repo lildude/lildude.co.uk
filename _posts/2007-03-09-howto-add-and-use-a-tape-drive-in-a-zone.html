@@ -1,0 +1,58 @@
+---
+layout: post
+title: 'HOWTO: Add and Use a Tape Drive in a Zone'
+date: 2007-03-09 08:46:20.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- HOWTO
+type: post
+published: true
+---
+<p>This is just a quick one that may come in handy to someone, or me again in the future.</p>
+<p>Adding a tape drive to a zone is quite a quick simple process.</p>
+<p><!--more--></p>
+<ol>
+<li>Add the device to the zone configuration from the global zone:
+<pre class="terminal"><code><span style="color: #f00">[devon:~] #</span> zonecfg -z myzone
+zonecfg:myzone> add device
+zonecfg:myzone:device> set match=/dev/rmt/0n
+zonecfg:myzone:device> end
+zonecfg:myzone> verify
+zonecfg:myzone> commit
+zonecfg:myzone> exit
+<span style="color: #f00">[devon:~] #</span></code></pre>
+</li>
+<li>Reboot the zone:
+<pre class="terminal"><code><span style="color: #f00">[devon:~] #</span> zoneadm -z myzone reboot</code></pre>
+<p>You need to reboot the zone, because <code>devfsadm</code> doesn't work in a local zone:</p>
+<pre class="terminal"><code><span style="color: #f00">[myzone:~] #</span> devfsadm
+devfsadm: open failed for /dev/.devfsadm_dev.lock: Permission denied
+<span style="color: #f00">[myzone:~] #</span> mt status
+/dev/rmt/0n: No such file or directory
+<span style="color: #f00">[myzone:~] #</span></code></pre>
+</li>
+</ol>
+<p>Once the local zone has rebooted, you should now have access to your tape drive and be able to use it as normal:</p>
+<pre class="terminal"><code><span style="color: #f00">[myzone:~] #</span> mt status
+HP DDS-4 DAT (Sun) tape drive:
+  sense key(0x0)= No Additional Sense   residual= 0   retries= 0
+  file no= 0   block no= 0
+<span style="color: #f00">[myzone:~] #</span> tar -cvf /dev/rmt/0n var
+a var/ 0 tape blocks
+a var/sadm/ 0 tape blocks
+a var/sadm/system/ 0 tape blocks
+a var/sadm/system/logs/ 0 tape blocks
+a var/sadm/system/logs/install_log 115 tape blocks
+a var/sadm/system/logs/sysidtool.log 37 tape blocks
+[...]
+<span style="color: #f00">[myzone:~] #</span> mt rewind
+<span style="color: #f00">[myzone:~] #</span> tar -tvf /dev/rmt/0n
+drwxr-xr-x   0/3        0 Feb 14 16:53 2007 var/
+drwxr-xr-x   0/3        0 Sep 28 12:46 2006 var/sadm/
+drwxr-xr-x   0/3        0 Apr 18 09:27 2006 var/sadm/system/
+drwxr-xr-x   0/3        0 Feb 14 16:45 2007 var/sadm/system/logs/
+-rw-r--r--   0/0    58510 Feb 14 16:35 2007 var/sadm/system/logs/install_log
+[...]
+<span style="color: #f00">[myzone:~] #</span></code></pre>
+<p>Just remember, you can only backup filesystems accessible from this zone.</p>

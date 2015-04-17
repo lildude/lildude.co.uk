@@ -1,0 +1,85 @@
+---
+layout: post
+title: BBC iPlayer Totem Plugin on OpenSolaris
+date: 1969-12-31 16:00:00.000000000 -08:00
+tags: []
+type: post
+published: false
+---
+<p>I was playing around with Totem, the default media player on OpenSolaris, today and noticed we’ve got the BBC iPlayer plugin available in the plugins list. Curious to see how it works, I tried to enable it and got:</p>
+<p>Well that’s disappointing. So I set to fixing it.</p>
+<p>First, I fired up Totem via the command line and when trying to enable to plugin I got some useful output:</p>
+<div class="console">Traceback (most recent call last):<br />
+File “/usr/lib/totem/plugins/iplayer/iplayer.py”, line 6, in<br />
+import iplayer2<br />
+File “/usr/lib/totem/plugins/iplayer/iplayer2.py”, line 14, in<br />
+import httplib2<br />
+ImportError: No module named httplib2</p>
+<p>** (totem:2385): WARNING **: Could not load plugin iplayer</p>
+<p>** (totem:2385): WARNING **: Error, impossible to activate plugin ‘BBC iPlayer’</p></div>
+<p>Looks like the plugin is written in Python and we’re missing the httplib2 python module. I suspect we’re probably missing other modules too as OpenSolaris doesn’t provide many of the Python modules. So what modules do we need?</p>
+<div class="console">$ cd /usr/lib/totem/plugins/iplayer<br />
+$ grep -h import *.py | grep -v ^#<br />
+import totem<br />
+import gobject<br />
+import gtk<br />
+import iplayer2<br />
+import threading<br />
+import re, os<br />
+import urllib2<br />
+from socket import timeout as SocketTimeoutError<br />
+import totem<br />
+import httplib2<br />
+import feedparser<br />
+import listparser<br />
+from BeautifulSoup import BeautifulStoneSoup<br />
+import re<br />
+$</div>
+<p>That’s quite a few modules. Of these, OpenSolaris doesn’t come with httplib2, feedparser and BeautifulSoup (I manually tried to import each module without any luck). So lets download install them (the filenames are correct at time of publishing)…</p>
+<div class="console">$ wget http://httplib2.googlecode.com/files/httplib2-0.6.0.tar.gz http://feedparser.googlecode.com/files/feedparser-4.1.zip http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.0.8.1.tar.gz<br />
+$ mkdir pylibs<br />
+$ cd pylibs<br />
+$ unzip ../feedparser-4.1.zip -d ./feedparser<br />
+$ gtar zxf ../httplib2-0.6.0.tar.gz<br />
+$ gtar zxf ../BeautifulSoup-3.0.8.1.tar.gz<br />
+$ for x in `/bin/ls -1`; do cd $x; pfexec python setup.py install; cd ..; done<br />
+running install<br />
+running build<br />
+running build_py<br />
+creating build<br />
+creating build/lib<br />
+copying BeautifulSoup.py -> build/lib<br />
+copying BeautifulSoupTests.py -> build/lib<br />
+running install_lib<br />
+copying build/lib/BeautifulSoup.py -> /usr/lib/python2.6/site-packages<br />
+copying build/lib/BeautifulSoupTests.py -> /usr/lib/python2.6/site-packages<br />
+byte-compiling /usr/lib/python2.6/site-packages/BeautifulSoup.py to BeautifulSoup.pyc<br />
+byte-compiling /usr/lib/python2.6/site-packages/BeautifulSoupTests.py to BeautifulSoupTests.pyc<br />
+running install_egg_info<br />
+Writing /usr/lib/python2.6/site-packages/BeautifulSoup-3.0.8.1-py2.6.egg-info<br />
+running install<br />
+running build<br />
+running build_py<br />
+creating build<br />
+creating build/lib<br />
+copying feedparser.py -> build/lib<br />
+running install_lib<br />
+copying build/lib/feedparser.py -> /usr/lib/python2.6/site-packages<br />
+byte-compiling /usr/lib/python2.6/site-packages/feedparser.py to feedparser.pyc<br />
+running install_egg_info<br />
+Writing /usr/lib/python2.6/site-packages/feedparser-4.1-py2.6.egg-info<br />
+running install<br />
+running build<br />
+running build_py<br />
+creating build<br />
+creating build/lib<br />
+creating build/lib/httplib2<br />
+copying python2/httplib2/__init__.py -> build/lib/httplib2<br />
+copying python2/httplib2/iri2uri.py -> build/lib/httplib2<br />
+running install_lib<br />
+copying build/lib/httplib2/__init__.py -> /usr/lib/python2.6/site-packages/httplib2<br />
+copying build/lib/httplib2/iri2uri.py -> /usr/lib/python2.6/site-packages/httplib2<br />
+running install_egg_info<br />
+Writing /usr/lib/python2.6/site-packages/httplib2-0.6.0-py2.6.egg-info<br />
+$</div>
+<p>Done. That’s it. Now lets fire up Totem and enable the plugin and watch stuff on iPlayer…</p>

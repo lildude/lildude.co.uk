@@ -1,0 +1,83 @@
+---
+layout: post
+title: Auditing and OpenSSH On Solaris
+date: 2010-06-16 10:11:32.000000000 -07:00
+tags:
+- Software
+- Solaris
+- Security
+- bsm
+- OpenSSH
+- auditing
+type: post
+published: true
+---
+<p>Many people don't run the SSH that comes with Solaris 9 and later on their Solaris hosts, instead opting for <a href="http://www.openssh.com/">OpenSSH</a> or one of <a href="http://www.ssh.com/">Tectia's SSH</a> products.  Some don't like <a href="http://blogs.sun.com/janp/entry/on_sunssh_versioning">SunSSH's versioning</a>, as it makes it hard to determine if SunSSH is vulnerable to the same issues as OpenSSH (most often it's not or the issue has already been addressed), others rely on features on OpenSSH that haven't made it into SunSSH (there aren't many) and then there are those who's corporate guidelines only allow for a third party solution - probably for uniformity across platforms.  Whatever the reason, all of these people are security conscious so they may also have an auditing (aka BSM) requirement too, and this is where the problem comes to light: they soon discover that it appears that not all events are being recorded for users who connect via this third party SSH software.</p>
+<p>Thankfully it's easy to get OpenSSH working with Solaris auditing thanks to the <a href="https://bugzilla.mindrot.org/show_bug.cgi?id=2">very generous code contributions</a> made by Sun to the OpenSSH community, way back in 2001, that were finally included in <a href="http://www.openssh.com/txt/release-4.0">OpenSSH 4.0</a> and later.  However, despite these contributions, people still miss the details on getting BSM working as they expect and this is what I'll address here.</p>
+<p><!--more-->
+<div class="alert"><strong>NOTE:</strong> These instructions are based on the latest version of OpenSSH 5.5p1 on Solaris 10, however they apply to Solaris 8 and later and all versions of OpenSSH since 4.0, when BSM support was first integrated.</div>
+<p>When a sysadmin has been told he needs to install OpenSSH and enable auditing on their Solaris hosts, the process normally goes as follows:</p>
+<ol>
+<li>The sysadmin rushes over to <a href="http://sunfreeware.com/">Sunfreeware.com</a> and downloads the necessary packages.</li>
+<li>If they use Sunfreeware.com, they follow <a href="http://sunfreeware.com/openssh9.html">these steps to install and configure OpenSSH</a></li>
+<li>They disable the OS supplied SSH, fire up OpenSSH and then test a couple of logins.</li>
+<li>Once happy OpenSSH is working, they set to configuring auditing.  Not knowing exactly what they want to audit right away, they start off auditing just logins by adding <code>lo</code> to the flags line in <code>/etc/security/audit_control</code>, enable auditing by running <code>/etc/security/bsmconv</code> and then reboot.</li>
+<li>Once the host has come back up, they login and check their audit logs...
+<div class="terminal">
+<pre>$ ssh root@192.168.0.5
+root@192.168.0.5's password: 
+Last login: Wed Jun 16 13:38:45 2010
+Sun Microsystems Inc.   SunOS 5.10      Generic January 2005
+# auditreduce -c lo | praudit -s
+Warning: invalid event no 32800 in audit trail.file,1970-01-01 01:00:00.000 +01:00,
+file,2010-06-16 16:49:30.000 +01:00,
+# </pre>
+</div>
+<p>Huh??  No login record.</p>
+<p>More often than not, most admins then pick up the phone and call <del datetime="2010-06-16T14:22:28+00:00">Sun</del> Oracle asking for some help only to be told "<em>Sorry, we don't support OpenSSH. Try with Sun's SSH and get back to us if you still have a problem.  Oh yes, and don't forget to read the configuration documentation</em>".</li>
+<li>The sysadmin then disables OpenSSH, enables SunSSH, and tests again only to find it works as they expect.</li>
+</ol>
+<p>The answer <del datetime="2010-06-16T15:02:42+00:00">Sun</del> Oracle gave is actually the clue here.  As most sysadmins don't compile OpenSSH from source (who could blame them), they miss out on the opportunity to read the <code>README.platform</code> file supplied with OpenSSH (it's installed in <code>/usr/local/doc/openssh/README.platform</code> when you install the Sunfreeware SMCosh551 pkg) and this Solaris specific snippet:</p>
+<pre>
+Solaris
+-------
+If you enable BSM auditing on Solaris, you need to update audit_event(4)
+for praudit(1m) to give sensible output.  The following line needs to be
+added to /etc/security/audit_event:
+
+        32800:AUE_openssh:OpenSSH login:lo
+
+The BSM audit event range available for third party TCB applications is
+32768 - 65535.  Event number 32800 has been choosen for AUE_openssh.
+There is no official registry of 3rd party event numbers, so if this
+number is already in use on your system, you may change it at build time
+by configure'ing --with-cflags=-DAUE_openssh=32801 then rebuilding.</pre>
+<p>Scroll back up and take another look at the auditreduce output I've included above.  Now you know what is causing that warning and how to resolve it.  Adding the entry above to the <code>/etc/security/audit_event</code> and re-loading auditing (or rebooting) will clear the message and now show your OpenSSH logins:</p>
+<div class="terminal">
+<pre># auditreduce -c lo | praudit -s
+file,2010-06-16 16:49:19.000 +01:00,
+header,94,2,AUE_openssh,,s10vb,2010-06-16 16:49:19.278 +01:00
+subject,root,root,root,root,root,932,932,0 51558 192.168.0.2
+text,successful login root
+return,success,0
+header,89,2,AUE_logout,,s10vb,2010-06-16 16:52:15.698 +01:00
+subject,root,root,root,root,root,932,932,0 51558 192.168.0.2
+text,sshd logout root
+return,success,0
+header,94,2,AUE_openssh,,s10vb,2010-06-16 16:52:19.578 +01:00
+subject,root,root,root,root,root,953,953,0 51569 192.168.0.2
+text,successful login root
+return,success,0
+file,2010-06-16 16:52:19.000 +01:00,
+#</pre>
+</div>
+<p>And there we have it.  Auditing working with OpenSSH.  In fact, truth be told, auditing was always working here. Had the admin enabled other events to audit or logged out and then in again before checking the audit records, they would have seen an audit record for those events along with the warning. </p>
+<p>If you happen to get output similar to:</p>
+<div class="terminal">
+<pre># auditreduce -c lo | praudit -s      
+file,1970-01-01 01:00:00.000 +01:00,
+file,2010-06-16 16:58:49.000 +01:00,
+#</pre>
+</div>
+<p>... it means either your SSH implementation hasn't been compiled with auditing/BSM support, you've not enabled auditing or you've not configured it correctly so it's time to hit the <a href="http://docs.sun.com/app/docs/doc/816-4557/audittm-1">documentation</a> and test using a Sun supplied login mechanism.  Don't forget that processes need to be restarted in order for them to be picked up by your auditing changes, so if in doubt, reboot.</p>
+<p>On a side note, you may want to seriously consider using the SSH implementation that comes with the OS.  Not only is it supported by the same people who provide you with the OS, it also has some features OpenSSH doesn't, most notably hardware acceleration by default.  See the <a href="http://hub.opensolaris.org/bin/view/Community+Group+security/SSH">SunSSH community page</a> for more details on Sun's implementation.</p>

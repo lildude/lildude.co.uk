@@ -1,0 +1,30 @@
+---
+layout: post
+title: Mercurial Precommit Isn't Entirely "Pre"
+date: 2009-02-03 08:30:41.000000000 -08:00
+tags:
+- Coding
+- mercurial
+- hg
+- precommit
+- commit
+- hook
+type: post
+published: true
+---
+<p>I've been battling with <a href="http://www.selenic.com/mercurial/wiki/">Mercurial's</a> precommit hook for a while now trying to get it to do as I wanted, only to find it's not as "pre" as it or the documentation would lead you to believe.</p>
+<p>I've been using Mercurial now for some time for all my version control needs, including all my web development.  One of the things I like to do is ensure the version number in the application/web page is correct and accurate (as I use hg code in production). So I whipped up a quick shell script that took the current repo revision (<code>hg id -n | tr -d '+'</code>), added 1 and then replaced all instances of my version strings with the repo tag (<code>hg tags -q | grep -v tip | head -1</code>) and revision in the form "<code>{tag}r{rev}</code>", eg <code>1.0r34</code>.</p>
+<p>The shell script works a treat, but I was finding after running a commit, hg stat still reported several files had been modified, which they had as the precommit script modified them.  These were always files I hadn't modified prior to the commit, but were modified by the precommit script.</p>
+<p><!--more-->The <a href="http://hgbook.red-bean.com/hgbook.html">Mercurial book</a> describes the precommit hook as follows in <a href="http://hgbook.red-bean.com/hgbookch10.html">ch10</a>:</p>
+<blockquote><p>10.9.6  precommit—before starting to commit a changeset</p>
+<p>This hook is run before Mercurial begins to commit a new changeset. It is run before Mercurial has any of the metadata for the commit, such as the files to be committed, the commit message, or the commit date. </p></blockquote>
+<p>So, this would lead you to believe that any modifications you may make to files using a script run by the precommit hook would be registered by the commit and included, right? </p>
+<p>Well, sadly that's NOT the case as I discovered when reading <a href="http://www.selenic.com/mercurial/bts/issue1030">Mercurial Issue 1030</a> which is closed off with this little comment:</p>
+<blockquote><p>By the time the precommit hook is run, we've already figured out what files<br />
+will be included in the next commit (the book is wrong)...</p></blockquote>
+<p>So that explains perfectly why my precommit hook wasn't working as expected.  The script was working as expected, however the Mercurial functionality wasn't. Bummer!!!</p>
+<p>I know the method I'm using isn't ideal, but automatically updating the version number is such a time saver and useful "feature". Unfortunately, I can't think of any other method of getting the behaviour I want short of creating a wrapper script that calls my script BEFORE "hg commit".</p>
+<p><strong title="Updated on 2010-04-09 @ 15:16:25">Update:</strong> Beautiful!!!  It looks like I don't read too good or things have changed without me knowing. kuk commented that I could use the "pre-commit" hook to do this.  I couldn't find this in the Hg Book so didn't know it existed.  I've since gone back to ticket 1030 mentioned above and in the same comment I quote it actually mentions...</p>
+<blockquote><p>Using the "pre-commit" hook might do what you want, but I'm not sure it's a good idea, since you're quite likely to accidentally commit some garbage files.</p>
+<p>(pre-<something> are generic hooks that run before the <something> command. E.g. pre-log runs before "hg log", pre-pull before "hg pull", pre-commit before "hg commit", etc.  OTOH, "precommit" runs before the internal commit operation.)</something></something></p></blockquote>
+<p>I've now tested this and it's EXACTLY what I needed and works a treat. Thanks kuk.</p>

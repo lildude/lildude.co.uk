@@ -1,0 +1,83 @@
+---
+layout: post
+title: Don't Forget the ZFS &quot;aclinherit&quot; Property
+date: 2012-03-29 10:35:35.000000000 -07:00
+tags:
+- ZFS
+- acl
+- inheritance
+type: post
+published: true
+---
+<p>A colleague posed an interesting issue his customer was having.  They were finding their ACLs were not being passed onto the files created within the directory they'd applied the ACLs to, even through they had set the inheritance ACLs as desired.</p>
+<p>This is what they were doing and seeing.</p>
+<p>First they were creating a directory and setting the ACLs on that directory:</p>
+<pre class="terminal"># mkdir /export/testdir
+# chmod A+user:bob:rwx:fd:allow /export/testdir
+# chmod A+user:dave:rwx:fd:allow /export/testdir
+# ls -dV /export/testdir
+drwxr-xr-x+  2 root     root           2 Mar 27 09:10 /export/testdir
+              user:dave:rwx-----------:fd-----:allow
+               user:bob:rwx-----------:fd-----:allow
+                 owner@:rwxp-DaARWcCos:-------:allow
+                 group@:r-x---a-R-c--s:-------:allow
+              everyone@:r-x---a-R-c--s:-------:allow
+#</pre>
+<p>Note, the <code>fd</code> part is the inheritance flags.  From the <code>chmod(1)</code> man page:</p>
+<pre>     The optional inheritance flags can be specified in the three
+     formats. The first format uses words to indicate the various
+     inheritance flags separated with a forward slash (/) charac-
+     ter.
+
+     file_inherit (f)    Inherit to all newly created files.
+
+     dir_inherit (d)     Inherit  to  all  newly  created  direc-
+                         tories.</pre>
+<p>This all looks good, until the user bob or dave create a file in <code>/export/testdir</code> and the other user tries to update it...</p>
+<pre class="terminal"># su - bob -c "echo bob > /export/testdir/file"
+Oracle Corporation	SunOS 5.11	11.0	January 2012
+# su - dave -c "echo dave >> /export/testdir/file"
+Oracle Corporation	SunOS 5.11	11.0	January 2012
+-bash: /export/testdir/file: Permission denied
+#</pre>
+<p>The permission denied error was certainly not expected.  Closer examination of the ACL of this new file shows...</p>
+<pre class="terminal"># ls -V /export/testdir/file
+-rw-r--r--+  1 bob      staff          4 Mar 27 09:14 /export/testdir/file
+              user:dave:r-------------:------I:allow
+               user:bob:rw------------:------I:allow
+                 owner@:rw-p--aARWcCos:-------:allow
+                 group@:r-----a-R-c--s:-------:allow
+              everyone@:r-----a-R-c--s:-------:allow
+#</pre>
+<p>Looks like the ACL created on the directory hasn't been inherited by the file.  Now this is the part he and his customer couldn't understand.  </p>
+<p>I had a quick look at this and I realised the problem was with inheritance.  One thing many people forget when using ACL inheritance is ZFS be default restricts inheritance and in fact strips out the <code>write_owner</code> and <code>write_acl</code> permissions when an ACL entry is inherited.  This is exactly what has happened above.</p>
+<p>Both my colleague and the customer forgot one important thing: the <code>aclinherit</code> property of the ZFS filesystem in question.  A quick look at this revealed it was indeed <code>restricted</code>:</p>
+<pre class="terminal"># zfs get aclinherit rpool/export
+NAME          PROPERTY    VALUE          SOURCE
+rpool/export  aclinherit  restricted     default
+#</pre>
+<p>Changing this to <code>passthrough</code>...</p>
+<pre class="terminal"># zfs set aclinherit=passthrough rpool/export
+# zfs get aclinherit rpool/export
+NAME          PROPERTY    VALUE          SOURCE
+rpool/export  aclinherit  passthrough    local
+#</pre>
+<p>... and performing the above again...</p>
+<pre class="terminal"># rm /export/testdir/file
+# su - bob -c "echo bob > /export/testdir/file"
+Oracle Corporation	SunOS 5.11	11.0	January 2012
+# su - dave -c "echo dave >> /export/testdir/file"
+Oracle Corporation	SunOS 5.11	11.0	January 2012
+# cat /export/testdir/file
+bob
+dave
+# ls -V /export/testdir/file
+-rwxr--r--+  1 bob      staff          9 Mar 27 09:21 /export/testdir/file
+              user:dave:rwx-----------:------I:allow
+               user:bob:rwx-----------:------I:allow
+                 owner@:rw-p--aARWcCos:-------:allow
+                 group@:r-----a-R-c--s:-------:allow
+              everyone@:r-----a-R-c--s:-------:allow
+#</pre>
+<p>... has the desired effect.  It has worked without error and the new file has the desired ACL.</p>
+<p>So in summary, when using ACLs on ZFS filesystems with inheritance, don't forget to set the <code>aclinherit</code> property appropriately.  More details on the <code>aclinherit</code> property can be found in the<a href="http://docs.oracle.com/cd/E19963-01/html/821-1448/gbacb.html#gbaax" target="_blank"> ZFS Admin Guide</a>.</p>
