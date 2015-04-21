@@ -1,0 +1,23 @@
+---
+layout: default
+---
+
+<div class="posts">
+  {% for post in site.posts %}
+  <div class="post">
+    <div class="post-content">
+      <h1 class="post-title"><a href="{{site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+      <p class="meta">
+        {% if post.author and post.author != "" %}
+          <a href="https://github.com/{{ post.author }}" class="post-author-image"><img src="https://avatars.githubusercontent.com/{{ post.author }}?s=40" alt="{{ post.author }}" /></a>
+        {% endif %}
+        Posted
+        {% if post.author and post.author != "" %}
+          by <a href="https://github.com/{{ post.author }}" class="post-author">{{ post.author }}</a>
+        {% endif %}
+        on <span class="post-date">{{ post.date | date: "%B %d, %Y" }}</span>
+      </p>
+    </div>
+  </div>
+  {% endfor %}
+</div>

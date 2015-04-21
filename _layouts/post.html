@@ -1,0 +1,22 @@
+---
+layout: default
+---
+
+<div class="post">
+  <h1 class="post-title">{{ page.title }}</h1>
+  <p class="meta">
+    {% if page.author and page.author != "" %}
+      <a href="https://github.com/{{ page.author }}" class="post-author-image"><img src="https://avatars.githubusercontent.com/{{ page.author }}?s=40" alt="{{ page.author }}" /></a>
+    {% endif %}
+    Posted {% if page.author and page.author != "" %}by <a href="https://github.com/{{ page.author }}" class="post-author">{{ page.author }}</a> {% endif %}
+    on <span class="post-date">{{ page.date | date: "%B %d, %Y" }}</span>
+  </p>
+
+  {{ content }}
+
+  {% if page.discussion %}
+  <div class="discussion">
+    <a href="{{ page.discussion }}">View the Discussion</a>
+  </div>
+  {% endif %}
+</div>
