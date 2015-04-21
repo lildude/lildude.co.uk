@@ -1,0 +1,19 @@
+---
+layout: post
+title: ZFS 2GB Swap
+date: 2009-02-21 01:12:39.000000000 -08:00
+tags:
+- Software
+- ZFS
+- swap
+type: post
+published: true
+---
+<p>As more and more people switch to ZFS for their root filesystem, more and more people are actually starting to encounter the misconception that you can only have 2GB of swap on ZFS root.</p>
+<p>This is not the case.  The misconception stems from a misunderstanding of the following section in the <a href="http://docs.sun.com/app/docs/doc/819-5461">ZFS Admin Guide</a>:</p>
+<blockquote><p>During an initial installation or a Solaris Live Upgrade from a UFS file system, a swap area is created on a ZFS volume in the ZFS root pool. The swap area size is based on half the size of physical memory, but no more than 2 Gbytes and no less than 512 Mbytes.</p></blockquote>
+<p>This could be better written and should be interpreted as...</p>
+<blockquote><p>
+The swap and dump areas created during installation will be the smaller of 1/2 physical memory or 2GB.</p></blockquote>
+<p>Once the OS has been installed, you can quite happily increase the size of swap to suit your needs, without a reboot, as Chris details <a href="http://blogs.sun.com/chrisg/entry/don_t_reboot_to_add">here</a>.</p>
+<p><strong>Update:</strong> I've just been informed that the Solaris 10u7 documentation will be changed to make this a lot clearer and reduce the chances of confusion.</p>

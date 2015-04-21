@@ -1,0 +1,34 @@
+---
+layout: post
+title: 'HOWTO: Check for Invalid Entries in /etc/vfstab'
+date: 2012-09-20 01:47:07.000000000 -07:00
+tags:
+- shell
+- vfstab
+- Howto
+type: post
+published: true
+---
+<p>One of my colleagues asked for some help in quickly locating invalid entries in an /etc/vfstab file that is 462 lines long - the customer's system in question had a lot of zones and each has its own filesystem.</p>
+<p>Manually trawling through the file is time consuming and cumbersome, so I sat down with my shell prompt and came up with this quick little command:</p>
+<pre class="terminal">
+$ egrep -v "^\s*$|^#" etc/vfstab | awk '{ if(NF&lt;7) print }'
+</pre>
+<p>Here's the logic and explanation for each part of this command...</p>
+<ol>
+<li>The problem the customer is encountering is due to an invalid entry somewhere in the file where the line has insufficient fields, so we're only interested in the uncommented lines which actually contain something which we pull those out using the <code>egrep -v "^\s*$|^#"</code></li>
+<li>We're then only interested in the lines that have less than 7 fields as a valid entry on Solaris requires 7 fields, so we print just those lines that don't have 7 fields using <code>awk '{ if(NF&lt;7) print }'</code></li>
+</ol>
+<p>Running this against the customer's /etc/vfstab file (gathered by the Explorer) produced (I've anonymized the actual results):</p>
+<pre class="terminal">
+$ egrep -v "^\s*$|^#" etc/vfstab | awk '{ if(NF&lt;7) print }' 
+/dev/vx/dsk/my_db_dg/myzone09-my_db-cntrl2-fs       /dev/vx/rdsk/my_db_dg/myzone09-my_db-cntrl2-fs        /zonedata/myzone
+09/opt/oracle/my_db/cntrl2 vxfs 3 yes -
+/dev/vx/dsk/my_db_dg/myzone09-my_db-cntrl3-fs       /dev/vx/rdsk/my_db_dg/myzone09-my_db-cntrl3-fs        /zonedata/myzone
+09/opt/oracle/my_db/cntrl3 vxfs 3 yes -
+/dev/vx/dsk/my_db_dg/myzone09-my_db-redo-fs         /dev/vx/rdsk/my_db_dg/myzone09-my_db-redo-fs          /zonedata/myzone
+09/opt/oracle/my_db/redo vxfs 3 yes -
+$
+</pre>
+<p>Here we have the classic case of a copy-&-paste action inserting a newline character between <code>myzone</code> and <code>09</code> resulting in 6 invalid entries instead of 3 valid entries.</p>
+<p>Of course this isn't a complete "solution" as it only checks the number of fields in each line.  It doesn't actually check that each field is valid for its location within the file and that the paths mentioned exist and are valid, but it is a good start to finding those invalid entries caused by copying and pasting long entries.</p>

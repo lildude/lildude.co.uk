@@ -1,0 +1,28 @@
+---
+layout: post
+title: WU-FTPD Files and Directories With Spaces
+date: 2007-04-26 06:36:45.000000000 -07:00
+tags:
+- Software
+- OpenSolaris
+- Solaris
+- WU-FTPD
+- ftpaccess
+- path-filter
+- filename
+- spaces
+type: post
+published: true
+---
+<p>This one got me thinking a bit today, and I didn't find much in the way of info on the net, so here it is for my own and anyone else's reference.</p>
+<p>Solaris 9 and later ships with WU-FTPD as it's FTP server.  General configuration, is done via the <code>/etc/ftpd/ftpaccess</code> file, which is the same file used by WU-FTPD, just in a different location.</p>
+<p>The problem I had was I could create directories from the command line, but couldn't from within Gnome's Nautilus when logging in anonymously. Every attempt resulted in:</p>
+<p><img class="center" src="/assets/permerror.png" alt="Permission Denied" /></p>
+<p>Ah, simple permissions I thought.  But wait, it can't be as I can quite easily create directories from the command line.  So I turned to logging.  As soon as I enabled logging, the problem became very clear:</p>
+<p><!--more--></p>
+<div class="console">anonymous(nobody%40gnome.org) of myhost [xxx.xxx.xxx.xxx] tried to create directory /export/ftp/dir01/untitled folder (path-filter)</div>
+<p>Bingo! Check the name it's tried to use - "<code>untitled folder</code>".  My tests on the CLI didn't include spaces. The error has also kindly told me where to look - the path-filter line in my <code>/etc/ftpd/ftpaccess</code> file. I checked this and sure enough, it doesn't allow for spaces in file and directory names.</p>
+<p>Changing the line to allow spaces...</p>
+<p><code>path-filter    guest,anonymous /etc/ftpd/filename.msg  ^[[:alnum:][:blank:]._-]*$ ^[.-]</code></p>
+<p>... resolved the issue. Note: it should all be on one line.</p>
+<p>The same issue affects Windows users using Explorer to access FTP and create directories as it tries to create a new folder called "<code>New Folder</code>".</p>

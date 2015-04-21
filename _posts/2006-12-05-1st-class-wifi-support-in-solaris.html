@@ -1,0 +1,36 @@
+---
+layout: post
+title: 1st Class WiFi Support in Solaris
+date: 2006-12-05 01:21:15.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- Network
+- WiFi
+- Nevada
+- dladm
+- GLDv3
+- drivers
+type: post
+published: true
+---
+<p>A new WiFi architecture has been <a href="http://opensolaris.org/os/community/on/flag-days/pages/2006112001/">integrated into Nevada Build 54</a> which will pave the way for some pretty cool features in the future, and also will start to bring Solaris inline with (and dare I say, overtake) the likes of Linux on the WiFi front.</p>
+<p><!--more--></p>
+<p>Of the changes, the most significant are:</p>
+<ul>
+<li>The drivers are now part of the GLDv3 (aka nemo) network framework.  Or should I say, the GLDv3 framework now supports WiFi.</li>
+<li>The kernel now has a dedicated net80211  kernel module which facilitates code sharing across WiFi drivers, thus easing the development of drivers for different chips.</li>
+<li>The preferred way to manage WiFi is with the GLDv3 administration command, <code><a href="http://opensolaris.org/os/community/arc/caselog/2006/623/materials/manpages/dladm-1m/">dladm</a></code> instead of <code>wificonfig</code>.  Whilst <code>wificonfig</code> won't be removed immediately, it's use will be discouraged.</li>
+</ul>
+<p>Now that these enhancements have been made, we'll start to see the cool stuff really come to life like:</p>
+<ul>
+<li><a href="http://opensolaris.org/os/project/nwam">Network Auto-Magic (NWAM)</a></li>
+<li><a href="http://opensolaris.org/os/project/clearview">Project Clearview</a></li>
+<li><a href="http://opensolaris.org/os/project/crossbow/Docs/si-design.pdf">IP Instances</a></li>
+<li>WPA/WPA2</li>
+</ul>
+<p>... and of course, a final goodbye to ndd(1M) is even more likely to happen - they've been saying this for ages, now it looks like it's going to finally happen.</p>
+<p>Whilst it's a bit sad Solaris has had to play catchup (it's kind of expected from an OS that has spent most of it's life in the data centre/corporate world), at least Sun has had time to sit back, watch the rest, and now implement things properly.</p>
+<p>Check out Peter Memishian's <a href="http://blogs.sun.com/meem/entry/wifi%2Fgldv3">WiFi/GLDv3</a> post for more details.</p>

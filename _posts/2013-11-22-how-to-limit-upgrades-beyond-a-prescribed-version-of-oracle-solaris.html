@@ -1,0 +1,17 @@
+---
+layout: post
+title: How to Limit Upgrades Beyond a Prescribed Version of Oracle Solaris
+date: 2013-11-22 08:02:45.000000000 -08:00
+tags:
+- pkg
+- IPS
+- Solaris 11
+- link
+type: post
+published: true
+---
+<p>By default <code>pkg update</code> on Solaris 11 will upgrade your system to the latest versions available on the repository your host is referencing.  Many customers don't want this and ask how to prevent the latest from being selected.  The answer has always been: don't update your repo or create a custom incorporation package.</p>
+<p>Bart Smaalders and Alta Elstad have written this great document telling you how you can do the latter...</p>
+<blockquote cite="https://blogs.oracle.com/OTNGarage/entry/how_to_prohibit_upgrading_beyond"><p>The Oracle Solaris 11 Image Packaging System (IPS) provides various methods to control the operating system version to which a server can be upgraded. One method is to provide a custom incorporation package.</p>
+<p>An incorporation package specifies the versions of other packages that can be installed. An incorporation package ensures that if you install an incorporate dependency package of that incorporation package, only the prescribed version of the dependent package can be installed. You can create your own custom incorporation package to specify the constraints you want. Using a custom incorporation to control the version of software that can be installed enables you to easily maintain different versions of Oracle Solaris on different machines without maintaining multiple package repositories. Each image can install a different version of the custom upgrade control incorporation package. All systems share the same package repository that contains all versions of software needed by any of the systems.<br />
+— <a href="https://blogs.oracle.com/OTNGarage/entry/how_to_prohibit_upgrading_beyond">How to Limit Upgrades Beyond a Prescribed Version of Oracle Solaris (OTN Garage)</a></p></blockquote>

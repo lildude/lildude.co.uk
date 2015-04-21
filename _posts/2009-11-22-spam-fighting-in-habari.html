@@ -1,0 +1,24 @@
+---
+layout: post
+title: Spam Fighting in Habari
+date: 2009-11-22 08:46:02.000000000 -08:00
+tags:
+- plugin
+- spam
+- Habari
+type: post
+published: true
+---
+<p>I've slowly been improving my <a href="http://colinseymour.co.uk">main site</a> since <a href="http://lildude.co.uk/migrating-from-wordpress-to-habari/">migrating to Habari</a> and so far so good, however one thing I didn't like prevailed - SPAM!!</p>
+<p>This isn't anything Habari specific - I had loads of spam when using Wordpress - however on Wordpress I used Akismet so didn't really see it.  I also soon gave up checking my spam queue in Wordpress as Akismet seemed to be doing a good job. With the move to Habari, I lost, or more precisely gave up Akismet and very quickly started seeing the spam I'd forgotten about.</p>
+<p>Time to fix that.</p>
+<p><!--more-->Firstly, Habari comes with quite a good spam checker plugin.  I had this enabled, but I continued to get spam.  So I looked to other plugins and external services to try and improve things.</p>
+<p>First the Akismet plugin:  sadly this is out of date now so I didn't even try using it.  I then tried the <a href="http://www.habariproject.org/dist/plugins/defensio/">Defensio</a> plugin, which whilst it worked, wasn't a very good solution either.  I continually received "Server not responding" errors from the plugin - these weren't from my server: it was the Defensio server itself not responding for some reason.  I also built a quick plugin that checked IPs against the black list (<a href="http://www.projecthoneypot.org/httpbl.php">HTTP::BL</a>) operated by <a href="http://www.projecthoneypot.org">Project Honeypot</a> however this seemed to be doing a very good job of tarring a lot of people with the same brush. I'll explain why later.</p>
+<p>I was about to start digging into the first two plugins to see if I could get the Akismet plugin working, and or work out why the Defensio plugin was reporting these errors, but decided against it for two primary reasons:  performance and independence.  By relying on an external service like Akismet or Defensio I fall at the mercy of these external hosts which could have a negative impact on my site's performance or the user's experience.  So I looked a little closer to home.</p>
+<p>I switched off all but the built in Spam Checker plugins and analysed the types of spam that made it through and the posts affected.  It didn't take long to work out the one common factor: all the posts that received spam were old posts.  In retrospect, it makes a lot of sense - spammers will target established posts to get better exposure.</p>
+<p>Anyway, with this useful bit of information I installed the <a href="http://www.habariproject.org/dist/plugins/autoclose/">Autoclose</a> plugin.  This plugin simply closes posts that are older than a selectable number of days.  I activated the plugin, set the number of days to 90 and sat back and waited.</p>
+<p>Well, what a result.  Since switching to only relying on the Autoclose and built in Spam Checker plugins 2 months ago, my total spam count has been 4, yes FOUR, and all 4 were manually entered, all on the same day, all by the same IP and on the same post.  Now I can live with this.  </p>
+<p>There is however one problem with the built in Spam Checker plugin that I've flagged (<a href="https://trac.habariproject.org/habari/ticket/1089">#1089</a>): the Spam Checker (and Habari as a whole) doesn't take into account users commenting from behind proxies all too well.  For most people this isn't a problem, however countries with slow international links (like South Africa) rely heavily on caching proxies.   As a result, the proxy used for a GET request may not be the same as that used for the POST request used to submit the comment form.</p>
+<p>As these two IP addresses differ, the Habari plugin quite rightly discards the comment and gives the user a 403 error. Unfortunately, this isn't acceptable for me as some of my readers are in South Africa, and this is primarily why my HTTP:BL plugin didn't work as well as I was hoping: every legit reader from South Africa was being bundled into the same boat as all the spammers in South Africa as they all share the same group of proxy servers.</p>
+<p>I've modified the Spam Checker plugin to try a little harder when attempting the client's IP address (patch attached to the bug report), and so far so good.  The proxies appear to behave correctly and pass on the client's IP address via the relevant headers.</p>
+<p>So all in all, I don't need very much to almost entirely cut out spam completely from Habari: the built in Spam Checker plugin (<a href="https://trac.habariproject.org/habari/attachment/ticket/1089/spamchecker.php.r3807.diff">with my patch</a>) and the <a href="http://www.habariproject.org/dist/plugins/autoclose/">Autoclose</a> plugin is all I need.  No external services and no over complication.  Win-win!!</p>

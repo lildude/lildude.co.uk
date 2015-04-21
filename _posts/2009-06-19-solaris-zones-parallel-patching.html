@@ -1,0 +1,132 @@
+---
+layout: post
+title: Solaris Zones Parallel Patching
+date: 2009-06-19 09:35:21.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Solaris
+- zones
+- patching
+- parallel
+type: post
+published: true
+---
+<p>If you're running a fair few non-global zones on Solaris 10, you'll know full well how painfully slow the patching process is.  Well, I'm please to say "not any more".</p>
+<p>The Zones Parallel Patching feature was officially released on Tuesday and is contained in the latest Solaris 10 patch utilities patch, <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-119254-66-1">119254-66</a> (SPARC) and <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-119255-66-1">119255-66</a> (x86).</p>
+<p>Getting the functionality is simple: just apply the patch as you would any other patch.  Taking advantage of it is a different thing.</p>
+<p>By default the behaviour is as before: <strong>NO</strong> parallel patching takes place. But it's easily changed by setting "<code>num_proc</code>" to the number of non-global zones to be patched in parallel in the <code>/etc/patch/pdo.conf</code> file.</p>
+<p>Prior to this feature, each non-global zone was patched sequentially. With this feature invoked, the global zone continues to be patched first, but then the non-global zones can be patched in parallel, leading to significant performance gains in patching operations on zones systems.</p>
+<p>While the performance gain is dependent on a number of factors, including the number of non-global zones, the number of on-line CPUs, the speed of the system, the I/O configuration of the system, etc., a significant performance gain (up to 300% has been reported) can be expected for patching the non-global zones.</p>
+<p><!--more-->Here's the relevant note from the patch README file (you read these files don't you ;-) ) that provides a bit more useful information in this new functionality:</p>
+<blockquote><p>NOTE 10: 119254-66 is the first revision of the patch utilities to deliver<br />
+         "zones parallel patching".  This new functionality allows multiple<br />
+         non-global zones to be patched in parallel by patchadd.  Prior to<br />
+         revision 66, patchadd would patch all applicable non-global zones<br />
+         sequentially, that is one after another. With zones parallel<br />
+         patching, a sysadmin can now set the number of zones to patch in<br />
+         parallel in a new configuration file for patchadd called<br />
+         /etc/patch/pdo.conf.</p>
+<p>         The two factors that affect the number of non-global zones that<br />
+         can be patched in parallel are:</p>
+<p>         1. Number of on-line CPUs</p>
+<p>         2. The value of num_proc in /etc/patch/pdo.conf</p>
+<p>         If the value of num_proc is less than or equal to 1.5 times<br />
+         the number of on line CPUs, then patchadd limits the maximum<br />
+         number of non-global zones that will be patched in parallel<br />
+         to num_proc.  If the value of num_proc is greater than 1.5<br />
+         times the number of on-line CPUs, then patchadd limits the<br />
+         maximum number of non-global zones that will be patched in<br />
+         parallel to 1.5 times the number of on-line CPUs. Note that<br />
+         patchadd will patch all applicable non-global zones on a system;<br />
+         the above description outlines only how patchaadd determines<br />
+         the maximum number of job slots to be used during parallel<br />
+         patching of non-global zones.</p>
+<p>         An example of this in operation would be where:</p>
+<p>         num_proc=8<br />
+         and number of on-line CPU's is 4</p>
+<p>         In this case the maximum setting for num_proc would be 6, that<br />
+         is the maximum number of zones that could be patched in parallel<br />
+         is 6.  If there are more than this number of non-global zones on<br />
+         the system, the first 6 will be patched in parallel, then the<br />
+         remaining non-global zones will be patched as processes finish<br />
+         patching the first 6 non-global zones.</p>
+<p>         There is only one patching process used to patch each non-global<br />
+         zone, so if num_proc exceeds the number of installed zones, then<br />
+         num_proc will be set to the number of non-global zones assuming<br />
+         that num_proc does not exceed on-line CPU count * 1.5 as above.<br />
+         Please see comments in /etc/patch/pdo.conf for more details on<br />
+         setting num_proc.
+</p></blockquote>
+<p>Of course, I didn't want to take someone else's word for it, so I tested this new functionality myself. </p>
+<h3>The Configuration</h3>
+<p><strong>Host</strong>: T5240<br />
+<strong>OS</strong>: Solaris 10 10/08 (aka update 6) - SUNWCuser installation cluster on ZFS<br />
+<strong>Zone config</strong>: 5 very simple and basic sparse root zones without network interfaces:</p>
+<div class="terminal"># zoneadm list -cv<br />
+  ID NAME             STATUS     PATH                           BRAND    IP<br />
+   0 global           running    /                              native   shared<br />
+  10 zone1            running    /zones/zone1                   native   shared<br />
+  11 zone2            running    /zones/zone2                   native   shared<br />
+  12 zone3            running    /zones/zone3                   native   shared<br />
+  13 zone4            running    /zones/zone4                   native   shared<br />
+  14 zone5            running    /zones/zone5                   native   shared<br />
+#<br />
+# zonecfg -z zone1 info<br />
+zonename: zone1<br />
+zonepath: /zones/zone1<br />
+brand: native<br />
+autoboot: true<br />
+bootargs:<br />
+pool:<br />
+limitpriv:<br />
+scheduling-class:<br />
+ip-type: shared<br />
+inherit-pkg-dir:<br />
+	dir: /lib<br />
+inherit-pkg-dir:<br />
+	dir: /platform<br />
+inherit-pkg-dir:<br />
+	dir: /sbin<br />
+inherit-pkg-dir:<br />
+	dir: /usr<br />
+#</div>
+<p>All zones were cloned from the first.</p>
+<h3>The Patching</h3>
+<p>Now to keep things nice and simple, lets start with the umount patch 140796-01...</p>
+<p><code>num_proc=1</code> (default):</p>
+<div class="terminal"># time patchadd 140796/140796-01<br />
+[...]<br />
+patchadd 140796/140796-01  31.46s user 18.05s system 45% cpu <span style="color:red">1:49.48 total</span><br />
+#</div>
+<p><code>num_proc=5</code>:</p>
+<div class="terminal"># time patchadd 140796/140796-01<br />
+[...]<br />
+patchadd 140796/140796-01  42.60s user 24.00s system 170% cpu <span style="color:red">39.032 total</span><br />
+#</div>
+<p>Not bad.  5 zones patched in less than half the time for one simple patch.  Lets try something more substantial like KU 138888-08...</p>
+<p><code>num_proc=1</code>:</p>
+<div class="terminal"># time patchadd 138888/138888-08<br />
+[...]<br />
+patchadd 138888/138888-08  95.89s user 89.16s system 53% cpu <span style="color:red">5:49.15 total</span><br />
+#</div>
+<p><code>num_proc=5</code>:</p>
+<div class="terminal"># time patchadd 138888/138888-08<br />
+[...]<br />
+patchadd 138888/138888-08  131.29s user 121.02s system 152% cpu <span style="color:red">2:45.89 total</span><br />
+#</div>
+<p>About the same. Not quite the 300% I've seen quoted (though I don't know what their config was) but it's still quite a considerable improvement.  </p>
+<p>Not satisfied, I backed out the KU and cloned 5 more zones (total 10) and tested again:</p>
+<p><code>num_proc=1</code>:</p>
+<div class="terminal"># time patchadd 138888/138888-08<br />
+[...]<br />
+patchadd 138888/138888-08  184.01s user 171.04s system 45% cpu <span style="color:red">13:07.70 total</span><br />
+#</div>
+<p><code>num_proc=10</code>:</p>
+<div class="terminal"># time patchadd 138888/138888-08<br />
+[...]<br />
+patchadd 138888/138888-08  305.07s user 259.50s system 231% cpu <span style="color:red">4:04.37 total</span><br />
+#</div>
+<p>Woooohoooo!!! Now that's more like it.  Patched in a third of the time!!!</p>
+<p>Monday's task will be to see how long it takes to apply the latest patch cluster to a Solaris 10 5/08 (aka u5) on UFS system with each setting with 10 zones  - I know, I'm a sucker for pain.  I actually wanted to try with u3, but the min supported OS for the T5240 I've got is s10u4+patches.</p>
+<p>This is really impressive and a godsend for anyone running a lot of zones.</p>

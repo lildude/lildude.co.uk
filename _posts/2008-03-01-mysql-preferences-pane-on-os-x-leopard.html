@@ -1,0 +1,24 @@
+---
+layout: post
+title: MySQL Preferences Pane on OS X Leopard
+date: 2008-03-01 10:05:40.000000000 -08:00
+tags:
+- Software
+- MySQL
+- leopard
+- Preferences
+- start
+- stop
+- Mac OS X
+type: post
+published: true
+---
+<p>The MySQL Preferences pane that comes with the MySQL download from the MySQL site is broken on Leopard, and has been for quite some time. </p>
+<p>It installs and correctly reflects the current status of any running MySQL processes, but the "Start MySQL Server" / "Stop MySQL Server" button doesn't do anything.</p>
+<p>Well, today I finally got it working.  </p>
+<p><!--more-->I worked it all out by first finding out what the "Start MySQL Server" button was actually executing using DTrace.  Now my DTrace skills aren't that brilliant yet, but it was enough to confirm my suspicions.  Clicking that button just executed <code>/usr/local/mysql/support-files/mysql.server</code>.</p>
+<p>As I said, my DTrace skills aren't very good yet, but that was enough for me.  I turned to my scripting skills.  I renamed <code>mysql.server</code> to <code>mysql.server.orig</code>.  I then created a wrapper script that I could use to try and troubleshoot what was going on when I clicked the button.</p>
+<p>Well, it didn't take long to work out that the preference pane didn't seem to be executing the script as the privileged user, even after prompting me for my password.  Quickly modifying my wrapper script to use sudo to call the actual script solved my problem.</p>
+<p>Now, I would show you my wrapper script, but it's not necessary. I was going to post my findings on one of the many bug reports on <a href="http://bugs.mysql.com">bugs.mysql.com</a> when I stumbled upon BugID: <a href="http://bugs.mysql.com/bug.php?id=28854">28854</a>.</p>
+<p>You'll never guess what it had in it:  a link to a <a href=""ftp://ftp.mysql.com/pub/mysql/download/gui-tools/MySQL.prefPane-leopardfix.zip">fixed version of the preferences pane, and sure enough this new version correctly executes the /usr/local/mysql/support-files/mysql.server as the privileged user.</p>
+<p>Just a pity I didn't find this bug when I was searching the MySQL bug reports earlier.</p>

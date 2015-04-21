@@ -1,0 +1,16 @@
+---
+layout: post
+title: 592 Days Uptime on Joyent Accelerator Zone
+date: 2012-11-05 02:50:52.000000000 -08:00
+tags:
+- hosting
+- zone
+- Joyent
+type: post
+published: true
+---
+<p>It's a sad day for me today... I have finally migrated everything off my old Joyent Accelerator (aka zone) onto their new  <a href="http://www.joyent.com/products/joyent-cloud" target="_blank">Joyent Cloud</a> (also a zone) just in time for the extended - thanks the hurricane Sandy - deadline of 7 November (I'd actually completed my migration before the original 31 Oct deadline) and I happened to notice a lot of my svcs were all started back in 2011.  This prompted me to run uptime(1)...</p>
+<pre class="terminal">[root@svr ~]# uptime
+ 10:43am  up 592 days 20:52,  1 user,  load average: 0.91, 1.08, 1.14
+[root@svr ~]#</pre>
+<p>Nice.  I think the final uptime will be 594 days in the end when everything is shutdown on Wednesday. Part of me doesn't want to lose this just to see what kind of uptime I'd get if Joyent weren't decommissioning the Accelerator service, but the other part of me knows this is for the best.</p>

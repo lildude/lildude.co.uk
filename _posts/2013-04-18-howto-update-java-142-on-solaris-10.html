@@ -1,0 +1,59 @@
+---
+layout: post
+title: 'HOWTO: Update Java 1.4.2 on Solaris 10'
+date: 2013-04-18 00:46:08.000000000 -07:00
+tags:
+- Java
+- HOWTO
+- Solaris 10
+- 1.4.2
+type: post
+published: true
+---
+<p>Java 1.4.2 as supplied with Solaris 10 is no longer updated via normal patches.  In order to update your Java 1.4.2 instance on Solaris 10, you need to update the pkgs that supply Java 1.4.2.  </p>
+<p>At the time of writing this document, the "<a href="http://www.oracle.com/technetwork/topics/security/javacpufeb2013update-1905892.html" target="_blank">Updated Release of the February 2013 Oracle Java SE Critical Patch Update</a>" is the latest Java CPU that updates Java 1.4.2 and it updates it to Java 1.4.2_42.  This is mentioned in <a href="https://support.oracle.com/epmos/faces/ui/km/DocumentDisplay.jspx?id=1526106.1" target="_blank">Doc ID 1526106.1</a> to which the CPU links.  Unfortunately, neither document detail how what is required and how to perform the update.</p>
+<p>This post serves to fill that gap and detail how to update the Solaris 10 supplied Java 1.4.2 to the latest version available.</p>
+<ul>
+<li>
+<p>Download the SDK 1.4.2_42 files appropriate for your architecture from <a href="https://updates.oracle.com/ARULink/PatchDetails/process_form?patch_num=8453300" target="_blank">here</a> (You'll need an Oracle login and possibly a support contract). This link is provided in <a href="https://support.oracle.com/epmos/faces/ui/km/DocumentDisplay.jspx?id=1526106.1" target="_blank">Doc ID 1526106.1</a> which the "Updated Release of the February 2013 Oracle Java SE Critical Patch Update" links to.</p>
+<p>You will need to download both the 32-bit and 64-bit versions of the pkgs available.</p>
+<p>The downloaded files contain the Solaris packages and the self-extracting shell script.  We're only interested in the Solaris packages.</p>
+</li>
+<li>
+<p>Transfer the files to your Solaris host and unzip them.</p>
+</li>
+<li>
+<p>Extract the tarballs that contains the Solaris pkgs.</p>
+<p>The filenames you will need to extract will be, depending on your architecture:</p>
+<pre>                  From the 32-bit zip file              From the 64-bit zip file
+    SPARC:     j2sdk-1_4_2_42-solaris-sparc.tar.Z    j2sdk-1_4_2_42-solaris-sparcv9.tar.Z
+      X86:     j2sdk-1_4_2_42-solaris-i586.tar.Z     j2sdk-1_4_2_42-solaris-x64.tar.Z  </pre>
+<p>Once the tarballs have been extracted, you should have the following pkgs in the current directory:</p>
+<pre>    SUNWj3cfg      SUNWj3dev      SUNWj3dmo     SUNWj3dmx
+    SUNWj3dvx      SUNWj3jmp      SUNWj3man     SUNWj3rt
+    SUNWj3rtx</pre>
+</li>
+<li>
+<p>Uninstall all of the SUNWj3* pkgs from the current system:</p>
+<pre class="terminal"># pkgrm SUNWj3cfg SUNWj3dev SUNWj3dmo SUNWj3dvx SUNWj3irt SUNWj3man SUNWj3rt SUNWj3rtx</pre>
+<p>Ignore all warnings about dependencies. We'll be re-installing the updated pkgs in the next step and this will rectify the dependencies.</p>
+</li>
+<li>
+<p>Install the pkgs extracted in step 3 above:</p>
+<pre class="terminal"># pkgadd -d . SUNWj3rt SUNWj3rtx SUNWj3cfg SUNWj3dev SUNWj3dvx SUNWj3man SUNWj3jmp SUNWj3dmo SUNWj3dmx</pre>
+</li>
+<li>
+<p>You can now confirm you have the updated version of Java 1.4.2:</p>
+<pre class="terminal"># /usr/j2se/bin/java -version
+java version "1.4.2_42"
+Java(TM) 2 Runtime Environment, Standard Edition (build 1.4.2_42-b03)
+Java HotSpot(TM) Client VM (build 1.4.2_42-b03, mixed mode)
+#
+# /usr/j2se/bin/sparcv9/java -version
+java version "1.4.2_42"
+Java(TM) 2 Runtime Environment, Standard Edition (build 1.4.2_42-b03)
+Java HotSpot(TM) 64-Bit Server VM (build 1.4.2_42-b03, mixed mode)</pre>
+</li>
+</ul>
+<p>All your OS supplied tools and utilities that use the OS supplied Java 1.4.2 should continue to work as before.</p>
+<p>One word of warning: do not perform this procedure whilst your system is running any Java processes that are using the Java 1.4.2 instance you are updating.</p>

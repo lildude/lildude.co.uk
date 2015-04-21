@@ -1,0 +1,19 @@
+---
+layout: post
+title: Oracle Solaris 11.1 Now Available for Download &amp; Update
+date: 2012-10-25 08:45:59.000000000 -07:00
+tags:
+- update
+- Solaris 11
+- link
+type: post
+published: true
+---
+<blockquote cite="https://blogs.oracle.com/solaris/entry/oracle_solaris_11_1_now">Oracle Solaris 11.1 is <a href="http://oracle.com/solaris" target="_blank">now available for download</a> -- as detailed earlier, this update to Oracle Solaris 11.1 provides new <a href="http://www.oracle.com/technetwork/server-storage/solaris11/overview/solaris11-1-1845817.html" target="_blank">enhancements</a> for enterprise cloud computing. Security, network, and provisioning advances, in addition to significant new performance features, make an already great release even better.<br />
+— <a href="https://blogs.oracle.com/solaris/entry/oracle_solaris_11_1_now">Oracle Solaris 11.1 Now Available; Learn More About It at November 7th Webcast (Oracle Solaris)</a></p></blockquote>
+<p>I've just checked the official Oracle <a href="http://pkg.oracle.com/solaris/release" target="_blank">release repo</a>, and sure enough it shows Solaris 11.1 is now available for updating your systems.</p>
+<p>Oh yes, and if you're already running Solaris 11, the upgrade from Solaris 11.0 to Solaris 11.1 is a simple 3 command process:</p>
+<pre class="terminal">
+# pkg update package/pkg
+# pkg update --accept --be-name solaris11.1
+# shutdown -y 0 -i6</pre>

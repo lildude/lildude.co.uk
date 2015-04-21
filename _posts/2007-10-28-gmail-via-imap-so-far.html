@@ -1,0 +1,24 @@
+---
+layout: post
+title: GMail via IMAP So Far
+date: 2007-10-28 02:02:49.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Google
+- Thunderbird
+- email
+- IMAP
+- labels
+- Gmail
+- folders
+type: post
+published: true
+---
+<p>Well, so far so good.  I've been using IMAP to access my Gmail for just <a href="http://lildude.co.uk/2007/10/gmail-gets-imap-support/">short of a week now</a> and haven't hit any real problems.  Things were a bit slow at first as Thunderbird built the index of the folder contents, but once done, all seems ok.</p>
+<p>The one thing that did annoy me for a while was Thunderbird wasn't checking all my Gmail folders/labels: it was only checking the Inbox.  </p>
+<p><!--more-->I use a lot of filters on Gmail, so it's important this works. I know you can right click on each folder, go to properties and select "Check this folder for new messages", but this is tedious with a lot of folders. I also know I can setup client side filters, but once again, this becomes tedious on multiple computers.</p>
+<p>So, back to our good friend Google for a quick search and I found what I was looking for.  In order to get Thunderbird to check all IMAP folders for new mail, just add the following to your <code>user.js</code> file and restart:</p>
+<p><code>user_pref("mail.check_all_imap_folders_for_new", true);</code></p>
+<p>You can also do this directly in the Config Editor (Thunderbird 2.0 and later) by going to <code>Edit -> Preferences -> Advanced -> Config Editor</code> and searching for the above setting.</p>
+<p>Now I have Thunderbird and Gmail working as I like it.</p>

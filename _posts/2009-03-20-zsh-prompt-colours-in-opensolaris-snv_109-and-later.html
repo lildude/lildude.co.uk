@@ -1,0 +1,46 @@
+---
+layout: post
+title: ZSH Prompt Colours in OpenSolaris snv_109 and Later
+date: 2009-03-20 01:12:39.000000000 -07:00
+tags:
+- Software
+- OpenSolaris
+- shell
+- zsh
+- prompt
+- snv_109
+- customization
+- colour
+type: post
+published: true
+---
+<p>I've just updated my system to the latest <a href="http://www.opensolaris.com">OpenSolaris</a> release (snv_109) and suddenly my ZSH prompt has lost all it's colours (I use them to clearly distinguish between me and the root user - I'm also a bit of a customisation freak ;-) ).</p>
+<p>A little bit of research soon revealed that OpenSolaris snv_109 and later now ships with ZSH 4.3.9 in which they changed the prompt colouring scheme, and for the better too as it's far easier to understand.</p>
+<p><!--more--><br />
+From the ZSHMISC(1) man page:</p>
+<pre>
+     %F (%f)
+          Start (stop) using a different  foreground  colour,  if
+          supported by the terminal.  The colour may be specified
+          two ways: either as a numeric argument, as  normal,  or
+          by  a  sequence in braces following the %F, for example
+          %F{red}.  In the latter case the values allowed are  as
+          described for the fg zle_highlight attribute; see Char-
+          acter  Highlighting  in  zshzle(1).   This  means  that
+          numeric colours are allowed in the second format also.
+</pre>
+<p>So I need to change my PS1/PS2 from using the old <code>$fg[color]</code> format to the new format, which is easy enough.  However I still need my colour prompt to work on pre snv_109 hosts, and this is where ZSH's <code>is-at-least</code> comes in handy.</p>
+<p>So, now the code that sets my prompt looks as follows (I've removed the rest of the stuff around it):</p>
+<pre><code>if ( is-at-least 4.3.9 ); then
+    PS1="%F{magenta}[%(!.%F{red}.%F{blue})%m : %F{green}%40&lt;...&lt;%~%F{magenta}]%F{blue}%(!.#.$) %f"
+    PS2="%(!.%F{red}.%F{blue})%_&lt; %f"
+else
+    PS1="%{${fg[magenta]}%}[%(!.%{${fg[red]}%}.%{${fg[blue]}%})%m : %{${fg[green]}%}\
+%40&lt;...&lt;%~%{${fg[magenta]}%}]%{${fg[blue]}%}%(!.#.$) %{${fg[default]}%}" 
+    PS2="%(!.%{${fg[red]}%}.%{${fg[blue]}%})%_&lt; %{${fg[default]}%}"
+fi</code></pre>
+<p>If you're curious, this give me the following prompt for a normal user:</p>
+<pre>          <span style="color:magenta;">[</span><span style="color: blue;">devon :</span> <span style="color:green">...data/70478860/ftp-2009-01-07/crash</span><span style="color:magenta;">]</span><span style="color: blue;">$</span></pre>
+<p>... and ...</p>
+<pre>          <span style="color:magenta;">[</span><span style="color:red;">devon :</span> <span style="color:green;">/usr/bin</span><span style="color:magenta;">]</span><span style="color:blue">#</span></pre>
+<p>... for root and as you can see in the first example, it truncates long paths too.</p>

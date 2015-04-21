@@ -1,0 +1,43 @@
+---
+layout: post
+title: 'HOWTO: Use xclipboard With Gnome'
+date: 2009-06-23 04:27:45.000000000 -07:00
+tags:
+- Software
+- OpenSolaris
+- HOWTO
+- Linux
+- Ubuntu
+- Gnome
+- xclipboard
+type: post
+published: true
+---
+<p>I work with a couple of guys who are quite stuck in their ways and are quite reliant on old tools, one of which is xclipboard(1).</p>
+<p>Unfortunately, Gnome comes with it's own clipboard manager, so when you try to run xclipboard, you get the following:</p>
+<div class="terminal">$ xclipboard<br />
+Error: another clipboard is already running<br />
+$</div>
+<p>Of course, ps(1M) will show no clipboard related processes running.  This is because the functionality is performed by Gnome itself, I believe, as part of the functionality of gnome-settings-daemon.</p>
+<p>One of my colleagues gave me the challenge of getting xclipboard working on Gnome on OpenSolaris/Nevada, ie Gnome 2.6, and I found it quite easy to do in the end.  </p>
+<p>The trick is to tell Gnome not to perform this functionality anymore as follows:</p>
+<p><!--more-->
+<ol>
+<li>Open up a terminal and fire up <code>/usr/bin/gconf-editor</code></li>
+<li>In the window that opens, go to Edit -> Find and search for "clip"</li>
+<li>Select <code>/apps/gnome_settings_daemon/plugins/clipboard</code> from the bottom part of the window <small>[1]</small></li>
+<li>Untick the "active" box in the right hand pane <small>[2]</small>
+<p><img src="/assets/gconfeditorclip.jpg" alt="gconf-editor" width="500px" class="center" /></li>
+<li>Close the window</li>
+<li>Log out and log in again *</li>
+</ol>
+<p>That's it.  xclipboard should now work with Gnome.</p>
+<p><img src="/assets/xclipboardgnome.jpg" alt="xclipboard running with Gnome" class="center" /></p>
+<p>You can of course make this change via the CLI in one command, and then verify it using gconftool-2(1):</p>
+<div class="terminal">$ gconftool-2 --set /apps/gnome_settings_daemon/plugins/clipboard/active 0 \<br />
+&nbsp;&nbsp;--type bool<br />
+$ gconftool-2 --get /apps/gnome_settings_daemon/plugins/clipboard/active<br />
+false<br />
+$</div>
+<p>* The log out /log in is needed for the change to take effect without any adverse effects.  Unfortunately my results were quite inconsistent if I didn't log out after making the gconf change.  The log out/log in was the only thing that kept things consistent. Your mileage may vary.</p>
+<p>This change works under Linux too. </p>

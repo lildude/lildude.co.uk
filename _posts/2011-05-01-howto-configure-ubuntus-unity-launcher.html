@@ -1,0 +1,38 @@
+---
+layout: post
+title: 'HOWTO: Configure Ubuntu''s Unity Launcher'
+date: 2011-05-01 00:54:09.000000000 -07:00
+tags:
+- HOWTO
+- Ubuntu
+- Natty
+- Unity
+- configure
+type: post
+published: true
+---
+<p>So I've recently updated my Ubuntu installation to 11.04 (Natty) and I'm starting to come to terms with the new Unity interface.  I think I might like it, though I've not used it in anger (ie for $work) just yet, so we'll see if I change my mind at a later date.</p>
+<p>One thing I have discovered though is it's actually quite hard to change any of the Unity settings.  I couldn't find any configuration or preference applications anywhere, and right clicking on certain locations doesn't bring up a menu from which you can select "Preferences" or similar.</p>
+<p>Well, today, after a lot of digging, I discovered a way to change some of the Unity settings, specifically the Launcher's behaviour settings.  The Launcher is the list of icons on the left of the screen by default.</p>
+<p>Unity is actually a Compiz plugin from what I can see so accordingly, you need to configure it like you would other Compiz features...</p>
+<ol>
+<li>Install CompizConfig Settings Manager if it's not installed already (it probably isn't)...</p>
+<pre class="terminal">$ sudo apt-get install compizconfig-settings-manager</pre>
+<p></li>
+<li>Use Unity to find and launch the CompizConfig Settings Manager (super+a and search for Compiz):
+<p><a href="http://colinseymour.smugmug.com/Other/Screenshots/i-jWbQZRJ/0/XL/findcompiz-XL.png" target="_blank"><img class="center" src="http://colinseymour.smugmug.com/Other/Screenshots/i-jWbQZRJ/0/M/findcompiz-M.png" alt="Find CompizConfig Settings Manager" width="600" height="375" /></a></p>
+</li>
+<li>Select "Desktop" in the left column and "Ubuntu Unity Plugin" on the right:
+<p><a href="http://colinseymour.smugmug.com/Other/Screenshots/i-RB7vgVQ/0/XL/ccsm-desktop-XL.png" target="_blank"><img class="center" src="http://colinseymour.smugmug.com/Other/Screenshots/i-RB7vgVQ/0/M/ccsm-desktop-M.png" alt="CompizConfig Settings Manager - Desktop" width="600" height="370" /></a></p>
+</li>
+<li>Make your desired changes in the two tabs available. Behaviour:
+<p><a href="http://colinseymour.smugmug.com/Other/Screenshots/i-9RzzCQt/0/XL/ccsm-unity-behaviour-XL.png" target="_blank"><img class="center" src="http://colinseymour.smugmug.com/Other/Screenshots/i-9RzzCQt/0/M/ccsm-unity-behaviour-M.png" alt="Ubuntu Unity Plugin - Behaviour" width="600" height="370" /></a></p>
+<p>... and Experimental ...</p>
+<p><a href="http://colinseymour.smugmug.com/Other/Screenshots/i-krFxPVP/0/XL/ccsm-unity-experimental-XL.png" target="_blank"><img class="center" src="http://colinseymour.smugmug.com/Other/Screenshots/i-krFxPVP/0/M/ccsm-unity-experimental-M.png" alt="Ubuntu Unity Plugin - Experimental" width="600" height="370" /></a>
+</li>
+</ol>
+<p>As you can see, things are a little sparse and there doesn't seem to be very much you can change, though the one thing I wanted to change - the size - is there.  Maybe we'll see more options appear in the future.  </p>
+<p>The rest of the Unity desktop behaviour seems to be governed by other Compiz plugins, so be sure to have a look around the other enabled plugins within CompizConfig Settings Manager.</p>
+<p>The theme settings are still configured like they were before, so there's nothing new on that side of things.</p>
+<p>Adding icons to the launcher is as simple as dragging and dropping.  Removing them involves right clicking and unticking "Keep in Launcher" or simply drag it to the trash can.</p>
+<p>I've not found any other ways to configure Unity yet, but I'll keep looking.  If you know of any other configuration settings, please let me know.</p>

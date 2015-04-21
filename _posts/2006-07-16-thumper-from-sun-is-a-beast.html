@@ -1,0 +1,26 @@
+---
+layout: post
+title: Thumper From Sun is A Beast
+date: 2006-07-16 02:55:51.000000000 -07:00
+tags:
+- OpenSolaris
+- Solaris
+- Hardware
+- ZFS
+- Storage
+type: post
+published: true
+---
+<p>Jonathan Schwartz gave us all a glimpse of the <a href="http://blogs.sun.com/roller/page/jonathan?entry=the_rise_of_the_general">upcoming storage product</a> from Sun: Thumper (external name still to be determined) </p>
+<p><a href="http://blogs.sun.com/roller/resources/jonathan/X4500_lowres.1024x768.jpg"><img class="center" src="http://blogs.sun.com/roller/resources/jonathan/X4500_lowres.1024x768.jpg" alt="Thumper" title="Thumper from Sun Microsystems" width="500" /></a></p>
+<p>This is one hell of a beasty. Inside this beasty you'll find 2x AMD Operteron dual core CPU's with up to 24 Terabytes of storage, running Solaris 10 and ZFS.  All this squeezed into 4U of rack space.  Now that's density for you. Oh and it weighs nearly as much as me.</p>
+<p>I noticed a couple of questions in Jonathan's comments section:</p>
+<p>- How do you keep this thing cool?<br />
+Well, there are a lot of fans in the front of the machine which draw the air in from the front, across all the disks, and out the back.  Extensive testing has been done to ensure there is enough air flow to keep the temperatures down and thus reduce temperature induced failures.  However, like most storage, incuding EMC, it won't last for very long if you decide that air-con in the datacentre isn't needed :-)</p>
+<p>- Can you have a barebones system and add disks as you go?<br />
+At this stage, no.  Thumper needs to have a disk in every slot to ensure the cooling is correct. Baffles are not provided at this time either.</p>
+<p>Jonathan answered the other question - </p>
+<blockquote><p>How do I replace a dead drive in Thumper? - the answer is you don't, you let Solaris and ZFS simply remove it from use (while maintaining provable data integrity), and leave it for an annual maintenance call to clean out failed drives and drop in fresh ones (known in the business as "failing in place").</p></blockquote>
+<p>And even then, it takes a matter of minutes to do (provided the host is on sliding rack rails). What a brilliant idea, however it may be a bit tough convincing some of our customers that they don't need to replace the disk straight away.</p>
+<p>Now this isn't going to be the ideal storage for your average database (it's probably a wee bit expensive), but I can see this being used by companies that stream a lot of video (future of the internet?), or surveillance companies who are currently recording directly to tape. Or maybe even companies like Pixar.</p>
+<p>Only time will tell how popular this machine will be, but I'm sure there will be some very happy customers out there.</p>

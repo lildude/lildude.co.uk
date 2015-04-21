@@ -1,0 +1,27 @@
+---
+layout: post
+title: 'HOWTO: Get xterm on Solaris 11 Without installing the Whole of the solaris-desktop
+  Group'
+date: 2012-09-17 01:31:29.000000000 -07:00
+tags:
+- pkg
+- Solaris 11
+- xterm
+- Oracle Database
+- Howto
+type: post
+published: true
+---
+<p>By default, when you install Solaris 11 onto a SPARC system using the Solaris text installer, the <code>solaris-large-server</code> pkg group is installed.  This is quite a large pkg group that provides most of the software you'd need on a server.  One thing it doesn't deliver, and this is deliberate, is an X environment or any of the related libraries, and thus no <code>xterm</code> either.</p>
+<p>This isn't a problem for most Solaris 11 server installations, however what is becoming increasingly common to me is the number of people, particular Oracle DB administrators, who use <code>xterm</code> to install and administer their database.  In these cases installing the <code>solaris-desktop</code> pkg group (the normal method of getting an X environment and corresponding libraries including <code>xterm</code>) is excessive.</p>
+<p>You'll be pleased to know you can easily get <code>xterm</code> on your <code>solaris-large-server</code> installation <strong>WITHOUT</strong> installing the whole of  the <code>solaris-desktop</code> pkg group by installing just the following pkgs:</p>
+<p><strong>Update:</strong> I've updated the list with an explanation for each. Thanks to Alan Coopersmith for the userful comment.</p>
+<ul>
+<li>xauth - required to allow ssh to set up X11 forwarding with authentication</li>
+<li>x11/diagnostic/x11-info-clients - required for software that executes xdpyinfo</li>
+<li>library/motif - required for software that has a Motif GUI</li>
+<li>terminal/xterm</li>
+</ul>
+<p>This will pull in a few additional dependencies, and by a quick calculation, install about 36Mb of additional software over-and-above the <code>solaris-large-server</code> pkg group.  </p>
+<p>This is certainly a lot more acceptable and appropriate for such machines.</p>
+<p>You will be pleased to know people within Oracle are discussing the idea of implementing simple pkg groups or profiles which can be used to install just what is needed for installing other Oracle products without having to install too much.  As far as I know, this is however still in the discussion stages, but watch this space.</p>

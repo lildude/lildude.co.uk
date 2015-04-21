@@ -1,0 +1,72 @@
+---
+layout: post
+title: Mails Queueing in MSP only Mode
+date: 2007-05-23 12:14:49.000000000 -07:00
+tags:
+- Software
+- Sendmail
+- MSP
+- load
+type: post
+published: true
+---
+<p>This week I stumbled upon some behaviour I wasn't expecting from Sendmail.</p>
+<p>First, what we already know... since Sendmail 8.12.0, Sendmail has split the MTA and MSP functions into 2 different processes using two different config files (<code>sendmail.cf</code> and <code>submit.cf</code> respectively).  Many companies still have archaic security policies that have NOT been updated to accommodate this change, and thus they still require absolutely NO Sendmail processes running, despite the fact that Sendmail can be configured to <a href="http://www.sendmail.org/faq/section3.html#3.44">ONLY allow connections from the MSP on the local host</a>.</p>
+<p>This is perfectly understandable, and doable by stopping all Sendmail daemons and then configuring the MSP (via the <code>submit.cf</code> file) to <a href="http://www.sendmail.org/faq/section3.html#3.44">pass mails directly to a SMARTHOST</a> or a different MTAhost, thus effectively running in MSP only mode.</p>
+<p>Generally this does the trick and the security auditors get the functionality they want, at the expense of not being able to deliver ANY mail locally (not even root) or perform any aliasing (<a href="http://www.sendmail.org/m4/msp.html">brief summary of caveats</a>).</p>
+<p>This week I stumbled upon a problem where running Sendmail in MSP only mode was causing emails to be queued on some hosts, but not others, despite all hosts using exactly the same <code>submit.cf</code>.</p>
+<p>Well, a lot of investigating pursued and I worked out what was causing this odd behaviour...</p>
+<p><!--more-->... <strong>the system load</strong>.</p>
+<p>Whilst running through the "<code>/usr/lib/sendmail -v -d0-99.99</code>" debug outputs (not for the faint hearted) I noticed the following for the hosts that succeed:</p>
+<pre>redefine(load_avg as 34)
+shouldqueue: CurrentLA=34, pri=30242: false (by calculation)</pre>
+<p>I then checked the hosts that always fails and found:</p>
+<pre>redefine(load_avg as 68)
+shouldqueue: CurrentLA=68, pri=30242: true (by calculation)</pre>
+<p><!--wsa:LongPostMiddle--></p>
+<p>Essentially what is happening here is the load on the machines is above the value of <code>QueueLA</code> multiplied by the number of CPUs, which in turn is causing Sendmail to perform a calculation to determine if the mail should be queued or delivered immediately.</p>
+<p>In the first instance, the calculation allowed immediate delivery, but didn't on the latter.</p>
+<p>The thinking can be loosely equated as follows:</p>
+<pre>if [ CurrentLA > (QueueLA * CPUs) ]
+then
+   if [ MsgPriority > QueueFactor / (CurrentLA - (QueueLA * CPUs) + 1) ]
+   then
+    queue for later delivery
+   else
+    deliver immediately
+   fi
+else
+   deliver immediately
+fi</pre>
+<p>Using the above information, and the fact that <code>QueueLA</code> and <code>QueueFactor</code> are commented out in <code>submit.cf</code> by default, thus they are using the default values of 8 and 600000 respectively, we can perform the calculations manually ourselves.</p>
+<p>First successful delivery:</p>
+<p>- the initial test:</p>
+<pre>CurrentLA > QueueLA * CPUs
+       34 > 8 * 2
+       34 > 16</pre>
+<p>- as <code>CurrentLA</code> is > 16, we move onto the second calculation:</p>
+<pre>MsgPriority > QueueFactor / (CurrentLA - (QueueLA * CPUs) + 1)
+      30242 > 600000 / (34 - (8 * 2) + 1)
+      30242 > 600000 / (34 - 17 )
+      30242 > 35294</pre>
+<p>As the RHS is greater than the LHS, immediate delivery takes place.</p>
+<p>Now a failure:</p>
+<p>- the initial test:</p>
+<pre>CurrentLA > QueueLA * CPUs
+       68 > 8 * 2
+       68 > 16</pre>
+<p>- as <code>CurrentLA</code> is > 16, we move onto the second calculation:</p>
+<pre>MsgPriority > QueueFactor / (CurrentLA - (QueueLA * CPUs) + 1)
+      30242 > 600000 / (68 - (8 * 2) + 1)
+      30242 > 600000 / (68 - 17 )
+      30242 > 11765</pre>
+<p>As the RHS is NOT greater than the LHS, the message is queued for later delivery.</p>
+<p>Oh, I forgot to mention - the <code>CurrentLA</code> is the number of processes in the run queue over the last minute, which is essentially the first column in the load average values shown by <code>/usr/bin/uptime.</code></p>
+<p>You can resolve this issue by increasing the value of QueueLA. Note, when manually specifying the <code>QueueLA</code>, Sendmail treats the figure as an absolute value and does NOT multiply it by the number of CPUs.</p>
+<p>You can change this value by adding the following to your <code>submit.mc</code> file:</p>
+<p><code>define(`confQUEUE_LA', `50')dnl    (I've chosen a figure at random)</code></p>
+<p>... and regenerate the <code>submit.cf</code> as usual.</p>
+<p>Please bear in mind, you'll need to weigh up the risks of increasing this value too high as setting this value too high can result in Sendmail bogging down the host if it starts sending a lot of emails for some unknown reason.  </p>
+<p>It's generally advisable to set this value to a sane level, eg 50, and then run a periodic client queue checker. </p>
+<p>FYI: This is all briefly discussed at<br />
+<a href="http://www.sendmail.org/~ca/email/doc8.12/op-sh-4.html#sh-4.4">http://www.sendmail.org/~ca/email/doc8.12/op-sh-4.html#sh-4.4</a></p>

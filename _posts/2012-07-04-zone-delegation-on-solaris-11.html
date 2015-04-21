@@ -1,0 +1,59 @@
+---
+layout: post
+title: Zone Delegation on Solaris 11
+date: 2012-07-04 02:21:53.000000000 -07:00
+tags:
+- permissions
+- RBAC
+- Solaris 11
+- Zones
+- delegation
+- user
+type: post
+published: true
+---
+<p>I've just discovered a very cool and useful feature built into Solaris 11: Zone Delegation.  Zone Delegation is the ability to configure your system so that specific global zone users can administer only specific non-global zones using Role Based Access Control (RBAC).  This means you don't need to use an all-or-nothing approach like assigning users full system administration privileges or complete zone administration privileges.</p>
+<p>The data for the zone delegation can be stored with the zone when you configure it using zonecfg(1M) - see the "admin" resource in the man page - or you can use RBAC profiles as you normally would and store these locally or on your name service of choice, for example NIS or LDAP.</p>
+<p>For example lets say we have zones named zoneA through zoneF and we have three admins alice, bob, carl.  We want to grant a subset of the zone management to each of them.</p>
+<p>We could do that either by adding the admin resource to the appropriate zones via zonecfg(1M) or we could do something like this with RBAC data directly:</p>
+<pre class="terminal">
+# usermod -P +Zone Management -A +solaris.zone.manage/zoneA alice
+# usermod -A +solaris.zone.login/zoneB alice
+
+# usermod -P +Zone Management-A +solaris.zone.manage/zoneB bob
+# usermod -A +solaris.zone.manage/zoneC bob
+
+# usermod -P +Zone Management-A +solaris.zone.manage/zoneC carl
+
+# usermod -A +solaris.zone.manage/zoneD carl
+# usermod -A +solaris.zone.manage/zoneE carl
+# usermod -A +solaris.zone.manage/zoneF carl
+</pre>
+<p>In the above alice can only manage zoneA, bob can manage zoneB and zoneC and carl can manage zoneC through ZoneF.  The user alice can also login on the console to zoneB but she can't do the operations that require the solaris.zone.manage authorisation on it.</p>
+<p>Or if you have a large number of zones and/or admins you could collect the authorisation lists into an RBAC profile and grant that to the admins eg:</p>
+<pre class="terminal">
+# profiles -p 'Zone Group 1'
+profiles:Zone Group 1> set desc="Zone Group 1"
+profiles:Zone Group 1> add profile="Zone Management"
+profiles:Zone Group 1> add auths=solaris.zone.manage/zoneA
+profiles:Zone Group 1> add auths=solaris.zone.login/zoneB
+profiles:Zone Group 1> commit
+profiles:Zone Group 1> exit
+
+# profiles -p 'Zone Group 3'
+profiles:Zone Group 1> set desc="Zone Group 3"
+profiles:Zone Group 1> add profile="Zone Management"
+profiles:Zone Group 1> add auths=solaris.zone.manage/zoneD
+profiles:Zone Group 1> add auths=solaris.zone.manage/zoneE
+profiles:Zone Group 1> add auths=solaris.zone.manage/zoneF
+
+profiles:Zone Group 1> commit
+profiles:Zone Group 1> exit
+</pre>
+<p>Now instead of granting carl the three authorisations directly we can just give the 'Zone Group 3' profile.</p>
+<pre class="terminal">
+# usermod -P +'Zone Group 3' carl
+</pre>
+<p>If we wanted to store the profile data and the profiles granted to the users in LDAP just add '-S ldap' to the profiles and usermod commands. </p>
+<p>Credit goes to <a href="https://blogs.oracle.com/darren/en_GB/" target="_blank">Darren Moffat</a> for this great explanation (with a bit of modification by me for this post) sent on an internal email alias this morning.</p>
+<p><strong>Update:</strong>  BLAST!!!  Just as I go to update this post to link to Darren's <a href="https://blogs.oracle.com/darren/en_GB/" target="_blank">blog</a>, I discover Darren has posted his email into a blog post himself this morning - <a href="https://blogs.oracle.com/darren/en_GB/entry/delegation_of_solaris_zone_administration" target="_blank">Delegation of Solaris Zone Administration</a>.  Hope you don't mind Darren.  Just spreading the news.</p>

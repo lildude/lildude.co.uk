@@ -1,0 +1,101 @@
+---
+layout: post
+title: 'HOWTO: Build and Install E17 on Solaris 10'
+date: 2007-09-03 08:52:55.000000000 -07:00
+tags:
+- Software
+- HOWTO
+type: post
+published: true
+---
+<p><img class="alignleft" src="/assets/elogo.png" alt="E Logo" />These details come following a request by <a href="http://sujithemmanuel.blogspot.com/">Sujith Emmanuel</a> following a post I made about <a href="http://lildude.co.uk/2007/04/e17-running-on-solaris-10/">getting E17 working on Solaris 10</a> Sunray servers.</p>
+<p>None of these details are Sunray specific.  Thankfully e17 is relocatable and is intelligent enough to workout if it's been moved.  I detail installing the files in my home directory as this is the only directory that is common on ALL the Sunray servers, and is the only one I have write permissions to.</p>
+<p>I've used these same details to install E17 on Nevada (snv 70) into /opt/e17 on an Ultra 20 (x86), so these instructions will work for both SPARC and x86 hosts.</p>
+<p>These instructions only detail building the basic window manager.  Once you've got this built, you can then go ahead and try building the rest of the components.  You will need to check the README files and work out the dependencies. I'll update this post when I get a chance to do this.<br />
+<!--more--><br />
+<h3>Download</h3>
+<p>I'm building from the snapshots provided at <a href="http://download.enlightenment.org/snapshots/">http://download.enlightenment.org/snapshots/</a>. At the time of writing, the LATEST snapshot was 2007-08-26, which is what I have used. Your filenames will vary depending on the snapshot used, but the actual component names will remain the same.</p>
+<p>Download the following files:</p>
+<ul>
+<li>imlib2-1.4.0.003.tar.gz</li>
+<li>eet-0.9.10.041.tar.gz</li>
+<li>evas-0.9.9.041.tar.gz</li>
+<li>ecore-0.9.9.041.tar.gz</li>
+<li>embryo-0.9.1.041.tar.gz</li>
+<li>edje-0.5.0.041.tar.gz</li>
+<li>efreet-0.0.3.006.tar.gz</li>
+<li>enlightenment-0.16.999.041.tar.gz</li>
+</ul>
+<h3>Build Order</h3>
+<p>In order to successfully build and install E17, you need to pay attention to the requirements of each component.  At the time of writing, the following order is required:</p>
+<ul>
+<li>imlib</li>
+<li>eet</li>
+<li>evas</li>
+<li>ecore</li>
+<li>embryo</li>
+<li>edje</li>
+<li>efreet</li>
+<li>elightenment</li>
+</ul>
+<h3>Build Environment</h3>
+<p>To ensure consistency, and ease the build process, whilst at the same time removing the need to use LD_LIBRARY_PATH when running E17, you need to configure your environment. If you've compiled software correctly on Solaris, there really should be no need to set LD_LIBRARY_PATH for anything, unless you're developing a new version of a library. See <a href="http://developers.sun.com/solaris/articles/build_sw_on_solaris.html">Building Software on the Solaris OS</a> for more details.</p>
+<p>I set the following environment variables.</p>
+<pre lang="text">EPATH=$HOME/apps/sparc/e17-041 
+PATH=/usr/sfw/bin:/usr/bin:/sbin:/usr/sbin:/usr/ccs/bin:/usr/dt/bin:\
+         /usr/openwin/bin:/usr/sfw/bin:$EPATH/bin
+LDFLAGS="-L/usr/sfw/lib,-R/usr/sfw/lib,-L$EPATH/lib,-R$EPATH/lib"
+PKG_CONFIG_PATH=$EPATH/lib/pkgconfig
+CCDIR=/usr/sfw/bin
+CC=${CCDIR}/gcc
+CXX=${CCDIR}/g++</pre>
+<p>Setting <code>$EPATH</code> isn't necessary, it just makes it easier to set other various options.  You can use any location you like.</p>
+<p>You'll note I'm using the GCC supplied with Solaris 10.  I've attempted to get things compiling with SunStudio 11 and 12, but didn't have much luck. I've not had the time to sit down with each component and work out why.</p>
+<p><!--wsa:LongPostMiddle--></p>
+<h3>Building and Installing</h3>
+<p>Extract all tarballs to a single directory for easy building.  I extracted all the tarballs to<code> ${HOME}/apps/src/e17/</code>.</p>
+<p>Now build each component as follows:</p>
+<pre lang="text">$ cd [component directory]
+$ ./configure --prefix=${EPATH}
+$ make
+$ make install</pre>
+<p>e.g.</p>
+<pre lang="text">$ cd eet-0.9.10.041
+$ ./configure --prefix=${EPATH}
+$ make
+$ make install</pre>
+<h3>Bugs</h3>
+<p>At the time of writing there appears to only be 1 bug that stops the build and installation process - <a href="http://bugs.enlightenment.org/show_bug.cgi?id=186">Bug 186</a> - which stops Enlightenment from building with the following error:</p>
+<pre lang="text">Undefined symbol        first referenced in file 
+MAX                     e_actions.o</pre>
+<p>In order to resolve this bug, and allow Enlightenment to compile, you need to modify enlightenment-0.16.999.041/src/bin/e_actions.c and add the following lines above the first "define" line:</p>
+<pre lang="text">#ifndef MAX
+#define MAX(x, y) (((x) > (y)) ? (x) : (y))
+#endif</pre>
+<p>Save the file and then run <code>./configure</code>, <code>make</code> and <code>make install</code>.  Enlightenment should compile without any more problems.</p>
+<h3>Starting E17</h3>
+<p>There are several ways you can start E17 depending on where you've installed it, and the overall control you have over the installed machine.</p>
+<p>If you don't have root access, you can start E17 in one of two ways:</p>
+<h4>Standalone</h4>
+<p>Add "<code>exec [EPATH]/bin/enlightenment_start</code>" to the end of your <code>${HOME}/.dtprofile</code> file.  Then login.  No matter which desktop option you choose, you'll get enlightenment.</p>
+<h4>Within Gnome</h4>
+<p>Login to JDS/Gnome and then go to (depending on which OS you're using)...</p>
+<p><strong>Solaris 10</strong>: Launch -> Preferences -> Desktop Preferences -> Sessions<br />
+<strong>Nevada</strong>: Launch -> Preferences -> Sessions</p>
+<p>Go to the "Current Session" tab and select the "<code>metacity</code>" line. Change the style to "Normal" and click apply. Do the same for "<code>nautilus</code>". Don't close the window yet.</p>
+<p>Now go to "Startup Programs" tab and add a new startup program pointing to the <code>[EPATH]/bin/enlightenment_start</code> binary in the directory you installed E17 into then save the current session...</p>
+<p><strong>Solaris 10</strong>: check the "Automatically save changes to session" box<br />
+<strong>Nevada</strong>: click the "Save the current session" button on the Session Options tab.</p>
+<p>E17 will start on your next login.</p>
+<p>You can now logout and login again, or start E17 in the current session by opening up a terminal and running...</p>
+<p><code>pkill metacity; pkill nautilus; [$EPATH]/bin/enlightenment_start &</code></p>
+<p>This will kill nautilus and metacity, and start E17.</p>
+<p>This method has a bit of a disadvantage in that the E17 lock screen and logout buttons don't work correctly.  You need to use the gnome buttons or modify the E17 buttons to call the gnome commands.</p>
+<p>To reverse these steps, remove the "Startup Programs" entry you added to the Gnome Sessions and then run the following in a terminal...</p>
+<p><code>pkill enlightenment; sleep 2; nautilus &; metacity &</code></p>
+<p>... and then save your session in the Gnome sessions dialog window.		</p>
+<p>If you have root access, you can add an entry to dtlogin by following <a href="http://gene.chat.ru/e/solaris.html">these instructions</a>, making the necessary path changes where appropriate.  Other sources are available which detail the same procedure.</p>
+<p>Once you're all up and running, you can start to configure your desktop to your heart's content.</p>
+<div class="alert">
+Please note, E17 is not even considered "Alpha" software yet.  Things can and will change, and there will be bugs. If things are not working for you, try a different snapshot.
+</div>

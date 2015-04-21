@@ -1,0 +1,24 @@
+---
+layout: post
+title: 'Local Shared Object: Flash Cookies You Didn''t Know About'
+date: 2008-07-30 10:34:28.000000000 -07:00
+tags:
+- Security
+- Adobe
+- Flash
+- LSO
+type: post
+published: true
+---
+<p>I stumbled upon the concept of "<a href="http://en.wikipedia.org/wiki/Local_Shared_Object">Local Shared Objects</a>" for the first time today after <a href="http://lifehacker.com/399504/objection-deletes-hard+to+reach-flash-cookies">reading</a> about the <a href="http://objection.mozdev.org/">Objection</a> extension for Firefox.</p>
+<p>For those who have also not heard of "Local Shared Objects" or LSOs for short, Wikipedia define them as:</p>
+<blockquote><p>A Local Shared Object (LSO) is a collection of cookie-like data stored as a file on a user's PC. LSOs are used by all versions of Adobe Flash Player and those subsequent to Version 5 of Macromedia's now-obsolete Flash MX Player</p></blockquote>
+<p>Well, sounds reasonable enough as I've had to use cookies to my advantage before, so why shouldn't Flash developers have the same functionality?  I mean, the user can always reject the cookie if they want, like normal cookies, right?</p>
+<p>Well, actually <strong>NO</strong>.  </p>
+<p><!--more-->It would appear you don't have a choice in the matter and wouldn't even know when one is stored on your system.  The Wikipedia entry goes on...</p>
+<blockquote><p>Adobe claims that Flash Players use a sandbox security model, but, contrary to that definition, Flash Players do not seek the user's permission to store on his hard disk LSO files, which contain cookie-like data that may include not only user-tracking information but any personal data that the user has entered in any Flash-enabled application, whether it be stand-alone or Web-based.<br />
+LSOs — an automatic, invisible opt-in for anyone installing any Adobe Flash Player — are not temporary files, and there is, deliberately as designed originally by Macromedia and continued by Adobe, no obvious control panel to opt out of them.</p></blockquote>
+<p>Hang on a second there.  Data is being stored on my hard disk that I have can't easily read and that I wasn't informed about?!  I'm not happy about this, what's more I'm not too happy about the relevantly low media exposure LSOs have experienced.  I like to think I keep pretty much up to date with security news and issues.  How did this one slip past?  I suppose if I was a Flash developer, I'd know all about them, and would probably have used them too.</p>
+<p>Well, I've gone ahead and installed the Objection plugin and WOW!!! A lot of sites take full advantage of LSOs, many of which I didn't even know were using Flash or didn't actually visit.  Those that I've never visited appear to be from Flash based adverts.  </p>
+<p>Now the information stored in these LSOs ranges from the innocuous of things like basic media player settings like last used volume and colour preferences to full on dangerous information like usernames and passwords - YES, I found one LSO that contained my username and password for that site.  There are also a lot of "tracking" settings - ie very unique looking figures, or settings called "uid" or "id" or similar.</p>
+<p>I can't say I'm too happy this information isn't so well known, but I am glad I now know about them now.  That's one more thing I've added to my "tidy up" routine.  I don't care if things take a little longer to display, or don't know my settings - at least I know that potentially insecure information is not being stored for any length of time without me knowing.</p>

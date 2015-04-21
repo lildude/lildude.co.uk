@@ -1,0 +1,24 @@
+---
+layout: post
+title: Spotify On OpenSolaris
+date: 2009-07-30 03:02:01.000000000 -07:00
+tags:
+- Software
+- OpenSolaris
+- wine
+- Spotify
+type: post
+published: true
+---
+<p>I'm please to announce folks that you have one less excuse to use Linux in favour of OpenSolaris... you can now run <a href="http://spotify.com">Spotify</a> on <a href="http://www.opensolaris.com">OpenSolaris</a>, granted not natively, but in the same way you can on Linux: with <a href="http://www.winehq.org">Wine</a>.</p>
+<p>The process is really easy:</p>
+<ol>
+<li>Switch to the dev repository (http://pkg.opensolaris.org/dev/) either via the CLI or within the Package Manager GUI</li>
+<li>Upgrade your OpenSolaris release to the latest and greatest, which at the time of writing is snv_118 using either the CLI (<code>pkg image-update</code>) or the Update Manager GUI.  </li>
+<li>Install Wine as per the details on the <a href="http://wiki.winehq.org/OpenSolaris">Wine wiki</a>. You can use either the <a href="http://sourceforge.net/projects/wine/files/">Wine source code tarball</a> or the latest <a href="http://wiki.winehq.org/GitWine">git sources</a> (which I used).  Do NOT try and use the prebuilt Wine in the contrib repository as it does not have sound or network support - both of which are needed by Spotify.</li>
+<li>Install Spotify as per the <a href="http://www.spotify.com/en/help/faq/wine/">Spotify under Wine</a> instructions</li>
+<li>Start Spofity, login and start listening.</li>
+</ol>
+<p>It's that simple. See...</p>
+<p><a href="http://colinseymour.smugmug.com/photos/605232261_wk4Tf-XL.png"><img class="center" src="http://colinseymour.smugmug.com/photos/605232261_wk4Tf-M.png" alt="Spotify on OpenSolaris" /></a></p>
+<p>There are details about on getting it working on earlier releases of OpenSolaris, and prebuilt pkgs available too if you don't want to live on the cutting edge, but I do, so I've gone with the cutting edge method :-D .</p>

@@ -1,0 +1,68 @@
+---
+layout: post
+title: What's Up With the flag Field in /etc/shadow on Solaris 11.1?
+date: 2013-01-03 01:46:05.000000000 -08:00
+tags:
+- Security
+- Solaris 11
+- "/etc/shadow"
+- flag
+type: post
+published: true
+---
+<p>If you're running Solaris 11.1, and you happen check your <code>/etc/shadow</code> file, you may notice there's been a change to the flags field (the last one)...</p>
+<pre>bob:$5$GKM8z8qP$ho7oJF3ceAoFo9sH5f.jy4UP16TvzoO7XmSYS81o6QA:15708::::::<strong>9874</strong></pre>
+<p>Prior to Solaris 11.1, this field only contained the following a few easy to read digits which the man page explained as...</p>
+<pre>     flag        Failed login  count  in  low  order  four  bits;
+                 remainder reserved for future use, set to zero.</pre>
+<p>... and this started at 0 and incremented by one every time there was a failed login attempt.  Now I'll let you into a secret, the above excerpt was actually taken from Solaris 11.1 which means the documentation hasn't been updated to reflect what you now see in the shadow file.  That's correct.</p>
+<p>The documentation has deliberately NOT been updated at this stage (Jan 2013) as it is still currently an unstable/private interface and thus not really ready for public consumption.  That said, you can easily workout what the rest of the information stored in this field is by looking at the <code>/usr/include/shadow.h</code> file...</p>
+<pre>/*
+ * The spwd structure is used in the retreval of information from
+ * /etc/shadow.  It is used by routines in the libos library.
+ */
+struct spwd {
+        char *sp_namp;  /* user name */
+        char *sp_pwdp;  /* user password */
+        int sp_lstchg;  /* password lastchanged date */
+        int sp_min;     /* minimum number of days between password changes */
+        int sp_max;     /* number of days password is valid */
+        int sp_warn;    /* number of days to warn user to change passwd */
+        int sp_inact;   /* number of days the login may be inactive */
+        int sp_expire;  /* date when the login is no longer valid */
+        unsigned int sp_flag;   /* currently low 15 bits are used */
+
+        <strong>/* low 4 bits of sp_flag for counting failed login attempts */
+#define FAILCOUNT_MASK  0xF
+        /* next 11 bits of sp_flag for precise time of last change */
+#define TIME_MASK       0x7FF0</strong>
+};</pre>
+<p>And there's your answer.  The last line tells us that the rest of the flag field is used to store the time of the last password change, with the date of that change being stored in the lastchg (3rd) field.</p>
+<p>So how do you use that figure?</p>
+<p>Well, before I tell you, I must warn...</p>
+<p class="alertbox"><strong>This is an unstable interface.  It can and will most likely change at any time without any notice, so do NOT come to rely on this information.</strong></p>
+<p>Right, with that out of the way, lets see how we can interpret this field.</p>
+<p>From the shadow.h file we know the last 4 bits are the number of failed login attempts, which can be obtained using (all commands are run at a Bash shell prompt):</p>
+<pre class="terminal">$ echo "obase=2;9874" | bc
+1001101001<strong>0010</strong>
+$</pre>
+<p>I've emboldened the last 4 bits. It should be obvious how many failed login attempts there have been, but lets switch these back to decimal to be sure:</p>
+<pre class="terminal">$ echo "ibase=2;0010" | bc
+2
+$</pre>
+<p>Now for the next 11 bits.  To get these we shift up 4 bits:</p>
+<pre class="terminal">$ a=9874;((a>>=4));echo $a
+617
+$</pre>
+<p>This doesn't tell us much, but I can tell you this is the number of minutes into the day that the password was changed, so lets print this number in base-60:</p>
+<pre class="terminal">$ echo "obase=60;617" | bc 
+ 10 17
+$</pre>
+<p>Which is correct. I change this user's password today at 10h17, aka 10:17am.</p>
+<p>The last two steps can be put into a single command:</p>
+<pre class="terminal">$ a=9874;((a>>=4));echo "obase=60;$a" | bc
+ 10 17
+$</pre>
+<p>And there you have it.  That is what is going on with the flag field in the /etc/shadow file on Solaris 11.1 and let me reiterate...</p>
+<p class="alertbox"><strong>This is an unstable interface.  It can and will most likely change at any time without any notice, so do NOT come to rely on this information.</strong></p>
+<p>I am providing this information just for information's sake and to provide you with a little explanation of what you might see.</p>

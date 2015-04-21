@@ -1,0 +1,22 @@
+---
+layout: post
+title: Updating to OpenSolaris 2009.06
+date: 2009-06-01 03:02:47.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- update
+- upgrade
+- '2009.06'
+- '2008.11'
+type: post
+published: true
+---
+<p>The pkg repositories have now been updated to included the 2009.06 pkgs (<a href="http://wikis.sun.com/download/attachments/102400619/community1-whats-new.pdf">What's New preso</a> - PDF).  There is no need to perform a clean install, you can just use the Update Manager GUI to update your OpenSolaris 2008.11 release to 2009.06.  </p>
+<p>There is one teeny weeny issue that you may encounter - the Update Manager GUI may tell you that there are no new pkgs available.  Sadly, the solution isn't clear or intuitive from the GUI: you need to update the SUNWipkg pkg first.  The CLI is clearer about this and tells you that you need to update this pkg when you attempt to upgrade using "pfexec pkg image-update".</p>
+<p>So to update via the GUI, quickly fire up a terminal and run:</p>
+<p><code>$ pfexec pkg install SUNWipkg</code></p>
+<p>This will update the package tool and once complete, you can then return to the Update Manager GUI to perform the upgrade.</p>
+<p>Thanks to the beauty of ZFS and OpenSolaris's upgrade procedure, a new boot environment will be created, updated and made the default BE (only if the upgrade is successful).  Your old boot environment will still be available if you want to go back at a later stage.</p>
+<p>I've you've been using the dev repositories, you're not likely to hit this issue now as you would have hit it in the past already.  I believe this issue is now resolved too.</p>

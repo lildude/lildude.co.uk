@@ -1,0 +1,18 @@
+---
+layout: post
+title: Debugging Wordpress
+date: 2006-07-09 03:16:12.000000000 -07:00
+tags:
+- Wordpress
+- Coding
+- PHP
+- Internet
+- MySQL
+- debug
+type: post
+published: true
+---
+<p>In my neverending quest to make sure my sites run smoothly, I was investigating ways I could debug Wordpress.  I know about the usual PHP debugging steps, but that only really helps when PHP isn't actually encountering any problems and it's certainly not very good at working out things behind the scenes, like the MySQL queries Wordpress makes short of adding a lot of PHP code.</p>
+<p>Using my trusty <a href="http://www.google.com">research tool</a>, I stumbled upon a post by Stilgar - "Debugging WordPress database queries" (Update: 1 May '09 - link removed as it appears to now be a owned by porn spammers).  This is just what I was looking for - a nice quick simple way of displaying the MySQL statements used when generating a page. Stilgar even goes on to provide a quick little change to the WP code to allow you to display exactly which file and which lines actually called this code. What a fantastic time saver.</p>
+<p>I've also learnt something else today - I didn't realise Wordpress used <a href="http://www.jvmultimedia.com/portal/node/6">ezSQL</a>.  I'm glad I know now as it wouldn't take much to port Wordpress to another ezSQL supported database if needed.</p>
+<p>I've now added this to my arsenal of debugging Wordpress tools (which I'll detail soon).</p>

@@ -1,0 +1,22 @@
+---
+layout: post
+title: Mapping Sun Keyboard Shortcuts in Opera
+date: 2008-09-29 07:45:59.000000000 -07:00
+tags:
+- Software
+- Solaris
+- Opera
+- keyboard
+- shortcut
+- cut
+- paste
+- copy
+type: post
+published: true
+---
+<p>It's been a while since I last ran Opera on Solaris and there have been a lot of changes, so I thought I'd take if for a spin.</p>
+<p>Well, so far so good.  The performance is pretty impressive, even when compared to Firefox 3, however it's still early days yet, so I can't say if it'll suit my needs entirely.</p>
+<p>Anyway, one thing that annoyed me straight away is Opera doesn't acknowledge the Sun Type 5, Type 6 and Type 7 keyboard copy, paste, cut shortcut keys.  It doesn't take the settings from the windowing environment and there isn't any documentation that I can find on how to assign them.</p>
+<p>So I did some investigating and worked it out.  Opera treats all the keys down the left hand side of the Sun Type [567] keyboards as F-keys starting with F11 through to F20.  So the Stop key is F11, the Again key is F12, the Props key is F13, etc etc.</p>
+<p>Once I worked that out, it was just a matter of going to <code>Preferences -&gt; Advanced -&gt; Shortcuts -&gt; &lt;select a layout&gt; -&gt; Edit</code> and creating a new shortcut for all the keys I wanted to use and assign the appropriate shortcut and action.  I'm only really interested in the Copy, Paste and Cut keys, so I created the appropriate shortcuts and assigned the shortcuts of F16, F18 and F20 respectively.</p>
+<p>One up for my productivity, hopefully this will help someone else who ventures in the world of Opera on Solaris.</p>

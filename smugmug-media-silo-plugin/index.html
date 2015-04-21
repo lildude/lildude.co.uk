@@ -1,0 +1,75 @@
+---
+layout: page
+title: 'Habari Plugin: SmugMug Media Silo'
+date: 2009-09-17 09:55:54.000000000 -07:00
+tags:
+- plugin
+- SmugMug
+- silo
+- Habari
+type: page
+published: true
+---
+<p>The SmugMug Media Silo plugin implements a <a href="http://habariproject.org">Habari</a> silo to access your SmugMug photos making it easy to include images in posts and pages and also upload images directly to <a href="http://www.smugmug.com">SmugMug</a>.</p>
+<p><img src="/assets/smugmugmediasiloscreenshot.jpg" alt="SmugMug Media Silo Screenshot" title="SmugMug Media Silo Screenshot" width="600px" height="184px" class="center" /></p>
+<p>Not a <a href="http://www.smugmug.com">SmugMug</a> user yet?  Get $5 off your first year using this reference code: <code>2ZxFXMC19qOxU</code> or simply <a href="https://secure.smugmug.com/signup.mg?Ureferrer=2ZxFXMC19qOxU" alt="Smugmug discount voucher">click here</a> to register with SmugMug and have the discount applied automatically.</p>
+<h2>Features</h2>
+<ul>
+<li>Access all your SmugMug images from within the Habari admin interface.</li>
+<li>Insert an image directly into a post from the Habari admin interface.</li>
+<li>Configure a default image size for inserted images, with the option of selecting a different size at the time of posting too.</li>
+<li>Configure a custom image size that differs from the defaults offered by SmugMug.</li>
+<li>Configure what you'd like your image to link to, if anything at all.</li>
+<li>"Unlisted" galleries and "Hidden" images are clearly marked with a lock icon so you don’t accidentally insert an image you really didn't want the world to see.</li>
+<li>Upload an image directly to a specific gallery from within the Habari admin interface</li>
+<li>Quickly and easily view recently modified albums and uploaded images</li>
+<li>SmugMug Media Silo caches information (not images) for quicker access and load times</li>
+<li>Secure authorization. Authorization is directly with SmugMug. SmugMug Media Silo uses OAuth to obtain access to your images, so does NOT require your username or password.</li>
+</ul>
+<h2>Limitations</h2>
+<p>SmugMug Media Silo is NOT compatible with Habari 0.5.2 and earlier. This is because several bugs were found in the development of the plugin that have only been resolved in 0.6 and later.</p>
+<p>SmugMug's video functionality has not been tested nor implemented yet, but it will be coming in a future release.</p>
+<h2>Download</h2>
+<h3>For Habari 0.6.2:</h3>
+<p class="center"><a class="button red" href="http://lildude.co.uk/downloads/hg/plugins/smugmugsilo-1.0-0.6.x.zip" title="Download smugmugsilo-1.0-0.6.x.zip">SmugMug Silo<br />1.0-0.6.x.zip</a>   <a class="button red" href="http://lildude.co.uk/downloads/hg/plugins/smugmugsilo-1.0-0.6.x.tar.bz2" title="Download smugmugsilo-1.0-0.6.x.tar.bz2">SmugMug Silo<br /> 1.0-0.6.x.tar.bz2</a></p>
+<p><strong>Note</strong>: Habari 0.6.x is now obsolete.  Accordingly, I will not offer support for Habari 0.6.x anymore.  Please ensure you update your Habari installation to 0.7 and use the version below.</p>
+<div style="clear: both"></div>
+<h3>For Habari 0.7 and Later</h3>
+<p class="center"><a class="button red" href="http://lildude.co.uk/downloads/hg/plugins/smugmugsilo-1.0-svn.zip" title="Download smugmugsilo-1.0-svn.zip">SmugMug Silo<br />1.0-svn.zip</a>   <a class="button red" href="http://lildude.co.uk/downloads/hg/plugins/smugmugsilo-1.0-svn.tar.bz2" title="Download smugmugsilo-1.0-svn.tar.bz2">SmugMug Silo<br />1.0-svn.tar.bz2</a></p>
+<div style="clear: both"></div>
+<h3>Latest and Greatest</h3>
+<p>I've now moved the hosting of this code to GitHub.  Those who want to live on the cutting edge can download the most recent version of the <a href="https://github.com/lildude/smugmug-silo" target="_blank">SmugMug Silo from GitHub</a>.</p>
+<p><strong>NOTE: This may sometimes be broken.  Only tagged versions are considered stable.</strong></p>
+<h2>Installation and Configuration</h2>
+<ol>
+<li>Download either the zip or tar.bz2 to your server</li>
+<li>Extract the contents to a temporary location (not strictly necessary, but just being safe)</li>
+<li>Move the <code>smugmugsilo</code> directory to <code>/
+<path to habari>/user/plugins/</path></code></li>
+<li>Refresh your plugins page and activate the plugin.</li>
+<li>Authorize the plugin with SmugMug by clicking "Authorize".  This will open the "Authorization" options which will look as follows:
+<p><a href="http://lildude.co.uk/user/sites/lildude.co.uk/files/2009/03/smugmugsiloactivate.jpg"><img src="/assets/smugmugsiloactivate.jpg" alt="SmugMug Media Silo Activate" title="SmugMug Media Silo Activate - Click for full size" width="600px" height="167px" class="center" /></a></p>
+<ul>
+<li>Next click "Authorize".  This will open the SmugMug authorization page in a new window or tab</li>
+<li>Accept the access requirements detailed on that page and close the window/tab and come back to the Habari Admin page/tab.</li>
+<li>Click "Confirm" to confirm you have authorized SmugMug Media Silo to access your SmugMug account.</li>
+</ul>
+</li>
+<li>Configure the silo to suit your needs.</li>
+</ol>
+<p>That's it.  You're ready to use the SmugMug Media Silo.</p>
+<h2>Upgrade</h2>
+<p>The upgrade procedure is as per the installation procedure, but please ensure you de-activate the plugin first.  This will ensure your current settings are merged with any new options that may be added with later releases.</p>
+<h2>Usage</h2>
+<p>Usage is incredibly simple: simply click on the "SmugMug" silo button within the entry/page creation/management page within Habari and select the gallery and image you want to insert into your post/page.</p>
+<p>Double-clicking the thumbnail will insert the default image size as configured in the SmugMug Media Silo configuration options wrapped in a link to the destination of your choice.</p>
+<p>Alternatively, click one of the Ti, Th, S, M or L buttons under the thumbnail to insert a Tiny, Thumbnail, Small, Medium or Large image respectively. These images will use the dimensions as <a href="http://www.smugmug.com/help/display-quality">provided by SmugMug</a>.</p>
+<h2>Additional Information</h2>
+<p>The ordering of images and galleries is as they are configured on SmugMug. SmugMug Media Silo does NOT change the order. If you wish to change the order or any other settings specific to your images, you will need to do so from within SmugMug’s own administration controls.</p>
+<p>Each image in the silo has a title associated with it. This will either be up to the first 23 characters of the first line of the caption (you can hover over the title to view the full caption) or the image's filename.</p>
+<h2>Revision History</h2>
+<p>1.0 - Initial release</p>
+<p>That's it folks.  If you encounter any problems or queries, please feel free to log an <a href="https://github.com/lildude/smugmug-silo/issues" target="_blank">issue on GitHub</a>, and provided I'm not on holiday, I'll normally get back to you within 48 hours.</p>
+<ul>
+<li><a href="http://lildude.co.uk/smugmug-media-silo-plugin-10-now-available/">SmugMug Media Silo Plugin 1.0 Now Available</a></li>
+</ul>

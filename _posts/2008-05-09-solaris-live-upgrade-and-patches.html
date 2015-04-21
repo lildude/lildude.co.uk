@@ -1,0 +1,42 @@
+---
+layout: post
+title: Solaris Live Upgrade and Patches
+date: 2008-05-09 08:04:51.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Solaris
+- General
+- Live Upgrade
+- patches
+type: post
+published: true
+---
+<p>I encountered a bit of a challenging question today...</p>
+<p>Suppose I have Solaris 10 1/06 (update 1) installed and I've patched it with various patches that are actually provided as part of a much later release, for example Solaris 10 11/06 (update 3).  Will I have to reapply those patches if I perform a live upgrade to and intermediate version, eg Solaris 10 6/06 (update 2)?</p>
+<p>At first I thought: "No. The patches have been applied, the pkgs updated to reflect these patches and the upgrade tool should be able to workout that a later version of the pkg has already been applied".</p>
+<p>Patches are essentially partial pkgs after all, and there is version detection within the patching and packaging.</p>
+<p>But the more I thought about it, the more I thought it couldn't be that simple, especially considering that the Solaris patch, packaging, installation and upgrade systems are a bit of a mess under the hood (it's being sorted in Nevada/OpenSolaris).  So I did some investigating.  </p>
+<p><!--more-->As the question pertained to Live Upgrade, I started my investigations there - in the live_upgrade(5) man page.  This is where I spotted the answer to the question.  Right down at the bottom of the man page is this little paragraph...</p>
+<pre>     It is possible for an operating  system  upgrade  to  remove
+     installed   patches.   Prior   to   such   an  upgrade,  use
+     analyze_patches, as described in luupgrade(1M), to determine
+     which, if any, patches will be removed.</pre>
+<p>I'd seen that "analyze_patches" script somewhere, but couldn't remember where. So I checked the luupgrade(1M) man page as suggested, where I found the following little sections...</p>
+<pre>     Before upgrading a boot environment, do the following:
+
+         o    Run analyze_patches.
+
+         o    Install Live Upgrade  packages  for  the  operating
+              system version to which you are upgrading.
+
+     The analyze_patches command is available in the /Misc direc-
+     tory  on the Solaris software DVD (formerly the Solaris ins-
+     tallation CD). This command determines which  patches  would
+     be  removed  as a result of the upgrade. Then, following the
+     upgrade, you can reinstall the list of patches  provided  by
+     analyze_patches.</pre>
+<p>So now I have the answer, and a way to determine which patches are likely to be removed, but I still didn't have an answer as to why.  </p>
+<p>A quick trawl through the upgrade source code soon gave me the answer.  Live Upgrade, and the normal Solaris upgrade tool, just perform a simple pkgrm of the old pkg and a pkgadd of the new.</p>
+<p>As patches are effectively partial pkgs, the pkgrm would remove all changes supplied by the patch, so the patch changes would no longer be applied.</p>
+<p>I have to admit, I've seen the analyze_patches script, but never actually known what it was for, and thus have never used it.  I can say I'll certainly be using it as part of my live upgrade procedures from here on, and will definitely be advising others to do the same thing.</p>

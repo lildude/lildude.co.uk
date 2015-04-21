@@ -1,0 +1,757 @@
+---
+layout: post
+title: ZFS Cheatsheet
+date: 2006-09-20 12:12:04.000000000 -07:00
+tags:
+- Software
+- Cheatsheet
+type: post
+published: true
+---
+<p><!--redirect_msg--></p>
+<p><strong>Updated on 21 Aug '08</strong> - Added section on sharing information following a comment.<br />
+<strong>Updated on 11 Sept '07</strong> - Updated to show functionality available in Nevada build 71.</p>
+<p>This came round on one of the many internal aliases - Thanks Jim Laurent</p>
+<p>The three primary goals of ZFS are:</p>
+<ol>
+<li>Highly scalable (128-bit) data repository</li>
+<li>Ease of administration</li>
+<li>Guaranteed on disk data integrity</li>
+</ol>
+<p>Source code and community support is available at <a href="http://www.opensolaris.org/os/community/zfs/">http://www.opensolaris.org/os/community/zfs/</a></p>
+<p><!--more--></p>
+<h3>Sample ZFS commands and usage</h3>
+<table>
+<tbody>
+<tr>
+<th>What You Do and See</th>
+<th>Why</th>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+$ man zpool
+$ man zfs
+</pre>
+</td>
+<td class="zfs-right">Get familiar with command structure and options
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+$ su
+Password:
+# cd /
+# mkfile 100m disk1 disk2 disk3 disk5
+# mkfile 50m disk4
+# ls -l disk*
+-rw------T   1 root     root     104857600 Sep 11 12:15 disk1
+-rw------T   1 root     root     104857600 Sep 11 12:15 disk2
+-rw------T   1 root     root     104857600 Sep 11 12:15 disk3
+-rw------T   1 root     root     52428800 Sep 11 12:15 disk4
+-rw------T   1 root     root     104857600 Sep 11 12:15 disk5
+</pre>
+</td>
+<td class="zfs-right">Create some "virtual devices" or vdevs as described in the zpool documentation. These can also be real disk slices if you have them available.
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool create myzfs /disk1 /disk2
+# zpool list
+NAME          SIZE    USED   AVAIL    CAP  HEALTH     ALTROOT
+myzfs         191M     94K    191M     0%  ONLINE     -
+</pre>
+</td>
+<td class="zfs-right">Create a storage pool and check the size and usage.
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          /disk1    ONLINE       0     0     0
+          /disk2    ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Get more detailed status of the zfs storage pool.
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool destroy myzfs
+# zpool list
+no pools available
+</pre>
+</td>
+<td class="zfs-right">Destroy a zfs storage pool
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool create myzfs mirror /disk1 /disk4
+invalid vdev specification
+use '-f' to override the following errors:
+mirror contains devices of different sizes
+</pre>
+</td>
+<td class="zfs-right">Attempt to create a zfs pool with different size vdevs fails.  Using -f options forces it to occur but only uses space allowed by smallest device.
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool create myzfs mirror /disk1 /disk2 /disk3
+# zpool list
+NAME          SIZE    USED   AVAIL    CAP  HEALTH     ALTROOT
+myzfs        95.5M    112K   95.4M     0%  ONLINE     -
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          mirror    ONLINE       0     0     0
+            /disk1  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+            /disk3  ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Create a mirrored storage pool. In this case, a 3 way mirrored storage pool.
+	  </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool detach myzfs /disk3
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          mirror    ONLINE       0     0     0
+            /disk1  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Detach a device from a mirrored pool.
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool attach myzfs /disk1 /disk3
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: resilver completed with 0 errors on Tue Sep 11 13:31:49 2007
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          mirror    ONLINE       0     0     0
+            /disk1  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+            /disk3  ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Attach device to pool. This creates a two-way mirror is the pool is not already a mirror, else it adds another mirror, in this case making it a 3 way mirror.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool remove myzfs /disk3
+cannot remove /disk3: only inactive hot spares can be removed
+# zpool detach myzfs /disk3
+</pre>
+</td>
+<td class="zfs-right">Attempt to remove a device from a pool.  In this case it's a mirror, so we must use "zpool detach".
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool add myzfs spare /disk3
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          mirror    ONLINE       0     0     0
+            /disk1  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+        spares
+          /disk3    AVAIL   
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Add a hot spare to a storage pool.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool remove myzfs /disk3
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          mirror    ONLINE       0     0     0
+            /disk1  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Remove a hot spare from a pool.
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool offline myzfs /disk1
+# zpool status -v
+  pool: myzfs
+ state: DEGRADED
+status: One or more devices has been taken offline by the administrator.
+        Sufficient replicas exist for the pool to continue functioning 
+        in a degraded state.
+action: Online the device using 'zpool online' or replace the device 
+        with 'zpool replace'.
+ scrub: resilver completed with 0 errors on Tue Sep 11 13:39:25 2007
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       DEGRADED     0     0     0
+          mirror    DEGRADED     0     0     0
+            /disk1  OFFLINE      0     0     0
+            /disk2  ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Take the specified device offline. No attempt to read or write to the device will take place until it's brought back online.  Use the -t option to temporarily offline a device.  A reboot will bring the device back online.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool online myzfs /disk1
+# zpool status -v 
+  pool: myzfs
+ state: ONLINE
+ scrub: resilver completed with 0 errors on Tue Sep 11 13:47:14 2007
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          mirror    ONLINE       0     0     0
+            /disk1  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Bring the specified device online.
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool replace myzfs /disk1 /disk3
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: resilver completed with 0 errors on Tue Sep 11 13:25:48 2007
+config:
+
+        NAME        STATE     READ WRITE CKSUM
+        myzfs       ONLINE       0     0     0
+          mirror    ONLINE       0     0     0
+            /disk3  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Replace a disk in a pool with another disk, for example when a disk fails
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool scrub myzfs
+</pre>
+</td>
+<td class="zfs-right">Perform a scrub of the storage pool to verify that it checksums correctly. On mirror or raidz pools, ZFS will automatically repair any damage.<br />
+		<strong>WARNING:</strong> scrubbing is I/O intensive.</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool export myzfs
+# zpool list
+no pools available
+</pre>
+</td>
+<td class="zfs-right">Export a pool from the system for importing on another system.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool import -d / myzfs
+# zpool list
+NAME          SIZE    USED   AVAIL    CAP  HEALTH     ALTROOT
+myzfs        95.5M    114K   95.4M     0%  ONLINE     -
+</pre>
+</td>
+<td class="zfs-right">Import a previously exported storage pool.  If -d is not specified, this command searches /dev/dsk.  As we're using files in this example, we need to specify the directory of the files used by the storage pool.
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool upgrade
+This system is currently running ZFS pool version 8.
+
+All pools are formatted using this version.
+# zpool upgrade -v
+This system is currently running ZFS pool version 8.
+
+The following versions are supported:
+
+VER  DESCRIPTION
+---  --------------------------------------------------------
+ 1   Initial ZFS version
+ 2   Ditto blocks (replicated metadata)
+ 3   Hot spares and double parity RAID-Z
+ 4   zpool history
+ 5   Compression using the gzip algorithm
+ 6   pool properties
+ 7   Separate intent log devices
+ 8   Delegated administration
+For more information on a particular version, including supported 
+releases, see:
+
+http://www.opensolaris.org/os/community/zfs/version/N
+
+Where 'N' is the version number.
+</pre>
+</td>
+<td class="zfs-right">Display pools format version.  The -v flag shows the features supported by the current version.  Use the -a flag to upgrade all pools to the latest on-disk version.  Pools that are upgraded will no longer be accessible to any systems running older versions.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool iostat 5
+               capacity     operations    bandwidth 
+pool         used  avail   read  write   read  write
+----------  -----  -----  -----  -----  -----  -----
+myzfs        112K  95.4M      0      4     26  11.4K
+myzfs        112K  95.4M      0      0      0      0
+myzfs        112K  95.4M      0      0      0      0
+</pre>
+</td>
+<td class="zfs-right">Get I/O statistics for the pool
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs create myzfs/colin
+# df -h
+Filesystem   kbytes    used   avail capacity  Mounted on
+...
+myzfs/colin  64M    18K    63M     1%    /myzfs/colin
+
+</pre>
+</td>
+<td class="zfs-right">Create a file system and check it with standard df -h command. File systems are automatically mounted by default under the /zfs location.  See the Mountpoints section of the zfs man page for more details.
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs list
+NAME         USED   AVAIL  REFER  MOUNTPOINT
+myzfs         139K  63.4M    19K  /myzfs
+myzfs/colin    18K  63.4M    18K  /myzfs/colin
+</pre>
+</td>
+<td class="zfs-right">List current zfs file systems.
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool add myzfs /disk1
+invalid vdev specification
+use '-f' to override the following errors:
+mismatched replication level: pool uses mirror and new vdev is file
+</pre>
+</td>
+<td class="zfs-right">Attempt to add a single vdev to a mirrored set fails
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool add myzfs mirror /disk1 /disk5
+# zpool status -v
+  pool: myzfs
+ state: ONLINE
+ scrub: none requested
+config:
+
+        NAME         STATE     READ WRITE CKSUM
+        myzfs        ONLINE       0     0     0
+          mirror     ONLINE       0     0     0
+            /disk3  ONLINE       0     0     0
+            /disk2  ONLINE       0     0     0
+          mirror     ONLINE       0     0     0
+            /disk1   ONLINE       0     0     0
+            /disk5   ONLINE       0     0     0
+
+errors: No known data errors
+</pre>
+</td>
+<td class="zfs-right">Add a mirrored set of vdevs
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs create myzfs/colin2
+# zfs list
+NAME           USED  AVAIL  REFER  MOUNTPOINT
+myzfs          172K   159M    21K  /myzfs
+myzfs/colin     18K   159M    18K  /myzfs/colin
+myzfs/colin2    18K   159M    18K  /myzfs/colin2
+</pre>
+</td>
+<td class="zfs-right">Create a second file system. Note that both file system show 159M available because no quotas are set.  Each "could" grow to fill the pool.
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs set reservation=20m myzfs/colin
+# zfs list -o reservation
+RESERV
+  none
+   20M
+  none
+</pre>
+</td>
+<td class="zfs-right">Reserve a specified amount of space for a file system ensuring that other users don't take up all the space.
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs set quota=20m myzfs/colin2
+# zfs list -o quota myzfs/colin myzfs/colin2
+QUOTA
+ none
+  20M
+</pre>
+</td>
+<td class="zfs-right">Set and view quotas
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs set compression=on myzfs/colin2
+# zfs list -o compression
+COMPRESS
+     off
+     off
+      on
+</pre>
+</td>
+<td class="zfs-right">Turn on and verify compression
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs set sharenfs=on myzfs/colin2
+# zfs get sharenfs myzfs/colin2 
+NAME  PROPERTY  VALUE     SOURCE
+myzfs/colin2   sharenfs  on        local
+</pre>
+</td>
+<td class="zfs-right">Share a filesystem over NFS. There is no need to modify the /etc/dfs/dfstab as the filesystem will be share automatically on boot.
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs set sharesmb=on myzfs/colin2
+# zfs get sharesmb myzfs/colin2 
+NAME  PROPERTY  VALUE     SOURCE
+myzfs/colin2   sharesmb  on        local
+</pre>
+</td>
+<td class="zfs-right">Share a filesystem over CIFS/SMB.  This will make your ZFS filesystem accessible to Windows users.
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs snapshot myzfs/colin@test
+# zfs list
+NAME               USED  AVAIL  REFER  MOUNTPOINT
+myzfs             20.2M   139M    21K  /myzfs
+myzfs/colin         18K   159M    18K  /myzfs/colin
+myzfs/colin@test      0      -    18K  -
+myzfs/colin2        18K  20.0M    18K  /myzfs/colin2
+</pre>
+</td>
+<td class="zfs-right">Create a snapshot called test.
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs rollback myzfs/colin@test
+</pre>
+</td>
+<td class="zfs-right">Rollback to a snapshot.
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs clone myzfs/colin@test myzfs/colin3
+# zfs list
+NAME               USED  AVAIL  REFER  MOUNTPOINT
+myzfs             20.2M   139M    21K  /myzfs
+myzfs/colin         18K   159M    18K  /myzfs/colin
+myzfs/colin@test      0      -    18K  -
+myzfs/colin2        18K  20.0M    18K  /myzfs/colin2
+myzfs/colin3          0   139M    18K  /myzfs/colin3
+</pre>
+</td>
+<td class="zfs-right">A snapshot is not directly addressable. A clone must be made. The target dataset can be located anywhere in the ZFS hierarchy, and will be created as the same type as the original.
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs destroy myzfs/colin2
+# zfs list
+NAME               USED  AVAIL  REFER  MOUNTPOINT
+myzfs             20.1M   139M    22K  /myzfs
+myzfs/colin         18K   159M    18K  /myzfs/colin
+myzfs/colin@test      0      -    18K  -
+myzfs/colin3          0   139M    18K  /myzfs/colin3
+</pre>
+</td>
+<td class="zfs-right">Destroy a filesystem</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs destroy myzfs/colin 
+cannot destroy 'myzfs/colin': filesystem has children
+use '-r' to destroy the following datasets:
+myzfs/colin@test
+</pre>
+</td>
+<td class="zfs-right">Attempt to destroy a filesystem that had a child.  In this case, the snapshot filesystem. We must either remove the snapshot, or make a clone and promote the clone.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs promote myzfs/colin3
+# zfs list 
+NAME                USED  AVAIL  REFER  MOUNTPOINT
+myzfs              20.1M   139M    21K  /myzfs
+myzfs/colin            0   159M    18K  /myzfs/colin
+myzfs/colin3         18K   139M    18K  /myzfs/colin3
+myzfs/colin3@test      0      -    18K  -
+# zfs destroy myzfs/colin 
+# zfs list
+NAME                USED  AVAIL  REFER  MOUNTPOINT
+myzfs               147K   159M    21K  /myzfs
+myzfs/colin3         18K   159M    18K  /myzfs/colin3
+myzfs/colin3@test      0      -    18K  -
+</pre>
+</td>
+<td class="zfs-right">Promte a clone filesystem to no longer be a dependent on it's "origin" snapshot.  This now associates makes the snapshot a child of the cloned filesystem.  We can then delete the original filesystem.
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs rename myzfs/colin3 myzfs/bob
+# zfs list
+NAME             USED  AVAIL  REFER  MOUNTPOINT
+myzfs            153K   159M    21K  /myzfs
+myzfs/bob         18K   159M    18K  /myzfs/bob
+myzfs/bob@test      0      -    18K  -
+# zfs rename myzfs/bob@test myzfs/bob@newtest
+# zfs list
+NAME                USED  AVAIL  REFER  MOUNTPOINT
+myzfs               146K   159M    20K  /myzfs
+myzfs/bob            18K   159M    18K  /myzfs/bob
+myzfs/bob@newtest      0      -    18K  -
+</pre>
+</td>
+<td class="zfs-right">Rename a filesystem, and separately rename the snapshot.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs get all
+NAME               PROPERTY       VALUE                  SOURCE
+myzfs              type           filesystem             -
+myzfs              creation       Tue Sep 11 14:21 2007  -
+myzfs              used           146K                   -
+myzfs              available      159M                   -
+myzfs              referenced     20K                    -
+[...]
+</pre>
+</td>
+<td class="zfs-right">Display properties for the given datasets. This can be refined further using options.
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool destroy myzfs
+cannot destroy 'myzfs': pool is not empty
+use '-f' to force destruction anyway
+</pre>
+</td>
+<td class="zfs-right">Can't destroy a pool with active filesystems.
+      </td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs unmount myzfs/bob
+# df -h
+myzfs                  159M    20K   159M     1%    /myzfs
+</pre>
+</td>
+<td class="zfs-right">Unmount a ZFS file system
+      </td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zfs mount myzfs/bob
+# df -h
+myzfs                  159M    20K   159M     1%    /myzfs
+myzfs/bob              159M    18K   159M     1%    /myzfs/bob
+</pre>
+</td>
+<td class="zfs-right">Mount a ZFS filesystem.  This is usually automatically done on boot.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zfs send myzfs/bob@newtest | ssh localhost zfs receive myzfs/backup
+# zfs list
+NAME                   USED  AVAIL  REFER  MOUNTPOINT
+myzfs                  172K   159M    20K  /myzfs
+myzfs/backup            18K   159M    18K  /myzfs/backup
+myzfs/backup@newtest      0      -    18K  -
+myzfs/bob               18K   159M    18K  /myzfs/bob
+myzfs/bob@newtest         0      -    18K  -
+</pre>
+</td>
+<td class="zfs-right">Create a stream representation of the snapshot and redirect it to zfs receive. In this example I've redirected to the localhost for illustration purposes.  This can be used to backup to a remote host, or even to a local file.
+		</td>
+</tr>
+<tr class="even">
+<td class="zfs-left">
+<pre lang="text">
+# zpool history
+History for 'myzfs':
+2007-09-11.15:35:50 zpool create myzfs mirror /disk1 /disk2 /disk3
+2007-09-11.15:36:00 zpool detach myzfs /disk3
+2007-09-11.15:36:10 zpool attach myzfs /disk1 /disk3
+2007-09-11.15:36:53 zpool detach myzfs /disk3
+2007-09-11.15:36:59 zpool add myzfs spare /disk3
+2007-09-11.15:37:09 zpool remove myzfs /disk3
+2007-09-11.15:37:18 zpool offline myzfs /disk1
+2007-09-11.15:37:27 zpool online myzfs /disk1
+2007-09-11.15:37:37 zpool replace myzfs /disk1 /disk3
+2007-09-11.15:37:47 zpool scrub myzfs
+2007-09-11.15:37:57 zpool export myzfs
+2007-09-11.15:38:05 zpool import -d / myzfs
+2007-09-11.15:38:52 zfs create myzfs/colin
+2007-09-11.15:39:27 zpool add myzfs mirror /disk1 /disk5
+2007-09-11.15:39:38 zfs create myzfs/colin2
+2007-09-11.15:39:50 zfs set reservation=20m myzfs/colin
+2007-09-11.15:40:18 zfs set quota=20m myzfs/colin2
+2007-09-11.15:40:35 zfs set compression=on myzfs/colin2
+2007-09-11.15:40:48 zfs snapshot myzfs/colin@test
+2007-09-11.15:40:59 zfs rollback myzfs/colin@test
+2007-09-11.15:41:11 zfs clone myzfs/colin@test myzfs/colin3
+2007-09-11.15:41:25 zfs destroy myzfs/colin2
+2007-09-11.15:42:12 zfs promote myzfs/colin3
+2007-09-11.15:42:26 zfs rename myzfs/colin3 myzfs/bob
+2007-09-11.15:42:57 zfs destroy myzfs/colin
+2007-09-11.15:43:23 zfs rename myzfs/bob@test myzfs/bob@newtest
+2007-09-11.15:44:30 zfs receive myzfs/backup
+</pre>
+</td>
+<td class="zfs-right">Display the command history of all storage pools.  This can be limited to a single pool by specifying its name on the command line. The history is only stored for existing pools.  Once you've destroyed the pool, you'll no longer have access to it's history.
+		</td>
+</tr>
+<tr class="odd">
+<td class="zfs-left">
+<pre lang="text">
+# zpool destroy -f myzfs
+# zpool status -v
+no pools available
+</pre>
+</td>
+<td class="zfs-right">Use the -f option to destroy a pool with files systems created.
+      </td>
+</tr>
+</tbody>
+</table>

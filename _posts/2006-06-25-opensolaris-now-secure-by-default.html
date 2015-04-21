@@ -1,0 +1,40 @@
+---
+layout: post
+title: OpenSolaris Now Secure By Default.
+date: 2006-06-25 01:02:41.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- Security
+type: post
+published: true
+---
+<p>snv_42 (Solaris Express b42a) of OpenSolaris has introduced a fantastic change which may surprise a few people performing initial installations (not upgrades).  As of snv_42 <strong>ALL</strong> ...</p>
+<blockquote><p>... network services (except for ssh) that were previously enabled by default, are now either disabled or constrained to respond to local requests only. This change minimizes the attack surface for an installed system and provides a base for customers to enable only the services they require.</p>
+<p>All of the affected services are controlled by the Service Management Framework (SMF). Any individual service can be enabled using the normal svcadm(1M) and svccfg(1M) commands.</p>
+<p>Disabling network services can also be achieved manually by running</p>
+<p>        <code># netservices limited</code></p>
+<p>This can be used on upgraded systems, where no changes are made by default, or to re-establish the hardened state after enabling individual services. Similarly, default services can be enabled as they were in previous Solaris releases by running</p>
+<p>        <code># netservices open</code></p>
+<p>There are two situations where you may see services listening to the network even when running in the "netservices limited" state. First, there are a few non-ON services, primarily for Gnome, that still require modifications to limit them to local requests. These changes will be included in an upcoming build.</p></blockquote>
+<p><small>Source: PSARC 2004/368 Secure by Default (Not public yet, but the <a href="http://www.opensolaris.org/os/community/arc/arc-faq/arc-publish-historical-checklist/table/">request</a> to be has been made)</small></p>
+<p>So what does that mean to the average user?  Well, obvious things like telnet, rlogin and ftp will be disabled for connections from remote systems. The only way you will be able to connect is via ssh.  However, following an initial install, the only way to connect will be via the console as login via ssh for root is disabled by default too (default OpenSSH config).</p>
+<p>More subtle things that will also be disabled will be rpcbind (used by NIS and NFS) and Sendmail will be configured to only receive mail from the local process.  If the newly installed machine is to receive mail from other hosts, it needs to be configured to allow incoming mail as follows:</p>
+<div class="terminal">
+# svccfg -s sendmail setprop config/local_only = false<br />
+# svcadm refresh sendmail<br />
+# svcadm restart sendmail
+</div>
+<p>The only other issue that I envisage new users to encounter is remote X connections are also disabled by default now. If you wish you allow X clients from other systems to work on your display, you will need to enable the X server to listen to the network<br />
+as follows:</p>
+<div class="terminal">
+        # svccfg -s x11-server setprop options/tcp_listen = true<br />
+        # svcadm refresh x11-server
+</div>
+<p>... and restart X server.</p>
+<p>Note that this is not necessary if you use X11 forwarding via <code>ssh -X</code>. </p>
+<p>These changes will eventually make their way into the official Solaris release.</p>
+<p>This is all well and good, but I wonder if or when the OpenSolaris developers will follow <a href="http://mail-index.netbsd.org/current-users/2006/05/29/0005.html">NetBSD's lead</a> and stop shipping Sendmail with Solaris, by default (Ubuntu Linux has never shipped with Sendmail).  Whilst super powerful and highly scalable, Sendmail is a nightmare to configure for the average Joe Schmoe and it notorious for it's vulnerabilities.</p>
+<p><strong>Update</strong>: Check out the <a href="http://www.opensolaris.org/os/community/security/projects/sbd/">project page</a> for more details and a <a href="http://www.opensolaris.org/os/community/security/projects/sbd/sbd_toi.pdf">TOI</a> (Transfer of Information)</p>

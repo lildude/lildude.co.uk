@@ -1,0 +1,25 @@
+---
+layout: post
+title: Synergy On Solaris
+date: 2008-02-28 08:50:36.000000000 -08:00
+tags:
+- Software
+- OpenSolaris
+- Solaris
+- keyboard
+- Nevada
+- mouse
+- Synergy
+type: post
+published: true
+---
+<p>I heard about <a href="http://synergy2.sourceforge.net/">Synergy</a> quite some time ago, but never actually got around to playing with it. Well, yesterday I changed that and took the time to play with it, and I'm quite impressed.</p>
+<p>To quote the Synergy site:</p>
+<blockquote><p>Synergy lets you easily share a single mouse and keyboard between multiple computers with different operating systems, each with its own display, without special hardware. It's intended for users with multiple computers on their desk since each system uses its own monitor(s).</p></blockquote>
+<p>This sounds like my desk.  I use a Sunray (snv_81 on SPARC servers) as my primary working environment and then I have an Ultra 20 (snv_80 on x86) next to me which I use for testing, playing and supporting customers on x86.</p>
+<p><!--more-->There are no precompiled binaries for Solaris so I downloaded the source and compiled it using the GCC supplied with Solaris 10 and later.  The compilation on SPARC and x86 just happened without any problems and in no time at all I had myself 2 SPARC and 2 x86 binaries (one for the synergy client and one for the synergy server).</p>
+<p>I then created a very simple configuration file based of the example provided, specified the relative position of each machine to the other and fired things up.  I chose to run the server process on my Sunray from my home directory and then ran the client process from the x86 host.</p>
+<p>To complicate matters, I run as a normal user on the Sunray and mostly run as root on the Ultra 20 but this wasn't a problem at all.  Synergy quite happily established a connection and I was easily sharing my Sunray keyboard and mouse with my Ultra 20.</p>
+<p>Switching between the displays works perfectly, copy and paste between the two works a treat, and the screen locking works too.  As both sessions don't share the same password (due to different users), the "single unlocking" feature doesn't work, but moving the mouse to the other screen allows me to unlock that display.</p>
+<p>All in all, I'm quite impressed.  In about 15 mins I've gone from 2 physical keyboards and mice hogging valuable desk space to a single keyboard and mouse controlling 2 machines, without a KVM.</p>
+<p>The only thing I need to do now is get things starting automatically and I can get rid of the 2nd keyboard and mouse completely (at the moment they're just hidden behind my monitors).</p>

@@ -1,0 +1,108 @@
+---
+layout: post
+title: New sysidcfg Keywords on Solaris 10 9/10 (aka S10u9)
+date: 1969-12-31 16:00:00.000000000 -08:00
+tags:
+- General
+type: post
+published: true
+---
+<p>With the release of Solaris 10 09/10 (aka S10u9) today, a lot of people will be eager to update, but before you update your jumpstart images and get updating, I thought I'd give you all a heads-up on some new keywords for sysidcfg which you may only discover when your jumpstarts suddenly start going interactive.</p>
+<p>With integration of changes for CR 6952572 and CR 6952415 into S10U9_b10, the following keywords have been introduced to sysidcfg(4) to conform to the corresponding changes with respect to MyOracle Auto Registration for Solaris (PSARC/2010/134)</p>
+<p>If the needed parameters are not specified, the Custom Jumpstart may fall back to the interactive install to get the input from the users.</p>
+<p>Please see the last section for changes to be done to sysidcfg(4) to make the Custom Jumpstart not to go interactive.</p>
+<p>1. New sysidcfg(4) Keywords:</p>
+<p>The following keywords have been introduced to sysidcfg(4)<br />
+ * auto_reg with values<br />
+     * anon<br />
+     * noproxy<br />
+     * all<br />
+     * none<br />
+     * disable<br />
+ * oracle_user<br />
+ * oracle_pw<br />
+ * http_proxy_host<br />
+ * http_proxy_port<br />
+ * http_proxy_user<br />
+ * http_proxy_pw</p>
+<p>2. Details:<br />
+auto_reg:  Used to specify the parameters needed for MyOracle Automatic Registration.<br />
+   anon<br />
+      o anonymous auto registration; MyOracle user/passwd ignored.<br />
+      o if MyOracle keywords specified, they will be ignored.<br />
+      o proxy keywords expected. If not specified in sysidcfg, resort to screens.</p>
+<p>   noproxy<br />
+      o no proxy server information is expected<br />
+      o if proxy keywords not specified, they will be ignored<br />
+      o MyOracle keywords expected. If not specified, resort to screens.</p>
+<p>   all     o both MyOracle and proxy keywords are expected, either through sysidcfg or by screens</p>
+<p>   none    o anonymous registration with no proxy information</p>
+<p>   disable o The auto-registration parameters are not expected. Any data provided/ not provided will be ignored.</p>
+<p>   oracle_user:<br />
+       MyOracle username as string</p>
+<p>   oracle_pw:<br />
+       MyOracle password (clear text)</p>
+<p>   http_proxy_host:<br />
+       a valid hostname of Proxy Serveras string</p>
+<p>   http_proxy_port:<br />
+       a valid port of Proxy Server as number</p>
+<p>   http_proxy_user:<br />
+       proxy username of Proxy Server as string</p>
+<p>   http_proxy_pw:<br />
+       password (clear text) for Proxy Server</p>
+<p>   typical way of sysidcfg entry for auto configuration:<br />
+       auto_reg=[anon|noproxy|all|none|disable] {<br />
+           oracle_user=username1<br />
+           oracle_paswd=password123<br />
+           http_proxy_user=username<br />
+           http_proxy_pw=password123<br />
+           http_proxy_host=sss.com<br />
+           http_proxy_port=8080<br />
+       }<br />
+   If any of the above 6 parameters is needed to have no value optionally, then a null-string "", should be specified in order<br />
+   for install not to go interactive.</p>
+<p>3. Examples:<br />
+   a. Anonymous auto registration<br />
+       auto_reg=anon {<br />
+           http_proxy_user=username<br />
+           http_proxy_pw=password123<br />
+           http_proxy_host=host.com<br />
+           http_proxy_port=8080<br />
+       }</p>
+<p>   b. Not anonymous, all of proxy information should be specified<br />
+       auto_reg=yes {<br />
+           oracle_user=username1<br />
+           oracle_pw=skd1sk$swsk2<br />
+           http_proxy_host=host.com<br />
+           http_proxy_port=8080<br />
+           http_proxy_user=username2<br />
+           http_proxy_pw=password123<br />
+       }</p>
+<p>   c. No proxy information needed to be specified<br />
+       auto_reg=noproxy {<br />
+           oracle_user=username1<br />
+           oracle_pw=passwd1<br />
+       }</p>
+<p>   d. Not anonymous, but only proxy host and port needs to be specified. Proxy doesn't need user/password<br />
+      Note: The screen should be avoided as unspecified parameters are intended to be optional and the<br />
+      process is intended to be non-interactive.<br />
+       auto_reg=all {<br />
+           oracle_user=username1<br />
+           oracle_pw=passwd1<br />
+           http_proxy_host=host.com<br />
+           http_proxy_port=8080<br />
+           http_proxy_user=""<br />
+           http_proxy_pw=""<br />
+       }</p>
+<p>   e. Anonymous registration with no proxy<br />
+       auto_reg=none</p>
+<p>   f. No auto-registration. Do not expect any parameter.<br />
+       auto_reg=disable</p>
+<p>4. Information for the internal development environment<br />
+If any of the auto_reg modes like anon, yes, noproxy and all the required parameters are not specified, the install will fallback to the interactive install.<br />
+To avoid this,<br />
+  Either add the following line in sysidcfg(4):<br />
+      auto_reg=none or auto_reg=disable<br />
+  or<br />
+  In any selected mode, specify the null-string as the value for the required parameter.</p>
+<p>More details can be found at http://docsview.sfbay.sun.com/app/docs/doc/817-1985/autoreg-1?a=view</p>

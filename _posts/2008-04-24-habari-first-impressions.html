@@ -1,0 +1,20 @@
+---
+layout: post
+title: 'Habari: First Impressions'
+date: 2008-04-24 01:40:47.000000000 -07:00
+tags:
+- Software
+- Internet
+- memory
+- blog
+- impressions
+- Habari
+type: post
+published: true
+---
+<p>After my initial thought of checking out <a href="http://www.habariproject.org/">Habari</a>, and the encouraging <a href="http://lildude.co.uk/update-on-wordpress-autoload-option-experimentation/#comment-5584">comment</a> from <a href="http://skippy.net/">Skippy</a>, I decided to go ahead and investigate Habari for myself, so I <a href="http://habariproject.org/en/download">downloaded</a> Habari 0.4.1 and took it for a spin.</p>
+<p><!--more-->The download and installation process was a breeze and in no time I was up and running with only one little glitch - the themes page in the admin interface reported an error due to the lack of <code>GLOB_BRACE</code> support in the <a href="http://www.php.net/glob">glob()</a> function on non-GNU systems - I dev, test and host on OpenSolaris.  I resolved this by changing the screenshot line in system/classes/themes.php as per the last comment in Habari bug <a href="http://trac.habariproject.org/habari/ticket/182">#182</a> (it was the quickest and simplest solution).</p>
+<p>With that out of the way, I was ready to get reading and playing.</p>
+<p>Well, I'm impressed.  Habari seems to be very well coded (thanks to the use of OO and good <a href="http://wiki.habariproject.org/en/Coding_Standards">coding practices</a>) and seems to be low on resource hogging too.  The directory structure has been well thought out so upgrading shouldn't be much of a problem.</p>
+<p>There are two limitations that I can immediately see that are stopping me from switching whole heartedly (for the moment): the lack of sub-pages and WP 2.5 import functionality.  I don't think these will be a major issue to resolve: I don't think it'll be long before the WP 2.3.1 import plugin (provided with Habari) is updated to support WP 2.5 and it seems easy enough to add the sub-page functionality via a plugin, so I may just do that and create my first Habari plugin that adds sub-page functionality (I've got to learn the ins and outs of the plugin system first ;-) ).</p>
+<p>I'm sure I'll encounter other limitations as I progress, but for the moment, I'm quite impressed (this may be slightly influenced by the never ending "500 Internal Server" errors I keep getting from Wordpress at the moment (<a href="http://lildude.co.uk/wordpress-is-a-memory-hog/">cos it's a memory hog</a>)).</p>

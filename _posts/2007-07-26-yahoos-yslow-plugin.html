@@ -1,0 +1,23 @@
+---
+layout: post
+title: Yahoo's YSlow Plugin
+date: 2007-07-26 08:31:37.000000000 -07:00
+tags:
+- Software
+- Firefox
+- Internet
+- performance
+- Firebug
+- YSlow
+type: post
+published: true
+---
+<p>First, some clarification.  <a href="http://developer.yahoo.com/yslow/">YSlow</a> is a pluggin for <a href="http://www.getfirebug.com/">Fire<strong>bug</strong></a>, not Fire<strong>fox</strong>.  It's installed as a Firefox pluggin, but it actually enhances Firebug.  Accordingly it requires Firebug to be installed.</p>
+<p>YSlow adds a new YSlow tab to Firebug and in this tab it rates your page on the scale A to F, based on compliance with <a href="http://developer.yahoo.com/performance/rules.html">Yahoo's performance rules</a> and provides a link to each rule, and lists each component it believes could be improved. Each of these "rules" have their own weighting too.</p>
+<p>This all sounds good, so I thought I'd put it to the test against my sites to see what it had to offer, and see what changes I could make to improve the overall impression of the performance of my sites.</p>
+<p><!--more-->Well, unsurprisingly, I had a fair amount of work to do, and I still do. However, in a matter of minutes, I was able to get both sites up into the mid to upper 70's with a quick bit of code tidying and manipulation to set things like the HTTP Expires headers, disable ETags, move my non-essential Javascript files to the bottom and enable compression, where possible. Getting into the 80's is going to require a bit more work, but I'll get there.</p>
+<p>One thing is for certain, I'll never get to 100% based on the default tests.  As a lowly individual, I don't think I'll EVER have the need for a CDN, so this test will never make it to an A.  I can however change the tests used in <code>about:config</code> to exclude this test or change it's weighting, if I so wish, thus getting me a lot closer to 100%.  Would this be cheating myself?</p>
+<p>I'm not sure if things are that much quicker (I forgot to take note of the numbers before my changes), but it is kind of nice to know that I'm doing things just a little bit better.</p>
+<p>The one thing I still don't understand is why ETags are discouraged by this tool, but I'm sure I'll find out soon enough.</p>
+<p>If you want some fancy screenshots to oggle over and to find out a bit more about the plugin before you play, you can find a review of the actual plugin over at <a href="http://www.phpied.com/yslow-performance-extension-for-firebug/">phpied.com</a> and check out the actual <a href="http://developer.yahoo.com/yslow/">YSlow</a> page.</p>
+<p><strong>Update:</strong> Moments after posting this, I make another tweak and this site is now getting a score of 81 (B).</p>

@@ -1,0 +1,33 @@
+---
+layout: post
+title: Bye Cisco VPNClient, Hello Shimo
+date: 2007-11-25 06:19:21.000000000 -08:00
+tags:
+- Security
+- VPN
+- Shimo
+- Cisco
+type: post
+published: true
+---
+<p>Our VPN solution at work, like many places is the Cisco VPN 3000 solution.  Whilst it works, it has a very very ugly Mac frontend in the form of Cisco's own VPNClient:</p>
+<p><img class="center" src="/assets/vpnclient.jpg" alt="Cisco VPNClient" title="Cisco VPNClient" /></p>
+<p>As you can see, it's quite horrid.  It's also a pain the arse to have to open this everytime I want to connect to the work VPN.  In my never ending quest to improve my work flow, I discovered a great little frontend for the Cisco VPN connections: <a href="http://projects.nexumoja.org/Shimo/">Shimo</a>.</p>
+<p><!--more-->Shimo is a simple, quick and efficient frontend for the Cisco VPN3000 that runs in the menu bar.  It takes full advantage of Apple's Keychain functionality (if applicable), Growl and allows you to connect and disconnect from the VPN with a quick keyboard shortcut, or simple mouse click.</p>
+<p>Using Shimo is easy:</p>
+<ol>
+<li>Install the Cisco VPNClient (4.9.00.0050 is recommended) if you haven't already and ensure you can connect to your VPN successfully. Unfortunately, you do still need this part.  Shimo is just a frontend.</li>
+<li><a href="http://www.nexumoja.org/downloads/1/">Download and install Shimo</a> - mount the disk image and drag the icon to your Applications folder.</li>
+<li>Run Shimo.  This will place a tunnel/doorway icon on your menu bar.</li>
+<li>Configure Shimo to suit your needs but clicking the new icon in your menu bar and select preferences:
+<p><img class="center" src="/assets/shimo-prefs.jpg" alt="Shimo Preferences" title="Shimo Preferences" /></p>
+<p>The only thing I needed to do was enable "Launch on Startup" and set my keyboard short cut.  My profiles were automatically imported from the VPNClient.</li>
+<p><!--wsa:LongPostMiddle--></p>
+<li>Now connect to your VPN either with your keyboard shortcut or clicking the tunnel/door icon and select "Connect":
+<p><img class="center" src="/assets/shimo-menu.jpg" alt="Shimo Menubar" title="Shimo Menubar" />
+</li>
+</ol>
+<p>That's it.  If, like us, you use a token card and are prompted for a password by the VPNClient, have no fear as Shimo obliges and does the same thing.</p>
+<p>For those obsessed with stats, Shimo provides quite a nice little statistics summary too:</p>
+<p><img class="center" src="/assets/shimo-stats.jpg" alt="Shimo Statistics" title="Shimo Statistics" /></p>
+<p>I would say it would be great if Cisco updated their VPN client to actually look like a Mac application and take advantage of the OS features, but I don't really care anymore.  Shimo does everything I need and does it simply and well.</p>

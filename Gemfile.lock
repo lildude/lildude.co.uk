@@ -1,3 +1,11 @@
+PATH
+  remote: /Users/lildude/Development/jekyll-import
+  specs:
+    jekyll-import (0.4.1)
+      fastercsv
+      jekyll (>= 1.4)
+      nokogiri
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -20,6 +28,7 @@ GEM
     colorator (0.1)
     execjs (2.5.2)
     fast-stemmer (1.0.2)
+    fastercsv (1.5.5)
     ffi (1.9.8)
     gemoji (2.1.0)
     github-pages (23)
@@ -38,6 +47,7 @@ GEM
       rdiscount (= 2.1.7)
       redcarpet (= 3.1.2)
     hitimes (1.2.2)
+    hpricot (0.8.6)
     html-pipeline (1.9.0)
       activesupport (>= 2)
       nokogiri (~> 1.4)
@@ -105,6 +115,7 @@ GEM
       smusher
     safe_yaml (1.0.4)
     sass (3.4.13)
+    sequel (4.21.0)
     smusher (0.4.9)
       httpclient (>= 2.2)
       json
@@ -124,6 +135,9 @@ PLATFORMS
 
 DEPENDENCIES
   github-pages (= 23)
+  hpricot
+  jekyll-import!
   jemoji
   reduce
+  sequel
   stringex

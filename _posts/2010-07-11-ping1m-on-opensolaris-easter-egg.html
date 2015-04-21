@@ -1,0 +1,42 @@
+---
+layout: post
+title: Ping(1M) on OpenSolaris Easter Egg
+date: 2010-07-11 11:12:43.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- Solaris
+- Network
+- ping
+- easter egg
+type: post
+published: true
+---
+<p>It's amazing what you discover whilst working a weekend shift with a bit of time to spare.  Whilst perusing through the shell scripts used as part of the Sun in-house built VPN solution (Oracle are giving it the chop in favour of Cisco SSL AnyConnect client which doesn't officially work on Solaris x86 - it does with the help of <a href="http://www.infradead.org/openconnect/">openconnect</a> though ;-) ), I discovered a little easter egg in ping(1M).</p>
+<p>Fire up a terminal and ping a host:</p>
+<div class="terminal">
+<pre>$ ping google.com             
+google.com is alive
+$
+</pre>
+</div>
+<p>Nothing fancy there and exactly as I expected. However, if you're a Linux/Mac user, this is NOT what you were expecting.  So lets make the Linux/Mac users happy with our new little <a href="http://src.opensolaris.org/source/xref/onnv/onnv-gate/usr/src/cmd/cmd-inet/usr.sbin/ping/ping.c#498">easter egg</a>...</p>
+<div class="terminal">
+<pre>$ export MACHINE_THAT_GOES_PING=1
+$ ping google.com                
+PING google.com: 56 data bytes
+64 bytes from ww-in-f104.1e100.net (209.85.229.104): icmp_seq=0. time=23.248 ms
+64 bytes from ww-in-f104.1e100.net (209.85.229.104): icmp_seq=1. time=50.359 ms
+64 bytes from ww-in-f104.1e100.net (209.85.229.104): icmp_seq=2. time=25.421 ms
+64 bytes from ww-in-f104.1e100.net (209.85.229.104): icmp_seq=3. time=50.336 ms
+64 bytes from ww-in-f104.1e100.net (209.85.229.104): icmp_seq=4. time=11.788 ms
+^C
+----google.com PING Statistics----
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip (ms)  min/avg/max/stddev = 11.788/32.230/50.359/17.331
+$
+</pre>
+</div>
+<p>Now that looks familiar to Linux/Mac users and Solaris users will recognise this as the output you get when using the <code>-s</code> flag.</p>
+<p>So, whilst not really anything amazing, this little undocumented environment variable allows you to get the output Linux/Mac users are used to without the need for setting up an alias of continually remembering to add the <code>-s</code> flag.</p>
+<p>I've only tested this on OpenSolaris so your experience may vary.</p>

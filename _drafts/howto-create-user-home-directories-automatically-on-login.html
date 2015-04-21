@@ -1,0 +1,10 @@
+---
+layout: post
+title: 'HOWTO: Create user home directories automatically on login'
+date: 2012-11-05 10:21:36.000000000 -08:00
+tags: []
+type: post
+published: true
+---
+<p>We haven't implemented this into Solaris yet, however they should be able to compile this PAM module on Solaris with relative ease.</p>
+<p>There is a method of doing this natively on Solaris and it takes advantage of autmount.  See the workaround in CR 6211761 (an RFE requesting pam_mkhomedir for Solaris) for details.</p>

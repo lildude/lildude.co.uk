@@ -1,0 +1,32 @@
+---
+layout: post
+title: Google Browser Sync
+date: 2006-06-17 02:09:51.000000000 -07:00
+tags:
+- Software
+- Google
+- plugin
+- Firefox
+- Mozilla
+- Internet
+type: post
+published: true
+---
+<p>Google has just released a new Firefox extension that, as they quote, </p>
+<blockquote><p>...continuously synchronises your browser settings - including bookmarks, history, persistent cookies, and save passwords - across your computers.</p></blockquote>
+<p>They're very good to point out how things are encrypted so it's harder for some hacker to get your persistent cookies etc, but one thing that the FAQ doesn't actually detail is what happens to my bookmarks etc on the other computer when I first install the plugin?</p>
+<p>For example, I have computer A at work, with loads upon loads of bookmarks and persistent cookies, and I have my computer B at home with not as many, but a fair few duplicates and different bookmarks. What happens if I install the plugin on A and sync B, or vice versa?</p>
+<p>Well, as the FAQ don't answer this question, I did a test of my own.  I installed the plugin on my Mac Mini (PPC)... this seemed to go well until it wanted to download something from the server and it seemed to hang for ever.  I cancelled this, allowed Firefox to start normally and sure enough, the plugin has been installed, it was just not "connected" in.  I got it to "Reconnect" and it appeared OK.</p>
+<p>I then went onto install the plugin on my laptop (I tested this on both Windows XP and OpenSolaris), entered the login details I setup when installing the plugin on my Mac and sat back and watched both the laptop and the Mac.  </p>
+<p>The first thing I noticed was that it logged me out on the Mac when the plugin logged in on the laptop - this will prove useful if I actually decide to go ahead with this as I leave my browser running 24/7 at work.</p>
+<p>It then took what seemed like forever to import and make all the necessary changes, at the same time maxing out the CPU.  Once done, my question had been answered.</p>
+<p>The plugin appears to be smart enough to detect duplicates (I only checked bookmarks) and seemed to successfully merge them, however it did seem to screw up the ordering a bit.  It didn't seem to use any ordering logic when merging the two.</p>
+<p>Once I was happy my Mac bookmarks were on the laptop, I made some changes on the laptop and sync'd back... this seemed to work fine too.</p>
+<p>All in all, this is potentially a very useful plugin, I've just got a couple of gripes:</p>
+<ul>
+<li>Resyncing can dramatically slow down the browser start time</li>
+<li>Resyncing can force Firefox to use as much CPU as it can - the CPU maxed out on both the laptop and the Mac on several occassions</li>
+<li>There is no selective bookmark syncing</li>
+<li>The merging order logic is a bit weird</li>
+</ul>
+<p>I've not tested to see if any bookmarks have gone AWOL, but I'm sure as I use this plugin more, I'll soon find out.</p>

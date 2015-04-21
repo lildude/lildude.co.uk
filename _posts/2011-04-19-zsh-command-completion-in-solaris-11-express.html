@@ -1,0 +1,41 @@
+---
+layout: post
+title: ZSH Command Completion in Solaris 11 Express
+date: 2011-04-19 09:37:26.000000000 -07:00
+tags:
+- Solaris
+- zsh
+- Solaris 11 Express
+- autocomplete
+type: post
+published: true
+---
+<p>I use zsh as my preferred shell.  It's been a while since I last updated my zsh profile and thought I'd look into implementing some useful command completion to try and make my life easier.  I was particularly interested in zfs(1M), zoneadm(1M), pkg(1M), svcs(1M) and svccfg(1M). Well, imagine my surprise when I discovered most of my work has already been done for me.  </p>
+<p>Check out the ZSH auto-completion for Solaris specific commands now available in Solaris 11 Express:</p>
+<pre class="terminal">$ ls -l /usr/share/zsh/4.3.10/functions/Completion/Solaris/
+total 70
+-r--r--r-- 1 root bin  1500 2010-11-05 15:02 _coreadm
+-r--r--r-- 1 root bin  1203 2010-11-05 15:02 _dhcpinfo
+-r--r--r-- 1 root bin 20003 2010-11-05 15:02 _dladm
+-r--r--r-- 1 root bin   596 2010-11-05 15:02 _dumpadm
+-r--r--r-- 1 root bin  3148 2010-11-05 15:02 _flowadm
+-r--r--r-- 1 root bin   805 2010-11-05 15:02 _gcore
+-r--r--r-- 1 root bin   406 2010-11-05 15:02 _inetadm
+-r--r--r-- 1 root bin  2276 2010-11-05 15:02 _netstat
+-r--r--r-- 1 root bin   670 2010-11-05 15:02 _pfexec
+-r--r--r-- 1 root bin  8481 2010-11-05 15:02 _pkg5
+-r--r--r-- 1 root bin  1809 2010-11-05 15:02 _prstat
+-r--r--r-- 1 root bin  3330 2010-11-05 15:02 _ps
+-r--r--r-- 1 root bin   449 2010-11-05 15:02 _ptree
+-r--r--r-- 1 root bin   228 2010-11-05 15:02 _savecore
+-r--r--r-- 1 root bin  1842 2010-11-05 15:02 _snoop
+-r--r--r-- 1 root bin  1503 2010-11-05 15:02 _svcadm
+-r--r--r-- 1 root bin  1667 2010-11-05 15:02 _svccfg
+-r--r--r-- 1 root bin   634 2010-11-05 15:02 _svcprop
+-r--r--r-- 1 root bin  1029 2010-11-05 15:02 _svcs
+-r--r--r-- 1 root bin  2684 2010-11-05 15:02 _svcs_fmri
+-r--r--r-- 1 root bin   300 2010-11-05 15:02 _zlogin
+$ </pre>
+<p>There is also ZFS specific auto-completion, but sadly no zoneadm.  I'll look to implement this myself.</p>
+<p>This comes from Solaris 11 Express with SRU5 applied, though from the date stamp of these files, they've been there for quite some time.  A quick search indicates these went into snv_134 so were in place long before Solaris 11 Express was released.</p>
+<p>There don't appear to be equivalent files for bash, but I guess that's probably because <a href="http://www.opensolaris.org/jive/thread.jspa?threadID=105996&tstart=0" target="_blank">Bart only created zsh auto-complete scripts</a> and then raised <a href="https://defect.opensolaris.org/bz/show_bug.cgi?id=9657" target="_blank">bug 9657</a> asking for them to be integrated into Solaris, which they now have been. Thanks Bart. You've saved me a lot of time.</p>

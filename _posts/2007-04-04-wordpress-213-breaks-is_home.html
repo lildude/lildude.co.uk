@@ -1,0 +1,16 @@
+---
+layout: post
+title: Wordpress 2.1.3 Breaks is_home()
+date: 2007-04-04 05:14:46.000000000 -07:00
+tags:
+- Software
+- Wordpress
+- Internet
+type: post
+published: true
+---
+<p>I spent the best part of this morning upgrading Wordpress on this and my personal site.  My personal site upgraded without any problems (that I've noticed), however I encountered problems here.</p>
+<p>Firstly, I lost all of my pages.  No idea where they went, but they just disappeared.  Luckily, I only have a few so they were easy to re-create.</p>
+<p>The next problem I encountered is with my theme.  It appears that if you call query_posts() within "the loop" (for multiple loops), then is_home() no longer returns TRUE when you're on the home page. This was quickly resolved by implementing one of the other methods for using multiple loops.</p>
+<p>Whilst this is fine for me, I think this is a bit of a silly change for non-techie people.  Suddenly their themes are not going to work as they did before, and they're not going to know why. It's also an undocumented change in behaviour.</p>
+<p>If you spot any problems, please let me know in the comments.</p>

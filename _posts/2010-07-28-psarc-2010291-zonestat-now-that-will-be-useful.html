@@ -1,0 +1,62 @@
+---
+layout: post
+title: 'PSARC 2010/291: zonestat - Now That Will be Useful'
+date: 2010-07-28 08:44:54.000000000 -07:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- zones
+- monitoring
+- PSARC
+- zonestat
+type: post
+published: true
+---
+<p>I've just noticed a new PSARC case, <a href="http://arc.opensolaris.org/caselog/PSARC/2010/291/">PSARC 2010/291: zonestat</a>,  that I know a lot of people will find very very useful. </p>
+<p>To quote the summary from the PSARC:</p>
+<blockquote><pre>This fast-track proposes the addition of a command line tool to
+facilitate the observation of system resources consumed by Solaris
+Zones.  The tool is specifically designed to observe the following:
+
+	1.  Memory and cpu utilization of zones.
+	2.  Utilization of resource control limits.
+	3.  Resource utilization versus physical resources and
+	    versus configured limits.
+	4.  Various cpu-related resource partitioning schemes,
+	    such as processor sets, pools, fair share scheduler,
+	    and cpu-caps.
+	5.  Total utilization and the per-zone break-down.
+	6.  Aggregate, average, and peak utilization over specified
+	    time periods.</pre>
+</blockquote>
+<p>The PSARC goes on to explain how this would done.  Essentially, it would comprise three components: </p>
+<ol>
+<li>A zones monitoring daemon: <code>zonestatd(1m)</code> that would run in the global zone and perform monitoring of the system and zones.  It will also respond to queries from the global zone and non-global zones and provide the requested utilisation information.</li>
+<li>A private zones monitoring library: <code>libzonestat.so(3lib)</code> that would be used by the CLI component to query the monitoring daemon.</li>
+<li>A zones monitoring CLI: <code>zonestat(1)</code> that administrators would use to display zone utilisation information.
+<p>The PSARC includes a few usage examples, with this being the one I think most people will be using:</p>
+<pre>Example 1: Summary of cpu and memory usage over a 5 second interval:
+# zonestat 5 1
+    SUMMARY
+                        -----CPU------------- ----PHYSICAL--- ----VIRTUAL----
+                   ZONE USED %PART %CAP %SHRU USED  PCT  %CAP  USED  PCT %CAP
+                [total] 9.74   30%    -     - 7576M  23%    - 11.6G  24%    -
+               [system] 0.28  0.8%    -     - 6535M  19%    - 10.4G  21%    -
+                 global 9.10   28%    -     -  272M 0.8%    -  366M 0.7%    -
+              kodiak-ab 0.32  1.0%    -     -  256M 0.7%    -  265M 0.5%    -
+              kodiak-dp 0.00  0.0%    -     - 77.6M 0.2%    - 71.1M 0.1%    -
+        kodiak-gjelinek 0.00  0.0%    -     - 58.7M 0.1%    - 59.3M 0.1%    -
+             kodiak-edp 0.00  0.0%    -     - 53.0M 0.1%    - 58.9M 0.1%    -
+         kodiak-johnlev 0.00  0.0%    -     - 51.9M 0.1%    - 57.4M 0.1%    -
+          kodiak-jordan 0.00  0.0%    -     - 51.7M 0.1%    - 56.8M 0.1%    -
+           kodiak-steve 0.00  0.0%    -     - 51.5M 0.1%    - 56.2M 0.1%    -
+           kodiak-susan 0.00  0.0%    -     - 48.9M 0.1%    - 55.7M 0.1%    -
+        kodiak-batschul 0.00  0.0%    -     - 48.5M 0.1%    - 49.5M 0.1%    -
+         kodiak-garypen 0.00  0.0%    -     - 46.3M 0.1%    - 49.5M 0.1%    -
+             kodiak-rie 0.00  0.0%    -     - 22.7M 0.0%    - 49.4M 0.1%    -
+</pre>
+<p>Wow! A single simple command to assess the current utilisation of ALL zones on a system. That is going to prove to be extremely useful.</li>
+</ol>
+<p>The zonestat command would also have the ability to generate machine parseable reports for a definable period of time.  Provided this doesn't have too much of an impact on performance, which I doubt it will, I can see this last usage being used a fair bit by service providers.</p>
+<p>Have a read through the details of the <a href="http://arc.opensolaris.org/caselog/PSARC/2010/291/20100726_stephen.lawrence">proposal</a> and then cross your fingers and hope this gets the fast track approval being requested.  This will be a very very useful tool and hopefully we'll see it in the not-too-distant future.</p>

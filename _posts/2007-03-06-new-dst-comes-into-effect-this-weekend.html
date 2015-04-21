@@ -1,0 +1,27 @@
+---
+layout: post
+title: New DST Comes Into Effect This Weekend
+date: 2007-03-06 03:33:22.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- Solaris
+- In The News
+- DST
+type: post
+published: true
+---
+<p>Just a quick reminder to let you know that the new daylight saving times come into effect in the US, Canada and Western Australia this weekend.</p>
+<p>If you're running Solaris 8, 9 or 10, head on over to <a href="http://sunsolve.sun.com">Sunsolve</a> and update your patches.  If you're running Solaris 2.5.1, 2.6 or 7, best get onto the phone to your local support centre as the patches for these releases are gonna cost you (cos these OS's are way past their <acronym title="End of Support Life">EOSL</acronym>).</p>
+<p><!--more--><br />
+If you're running OpenSolaris, then provided you're running build 31 or later, you'll be OK, that is unless you're in the Bahamas (I wish) in which case you'll need build 57 or later.  If not, upgrade. Anyway, if you're playing with cutting edge software, why aren't you taking advantage of all the cool new features?</p>
+<p>And for the paranoid, you can check if your host will adjust it's representation of the time correctly by running <code>zdump(1M)</code> against your timezone (ignore the 1st line - this is when you ran the command):</p>
+<div class="terminal"><code><span style="color: #0000ff">[devon:~] $</span> zdump -v US/Pacific | grep 2007<br />
+US/Pacific  Tue Mar  6 10:20:17 2007 UTC = Tue Mar  6 02:20:17 2007 PST isdst=0<br />
+US/Pacific  Sun Mar 11 09:59:59 2007 UTC = Sun Mar 11 01:59:59 2007 PST isdst=0<br />
+US/Pacific  Sun Mar 11 10:00:00 2007 UTC = Sun Mar 11 03:00:00 2007 PDT isdst=1<br />
+US/Pacific  Sun Nov  4 08:59:59 2007 UTC = Sun Nov  4 01:59:59 2007 PDT isdst=1<br />
+US/Pacific  Sun Nov  4 09:00:00 2007 UTC = Sun Nov  4 01:00:00 2007 PST isdst=0<br />
+<span style="color: #0000ff">[devon:~] $</span></code></div>
+<p>And don't forget your other operating systems.  Whilst we'd all like to think there's only Solaris, other lesser ;-) operating systems do exist.</p>

@@ -1,0 +1,24 @@
+---
+layout: post
+title: OpenSolaris snv_108 on VirtualBox
+date: 2009-02-26 10:52:07.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- VirtualBox
+- GUI
+- xorg
+- snv_108
+type: post
+published: true
+---
+<p>The OpenSolaris/dev repository was updated yesterday to reflect the changes in snv_108 for both x86/x64 and SPARC platforms (<a href="http://mail.opensolaris.org/pipermail/opensolaris-announce/2009-February/002055.html">announcement</a>).</p>
+<p>I updated my VirtualBox instance this morning, which went without a hitch until it came to rebooting.  The OS rebooted without any problems, however it didn't seem to get beyond the "loading" screen that appears just after Grub. It would however boot quite successfully into multi-user mode when in text-mode.  I poked and prodded and for the life of me, I couldn't find any problems, so I went back to the announcement email and I found the cause of my problems there:</p>
+<blockquote><p>Known issues for users running OpenSolaris as a VirtualBox guest<br />
+===============================================================<br />
+The Xorg driver included with the VirtualBox Guest Additions is incompatible with the 1.5.3 version of<br />
+the Xorg server included in this build.  VirtualBox users should remove the VirtualBox guest additions<br />
+prior to updating to this build.</p></blockquote>
+<p>Sure enough, removing the guest additions pkg resolved the issue. OpenSolaris now loads the graphical interface within VirtualBox without any issues.  </p>
+<p>Sadly, I don't have all the functionality the guest additions provide, but it's at least it's usable now.  I imagine VirtualBox will be updated soon to include support for this rev of Xorg.</p>

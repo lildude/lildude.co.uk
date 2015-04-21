@@ -1,0 +1,22 @@
+---
+layout: post
+title: Updating Solaris 11 With an SRU via ISO is So Easy
+date: 2011-11-29 09:44:59.000000000 -08:00
+tags:
+- update
+- Solaris 11
+- SRU
+type: post
+published: true
+---
+<p>Today I had the pleasure of testing updating one of my Solaris 11 virtual machine images to <a href="https://support.oracle.com/oip/faces/secure/km/DocumentDisplay.jspx?id=1378004.1" target="_blank">SRU1</a> using the <a href="https://support.oracle.com/CSP/ui/flash.html#tab=PatchHomePage%28page=PatchHomePage&amp;id=%28%29%29,%28page=PatchSearchResultsHome&id=%28search=%3CSearch%3E%0A%20%20%3CFilter%20name=%22product%22%20op=%22IS%22%20value=%2217450%22%20type=%22product%22/%3E%0A%20%20%3CFilter%20name=%22release%22%20op=%22IS%22%20value=%22400000110000%22%20type=%22release%22/%3E%0A%20%20%3CFilter%20name=%22platform%22%20op=%22IS%22%20value=%22%22%20type=%22platform%22/%3E%0A%3C/Search%3E&flag=search&from=bookmark%29%29" target="_blank">ISO image</a> for a colleague and I'm pleased to say it was incredibly easy.</p>
+<p>Once downloaded, it was a simple matter of following the instructions in the <a href="https://updates.oracle.com/Orion/Services/download?type=readme&amp;aru=14276084" target="_blank">README</a> file for the download...</p>
+<blockquote><p>Quick Start Guide<br />
+The basic steps to use the repository copy for updating your local system is as follows. Note that "sruN" represents the number of this SRU (e.g. sru1):</p>
+<p>    1. Mount the ISO image as a filesystem:</p>
+<p>        <code>$ mount -F hsfs {full_path_to}/sol-11-1111-sruN-incr-repo.iso /mnt</code></p>
+<p>    2. Add the publisher to the system:</p>
+<p>        <code>$ pkg set-publisher -G '*' -g file:///mnt/repo solaris</code></p>
+<p>    3. Perform the upgrade:</p>
+<p>        <code>$ pkg update</code></p></blockquote>
+<p>Of course, updating using the online method directly from the Oracle <a href="https://pkg.oracle.com/solaris/support" target="_blank">support repository</a> (See doc <a href="https://support.oracle.com/CSP/main/article?cmd=show&amp;type=NOT&amp;doctype=REFERENCE&id=1021281.1" target="_blank">1021281.1</a> for how to get access) was just as easy.</p>

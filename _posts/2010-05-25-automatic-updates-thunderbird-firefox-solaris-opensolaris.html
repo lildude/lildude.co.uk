@@ -1,0 +1,57 @@
+---
+layout: post
+title: Automatic Updates for Thunderbird and Firefox on Solaris and OpenSolaris
+date: 2010-05-25 05:20:30.000000000 -07:00
+tags:
+- Software
+- OpenSolaris
+- Solaris
+- update
+- Firefox
+- Mozilla
+- Thunderbird
+- automatic
+type: post
+published: true
+---
+<p>As with Linux, <a href="http://getfirefox.com">Firefox</a> and <a href="http://www.mozillamessaging.com/">Thunderbird</a> are available for <a href="http://www.oracle.com/solaris">Solaris</a> and <a href="http://opensolaris.com">OpenSolaris</a> in a variety of forms:  supplied with the OS, installed separately from a pkg and installed separately from a tarball (both available from Mozilla.org). Of these, the only way you can get any sort of automatic update is with the first option: via an OS update and this tends to lag behind the available releases by quite some margin.  Well, that's about to change, at least for some people.</p>
+<p>I'll get straight into the technical details and leave the background behind all of this to the very <a href="#background">end</a>.</p>
+<p>This post and the accompanying code was inspired by <a href="http://developer-stage.mozilla.org/en/Setting_up_an_update_server">this article on Mozilla Developer Center</a>.</p>
+<p><ins datetime="2010-05-26T07:14:25+00:00"><strong>Update</strong></ins>: Ooops, it would seem the automatic update <strong>DOES</strong> work by default for the tarball downloads, it just doesn't offer an automatic upgrade between 3.5.x and 3.6.x as I was testing.  I'll leave the rest of this post as is as an "education" for those wanting to implement their own internal crude update system.<br />
+<!--more --></p>
+<h2>Limitations</h2>
+<p>Lets get this out of the way early, and put it in lights:  </p>
+<div class="alert">This method only works for tarball installs in which the user running Firefox/Thunderbird and performing the update has write permissions to the directory containing the Firefox/Thunderbird installation, like their home directory.</div>
+<p>If you don't meet this single one requirement, then the rest of this post is purely informational to you.</p>
+<h2>Requirements</h2>
+<p>The requirements are quite modest.  All you need is a web server capable of running PHP (with <a href="http://php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen">allow_url_fopen</a> enabled) and ideally with HTTPS/SSL support.  This web server can be on an internal private network, but it needs to be able to communicate with the Mozilla.org servers.</p>
+<p>The HTTPS/SSL requirement is not essential, but highly recommended if your web server will be accessed across a public network... </p>
+<blockquote><p>Every user will ping the update server regularly whether there's an update or not (once a day by default). Any user who connects from outside your protected network - particularly from a public WiFi hotspot - can potentially have their connection hijacked and be fed a malicious update. SSL protects against this attack. The update.xml files are small, don't sweat the SSL overhead.</p>
+<p>The large updates themselves can be safely served from a non-secure server because the update files contain a hash that the client will verify. The hash can be trusted only if the update.xml is served securely.<br />
+&mdash; <cite><a href="http://developer-stage.mozilla.org/en/Setting_up_an_update_server">MDC - Setting up an update server</a></cite></p></blockquote>
+<h2>Implementation and Usage</h2>
+<p>These steps assume your web server is already up and running and configured for PHP.  </p>
+<ol>
+<li>Place this file (<a href="http://lildude.co.uk/downloads/other/moz-update.phps">moz-update.phps</a>) in a directory on a webserver, rename it by removing the "s" in ".phps" and note it's URL.  You can test the script using a URL similar to the following:
+<p><code>https://localhost/moz/moz-update.php?a=Firefox&v=3.5&b=SunOS_5.11_x86-sunc</code></p>
+<p>Change "<code>localhost/moz</code>" to correctly reflect the server name and path. You'll note I've not used "SEO friendly" URLs.  I've done this deliberately as it adds and entirely unnecessary configuration step.</li>
+<li>Edit the user's <code>prefs.js</code> and add the following line:
+<p>		<code>user_pref("app.update.url.override", "https://localhost/moz/moz-update.php?a=%PRODUCT%&v=%VERSION%&b=%BUILD_TARGET%");</code></p>
+<p>As above, change "<code>localhost/moz</code>" to correctly reflect the server name and path.</li>
+<li>Restart Firefox/Thunderbird and go to Help &rarr; Check for Updates and sit back and watch Firefox/Thunderbird do it's magic.  Firefox/Thunderbird will continue to check for updates as they do on other operating systems and you'll be notified when an update becomes available.</li>
+</ol>
+<h2>Notes About the Script</h2>
+<p>The PHP script is really quite simple and should be easy enough to follow, modify and customise to suit your needs.  It should work out the box, though you may want to make a few changes to suit your needs and provide a quicker response:</p>
+<ol>
+<li>Modify <code>$mirror</code> to point to your nearest mirror. Just copy and paste the URL from the <a href="http://www.mozilla.org/community/mirrors.html">Mozilla mirrors list</a>. Be sure to check it actually has the necessary <code>contrib/solaris_tarball</code> directories too.</li>
+<li>Optionally modify <code>$firefox</code> and <code>$thunderbird</code> to point to the version specific <code>latest-#.#</code> directory you wish to use for your updates.  By default the PHP script will use the latest, but it you want to restrict things to a particular branch or use a beta branch, you'll need to change this.
+<p>For example, if you're using Thunderbird 3.1 beta, set <code>$thunderbird</code> to "<code>latest-3.1</code>"</li>
+</ol>
+<p>I've released this script under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License, Version 2</a> so you're free to make changes etc within the terms of this license.  I'm also providing it as-is without any support or assistance, though I may offer some assistance if needed. On a side note, I don't think it would be too hard to modify the script to provide your own internal update server or provide updates for other operating systems like Linux.  </p>
+<p>Right, now we've got all the technical stuff out of the way, if you're curious to find out how I came about writing this, read on...</p>
+<p><a name="background"></a></p>
+<h2>Some Background</h2>
+<p>Years ago I switched to almost exclusively using a Sunray for my day-to-day work, and I very quickly discovered the long lag between a new release of Firefox/Thunderbird being released and the OS being updated.  It was at this time that I started running Firefox and Thunderbird from my home directory.  Everytime there was a new release available, I'd check the well hidden contrib directory (<code>http://releases.mozilla.org/pub/mozilla.org/$APP/releases/latest/contrib/solaris_tarball/</code>) to see if a Solaris/OpenSolaris release was available.  If there was, I'd download the tarball, install it into my home directory, test it, and then remove the old version.  This is a bit of a schlep and I ended up writing a shell script that did this for me.  </p>
+<p>I noticed the other day that for some reason my script hadn't updated my Firefox instance in a while so I set to investigating why, and that's when I asked myself "<em>Why am I re-inventing the wheel? Firefox/Thunderbird already has an update facility built in, why not use that?</em>" </p>
+<p>So I did some investigating and <a href="https://wiki.mozilla.org/Software_Update">discovered</a> the basic method the Mozilla apps use to determine if an update is available and the files it uses to perform the update.  I then discovered that the Mozilla community doesn't actually support the Solaris/OpenSolaris builds, so the Mozilla.org update servers (AUS) don't return anything useful for the requests the Solaris/OpenSolaris instances make, even though the Mozilla archive files (<code>.mar</code>) exist.  I then hypothesized that provided the applications receive an appropriate response, they'd perform the update as they do on Windows and OS X, so I created the PHP script mentioned in this post and sure enough, it worked a treat.</p>
+<p>The script itself doesn't do very much.  All it does is provide the XML response which points to the official location of the download files.  This script effectively does what the Mozilla AUS servers do, but for Solaris/OpenSolaris. No other files need to be stored on your server.</p>

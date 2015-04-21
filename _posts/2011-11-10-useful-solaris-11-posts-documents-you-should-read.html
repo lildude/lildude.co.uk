@@ -1,0 +1,92 @@
+---
+layout: post
+title: Useful Solaris 11 Posts and Documents You Should Read
+date: 2011-11-10 02:05:08.000000000 -08:00
+tags:
+- Links
+- HOWTO
+- Solaris 11
+- documentation
+type: post
+published: true
+---
+<p><img class="alignright" alt="Solaris 11" src="/assets/Solaris11-cloud.png" width="308" height="223" />Well, <a href="http://www.oracle.com/us/products/servers-storage/solaris/solaris11/overview/index.html" target="_blank">Solaris 11</a> is now out there and I'm sure people are eager to get tinkering with the new functionality.</p>
+<p>To help you, I'll be collecting links to some useful documents and blog posts I've found and add them to this post over the next week.</p>
+<h2>Official Oracle Links and Documents</h2>
+<ul>
+<li>Just in case you haven't got your hands on a copy yet...<br />
+ <a href="http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html" target="_blank">Oracle Solaris 11 Downloads</a></li>
+<li><a href="http://www.oracle.com/technetwork/server-storage/solaris11/documentation/index.html" target="_blank">Oracle Solaris 11 Product Documentation</a></li>
+<li><a href="http://www.oracle.com/us/products/servers-storage/solaris/solaris11/resources/index.html" target="_blank">Oracle Solaris 11 - Resources</a> - this page includes links to data sheets, FAQs and several white papers.</li>
+<li><a href="http://download.oracle.com/docs/cd/E23824_01/index.html" target="_blank">Oracle Solaris 11 Information Library</a></li>
+<li><a href="http://www.oracle.com/technetwork/server-storage/solaris11/technologies/ips-323421.html" target="_blank">Oracle Solaris 11 Package Management with IPS</a> -  the official (and huge) source of information about IPS, which also includes a link to...</li>
+<li><a href="http://hub.opensolaris.org/bin/download/Project+pkg/files/ipsdevguide.pdf" target="_blank">The IPS Developer Guide</a> (PDF)</li>
+<li><a href="http://www.oracle.com/technetwork/server-storage/solaris11/documentation/how-to-517481.html" target="_blank">Oracle Solaris 11 How to Articles</a> - some really useful docs in here.  I'm not going to list them all, but here are a few notable ones...
+<ul>
+<li><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/o11-112-s11-first-steps-524819.html" target="_blank">Taking Your First Steps with Oracle Solaris 11</a> - good run through for someone who's never touched Solaris 11 or Solaris 11 Express.</li>
+<li><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/o11-091-sol-dis-recovery-489183.html" target="_blank">How to Perform System Archival and Recovery Procedures with Oracle Solaris 11</a></li>
+<li><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/o11-092-s11-zones-intro-524494.html" target="_blank">How to Get Started Creating Oracle Solaris Zones in Oracle Solaris 11</a></li>
+<li><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/o11-118-s11-script-zones-524499.html" target="_blank">How to Script Oracle Solaris 11 Zones Creation for a Network-In-a-Box Configuration</a> - taking zone creation to the next level with an emphasis on the networking side of things.</li>
+<li><a href="http://www.oracle.com/technetwork/articles/servers-storage-admin/o11-083-ips-basics-523756.html" target="_blank">Introducing the Basics of Image Packaging System (IPS) on Oracle Solaris 11</a> - wooohooo!!! No more patching.  IPS integrates beautifully with boot environments and ZFS allowing for quick easy rollbacks if things go wrong.  It happens automatically too.</li>
+</ul>
+</li>
+<li><a href="https://support.oracle.com/CSP/main/article?cmd=show&type=NOT&id=1313405.1" target="_blank">Oracle Solaris 11 Product Information Center</a> - this is actually a knowledge document on <a href="http://support.oracle.com" target="_blank">My Oracle Support</a> that will grow and evolve as more documentation and alerts about Solaris 11 come to light.</li>
+</ul>
+<h2>Third Party Articles and Blog Posts</h2>
+<p>Most of these are from Oracle employees who have been actively involved in the development of Solaris 11 and most of the documentation linked above.  This is the section I anticipate will grow over the coming week.</p>
+<h3>General</h3>
+<ul>
+<li><a href="https://blogs.oracle.com/orasysat/entry/the_most_inviting_solaris_111" target="_blank">The most inviting Solaris 11 features - Part I, Boot Environments</a> - probably one of the best features of Solaris 11.  Start getting into the habit of creating a new BE or snapshot BEFORE you make any system changes.  It's cheap, quick and oh so easy to revert if things go wrong.</li>
+<li><a href="http://www.phoronix.com/scan.php?page=article&item=oracle_solaris_11&num=1" target="_blank">A Quick Tour Of Oracle Solaris 11</a> <small>(Added: 14 Nov)</small></li>
+</ul>
+<h3>Desktop</h3>
+<ul>
+<li><a href="http://blogs.oracle.com/calum/entry/what_s_new_on_the" target="_blank">What's new on the Solaris 11 Desktop?</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/alanc/entry/s11_x11" target="_blank">S11 X11: ye olde window system in today's new operating system</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/korn/entry/accessible_solaris_11" target="_blank">Accessible Oracle Solaris 11 - released!</a> <small>(Added: 14 Nov)</small></li>
+</ul>
+<h3>Development tools</h3>
+<ul>
+<li><a href="http://blogs.oracle.com/ali/entry/nagging_as_a_strategy_for" target="_blank">Nagging As A Strategy For Better Linking: -z guidance</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/ali/entry/much_ado_about_nothing_stub" target="_blank">Much Ado About Nothing: Stub Objects</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/ali/entry/using_stub_objects" target="_blank">Using Stub Objects</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/ali/entry/the_stub_proto_not_just" target="_blank">The Stub Proto: Not Just For Stub Objects Anymore</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/ali/entry/elffile_elf_specific_file_identification" target="_blank">elffile: ELF Specific File Identification Utility</a> <small>(Added: 14 Nov)</small></li>
+</ul>
+<h3>IPS packaging</h3>
+<ul>
+<li><a href="https://timsfoster.wordpress.com/2011/11/09/the-ips-system-repository/" target="_blank">The IPS System Repository</a></li>
+<li><a href="https://timsfoster.wordpress.com/2011/11/09/ips-self-assembly-part-1-overlays/" target="_blank"><br />
+IPS Self-assembly – Part 1: overlays</a></li>
+<li><a href="https://timsfoster.wordpress.com/2011/11/09/self-assembly-part-2-multiple-packages-delivering-configuration/" target="_blank">Self assembly – Part 2: multiple packages delivering configuration</a></li>
+<li><a href="https://timsfoster.wordpress.com/2011/10/17/replacing-the-application-packaging-developers-guide/" target="_blank">Replacing the Application Packaging Developer’s guide</a> <small>(Added: 14 Nov)</small></li>
+</ul>
+<h3>SMF & FMA</h3>
+<ul>
+<li><a href="http://blogs.oracle.com/SolarisSMF/entry/introducig_smf_layers" target="_blank">Introducing SMF Layers</a> <small>(Added: 11 Nov)</small></li>
+<li><a href="http://hub.opensolaris.org/bin/view/Community+Group+fm/Solaris11FCS" target="_blank">Oracle Solaris 11: New Fault Management Features</a> - very interesting developments here.  Now you can easily identify disks, email FMA events, FMA events for kernel panics and SMF service issues are also no reported by FMA. <small>(Added: 11 Nov)</small></li>
+</ul>
+<h3>Security</h3>
+<ul>
+<li><a href="https://blogs.oracle.com/darren/entry/user_user_home_directory_encryption" target="_blank">User home directory encryption with ZFS</a></li>
+<li><a href="https://blogs.oracle.com/darren/entry/password_caching_for_solaris_su" target="_blank">Password (PAM) caching for Solaris su - "a la sudo"</a></li>
+<li><a href="https://blogs.oracle.com/darren/entry/completely_disabling_root_logins_on" target="_blank">Completely disabling root logins on Solaris 11</a></li>
+<li><a href="http://bubbva.blogspot.com/2011/11/exciting-crypto-advances-with-t4.html" target="_blank">Exciting Crypto Advances with the T4 processor and Oracle Solaris 11</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/DanX/entry/sparc_t4_openssl_engine" target="_blank">SPARC T4 OpenSSL Engine</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/DanX/entry/solaris_x86_aesni_openssl_engine" target="_blank">Solaris X86 AESNI OpenSSL Engine</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/darren/entry/openssl_versions_in_solaris" target="_blank">OpenSSL Versions in Solaris</a> <small>(Added: 17 Nov)</small></li>
+</ul>
+<h3>Zones</h3>
+<ul>
+<li><a href="https://blogs.oracle.com/darren/entry/immutable_zones_on_encrypted_zfs" target="_blank">Immutable Zones on Encrypted ZFS - not just an immutable (read-only) zone, but one that takes advantage of ZFS encryption.</a></li>
+</ul>
+<h3>Dtrace</h3>
+<ul>
+<li><a href="http://dtrace.org/blogs/brendan/2011/11/09/solaris-11-dtrace-syscall-provider-changes/" target="_blank">Solaris 11 DTrace syscall Provider Changes</a> <small>(Added: 14 Nov)</small></li>
+</ul>
+<h3>Networking</h3>
+<ul>
+<li><a href="http://milek.blogspot.com/2011/11/solaris-11-hostmodel.html" target="_blank">Solaris 11  hostmodel</a> <small>(Added: 14 Nov)</small></li>
+<li><a href="http://thegreyblog.blogspot.com/2011/11/network-configuration-in-solaris-11.html" target="_blank">Network Configuration in Solaris 11 with NWAM Profiles</a> <small>(Added: 17 Nov)</small></li>
+<li><a href="http://blogs.oracle.com/amaguire/entry/exploring_tcp_throughput_with_dtrace" target="_blank">Exploring TCP throughput with DTrace</a> <small>(Added: 17 Nov)</small></li>
+</ul>

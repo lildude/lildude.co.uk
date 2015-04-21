@@ -1,0 +1,106 @@
+---
+layout: post
+title: 'HOWTO: Create a ZFS Filesystem OS X Leopard'
+date: 2007-12-01 03:13:15.000000000 -08:00
+tags:
+- HOWTO
+- ZFS
+- leopard
+- read-write
+- Mac OS X
+type: post
+published: true
+---
+<p>You've upgraded to OS X Leopard, played with Time Machine, <a href="http://www.usingmac.com/2007/11/18/leopard-tweaking-terminal-codes">tweaked</a> <a href="http://howto.wired.com/wiredhowtos/index.cgi?page_name=tweak_mac_os_x_leopard_s_user_interface;action=display;category=Live">things</a> to your heart's content and now you want to play with something else cool you've heard has made it's way into OS X - ZFS.</p>
+<p>Unfortunately, Apple have only bundled read-only support for ZFS to date, but we'll be changing that.</p>
+<div class="alert">
+<strong>WARNING</strong>: ZFS read-write support is still very experimental and if you're not careful, it <strong>WILL</strong> crash your Mac.
+</div>
+<p>Right, now we've got the warning out of the way, lets get cracking.</p>
+<p><!--more--><br />
+<h3>Get and Install read-write ZFS support</h3>
+<p>First, you need to get hold of the <a href="https://connect.apple.com/cgi-bin/WebObjects/MemberSite.woa/wa/getSoftware?bundleID=19884">ZFS Beta Seed</a> pkg from the ADC.  If you don't have an ADC login, you can register for free.</p>
+<p>Due to an <a href="http://synesius.wordpress.com/2007/11/18/zfs-beta-seed-v11-will-not-install-on-leopard1-1051/">unfortunate bug in the packaging</a>, you won't be able to install the ZFS Beta Seed pkg by simply double clicking the pkg if you're running 10.5.1.  This bug doesn't affect 10.5.</p>
+<p>There are several ways to resolve this, but I like the one detailed by <a href="http://blogs.sun.com/yakshaving/entry/how_to_get_experimental_rw">Shawn Ferry</a> the best:</p>
+<ol>
+<li>Mount the DMG you downloaded from the ADC site</li>
+<li>Open up the terminal (we'll be spending a lot of time here)</li>
+<li>Expand the pkg in the DMG:
+<div class="terminal"><code>$ pkgutil --expand /Volumes/ZFS/ZFSBetaSeed1.pkg /tmp/ZFSseed1</code></div>
+</li>
+<li>Edit the Distribution file and remove the check that is getting things wrong by commenting out the following line:
+<pre text="xml">&lt;volume-check script='volumeCheck()'/&gt;</pre>
+<p>... by wrapping it in <code>&lt;!--</code> and <code>--&gt;</code> so it looks like this:</p>
+<pre text="xml">&lt;!-- &lt;volume-check script='volumeCheck()'/&gt; --&gt;</pre>
+<p>... and save the file.</li>
+<li>Now re-package the files we've extracted and edited into a new pkg:
+<div class="terminal"><code>$ pkgutil --flatten /tmp/ZFSseed1 /tmp/ZFSrw.pkg</code></div>
+</li>
+<li>Open the package installer and install the new pkg as you would normally:
+<div class="terminal"><code>$ open /tmp/ZFSrw.pkg</code></div>
+</li>
+<li>Reboot for the changes to take effect</li>
+</ol>
+<p><!--wsa:LongPostMiddle--></p>
+<h3>Create Your First ZFS Filesystem</h3>
+<p>Now we've got read-write ZFS support installed, we can create our first ZFS filesystem. In this example, I'm going to use a USB memory stick, but you can use any free partition, or even files (drop me a line if you want to know how to do this with files). </p>
+<ol>
+<li>Ensure the device(s) you are going to use are connected and powered on.</li>
+<li>If these devices already have filesystems like FAT or HFS+, OS X will mount them automatically.  Unmount, but don't eject them by opening up Disk Utility, select the device and click the "Unmount" button.</li>
+<li>Whilst you've got Disk Utility open, right click on the device(s), select "Information" and take note of the "Disk Identifier":
+<p><img class="center" src="/assets/diskinfo.jpg" alt="Disk Information" title="Disk Information" />
+</li>
+<li>Fire up the terminal and create your ZFS zpool and first filesystem (enter your password when prompted):
+<div class="terminal"><code>$ sudo zpool create <new zfs name> disk#s#</new></code></div>
+<p>... where <code><new zfs name /></code> is any name you want and <code>disk#s#</code> is the "Disk Identifier" you noted above. In my examples I use "myzfs" and  "disk2s1" respectively.</p>
+<p>After a short wait you'll find you now have a new device created and mounted in the finder too:</p>
+<p><img class="center" src="/assets/myzfsinfinder.jpg" alt="myzfs Shown in Finder" title="myzfs Shown in Finder" /></p>
+<p>This is the zpool we've just created.  It will have a ZFS filesystem on it too.</li>
+</ol>
+<p>That's it folks.  You now have a ZFS filesystem that you can use as you would a normal filesystem.  You can confirm this as follows:</p>
+<div class="terminal"><code>$ sudo zpool list<br />
+NAME                    SIZE    USED   AVAIL    CAP  HEALTH     ALTROOT<br />
+myzfs                   976M    259K    976M     0%  ONLINE     -<br />
+$<br />
+$ sudo zpool status<br />
+  pool: myzfs<br />
+ state: ONLINE<br />
+ scrub: none requested<br />
+config:</p>
+<p>        NAME        STATE     READ WRITE CKSUM<br />
+        myzfs       ONLINE       0     0     0<br />
+          disk2s1   ONLINE       0     0     0</p>
+<p>errors: No known data errors<br />
+$<br />
+$ sudo zfs list<br />
+NAME    USED  AVAIL  REFER  MOUNTPOINT<br />
+myzfs   356K   944M   268K  /Volumes/myzfs<br />
+$<br />
+$ mount<br />
+/dev/disk0s3 on / (hfs, NFS exported, local, journaled)<br />
+devfs on /dev (devfs, local)<br />
+fdesc on /dev (fdesc, union)<br />
+map -hosts on /net (autofs, automounted)<br />
+map auto_home on /home (autofs, automounted)<br />
+myzfs on /Volumes/myzfs (zfs, local)<br />
+$</code></div>
+<h3>Time to Play</h3>
+<p>You can now play with things to your heart's content.  For example, you can create a new ZFS filesystem on this pool:</p>
+<div class="terminal"><code>$ sudo zfs create myzfs/data<br />
+$ sudo zfs list<br />
+NAME         USED  AVAIL  REFER  MOUNTPOINT<br />
+myzfs        380K   944M   268K  /Volumes/myzfs<br />
+myzfs/data    18K   944M    18K  /Volumes/myzfs/data<br />
+$</code></div>
+<p>And you'll find Finder shows it too:</p>
+<p><img class="center" src="/assets/myzfsdatainfinder.jpg" alt="myzfs/data shown in Finder" title="myzfs/data shown in Finder" /></p>
+<p>You can find more about what you can do with ZFS in my <a href="http://lildude.co.uk/2006/09/zfs-cheatsheet/">ZFS Cheatsheet</a>, just note it's based on the functionality available in OpenSolaris.  OS X may not have all this functionality yet.</p>
+<h3>Be Careful</h3>
+<p>Now for the important part: right at the beginning, I said ZFS <strong>WILL</strong> crash your Mac.  I wasn't joking.  Just remove the device you have been using, try access it in Finder and see what I mean.</p>
+<p>Unfortunately OS X isn't too good at detecting missing devices under ZFS control yet, so it panics your system.  You can prevent this by ensuring you export your ZFS filesystem BEFORE you attempt to disconnect your devices using:</p>
+<div class="terminal"><code>$ sudo zpool export -f myzfs</code></div>
+<p>Don't just eject the the filesystem from Finder as this doesn't change the ZFS metadata for the device (yet).</p>
+<p>If you want to use your device again in the furture, connect it, unmount the device in Disk Utility as above, open the terminal and import the filesystem:</p>
+<div class="terminal"><code>$ sudo zpool import myzfs</code></div>
+<p>You'll now have your ZFS filesystems as you left them.</p>
+<p>Now at this point you may be wondering what the fuss is all about, you can do this with HFS+ or FAT anyway.  I agree you can, but the true power of ZFS comes to life when you have lots of disks, or you want to setup some sort of redundancy using RAID.  This is very easy with ZFS and you'll be safe in the knowledge that your data is safe. </p>

@@ -1,0 +1,29 @@
+---
+layout: post
+title: Migrating from iPhoto to iView Media Pro
+date: 2007-01-27 04:46:42.000000000 -08:00
+tags:
+- Software
+- Mac
+- iPhoto
+- iView-MediaPro
+- AppleScript
+- Mac OS X
+type: post
+published: true
+---
+<p><img class="alignleft" src="/assets/iPhoto2iViewMediaPro.png" alt="iPhoto to iView MediaPro" />I've been using iPhoto to manage my pictures ever since I got my Mac Mini.  I was quite impressed with it originally, and it seemed to fulfil all my requirements.  However, over time my collection of images got bigger and bigger and bigger still, and iPhoto just wasn't keeping up.  Starting iPhoto would take forever, and then it would proceed to use up a shed load of memory.  So I started hunting for an alternative.</p>
+<p>It wasn't long until I found <a href="http://www.iview-multimedia.com/">iView MediaPro</a>. What a fantastic application - it's quick, easy to use and it will still allow me to edit my pictures in Photoshop or any other application I like, all without munching all my memory.</p>
+<p>After a bit of playing, I finally bit the bullet and decided to migrate from iPhoto to iView MediaPro. What a painless experience.</p>
+<p><!--more--></p>
+<p>First, I followed the instructions in the user guide to import my iPhoto library (<code>iViewMediaPro -> Getting Started... -> Import iPhoto Library</code>). This took several hours.  Once the import was complete, I could see all my photos in iPhoto and iView MediaPro.</p>
+<p>Next, I made copies of all the photos to a directory of my choice (<code>âŒ˜A -> Action -> Transfer to Folder -> Copy files and reset paths ->Choose Folder...</code>).  I wanted to keep my iPhoto library in tact just in case something went wrong. Thankfully nothing did and the copy was complete after a couple more hours.</p>
+<p>Next, I arranged the photos into a directory structure of my liking.  I never did like the iPhoto directory structure.</p>
+<p>All done, well almost.  Everything was pretty much as I like it, except for one thing - the filenames.  One of the reasons for the move to iView Media Pro is I wanted to ensure the underlying filesystem and filenames were easily to navigate and understand, regardless of platform.  My intentions are to ultimately move my photo collection onto an external disk that I will interchange between various operating systems, namely OS X, Windows (on very rare occasions), Ubuntu Linux and Solaris. As iPhoto doesn't actually change the filenames, I was left with the very "descriptive" <code>DSG_12345.JPG</code> for filenames.  Not for long.</p>
+<p><!--wsa:LongPostMiddle--></p>
+<p>iView MediaPro comes with some handy little AppleScripts to do mundane things like rename files based on the EXIF date, or set the picture as your desktop. However, it doesn't come with a script to do what I wanted. iPhoto's "Title" for each photo has been imported into the "Headline" field in iView MediaPro.  I wanted the headline to be my filename for the pictures, without any punctuation, and all spaces replaced with "_".  This would give me the most usable filenames for all platforms.</p>
+<p>Have no fear I thought, time to delve into a little bit of AppleScript.  I've never written AppleScript so this was a first for me.  I started off my copying one of the provided scripts (<code>Rename using EXIF Date...</code>) and within a couple of minutes I'd changed it to "Rename using Headline" and it did exactly that.  It took my "Headline" for each photo and set the filename to this. The tough bit was enhancing the script further to strip out all the punctuation and spaces, but I managed it. AppleScript #1 - <a href="http://lildude.co.uk/shared/scripts/AppleScript/RenameUsingHeadline.applescript">Rename Using Headline</a>.</p>
+<p>Once I had my script, I moved it to the scripts folder (<code>iView MediaPro -> Show Package Contents -> Contents -> Shared Support -> Plugins ->Scripts -> Files</code>) and restarted iView MediaPro. Tadaa, there was my script in "Files" section of the scripts.  I selected all my photos, then my script and let it do it's magic.</p>
+<p>Whilst my rename script was doing it's magic, I noticed something else - several pictures had "AppleMark" as the only thing in the "Description" field.  This must be left over from iPhoto.  This only appears to be for pictures without comments in iPhoto, but for which I'd made some tweaks using iPhoto.  Time to strip those out. Time for AppleScript #2 - <a href="http://lildude.co.uk/shared/scripts/AppleScript/RemoveAppleMarkDescription.applescript">Remove AppleMark Description</a>.</p>
+<p>Once again, I copied "<code>Rename using EXIF Date...</code>" and made my changes, and bunged it into the Annotations folder (<code>iView MediaPro -> Show Package Contents -> Contents -> Shared Support -> Plugins ->Scripts -> Annotations</code>), restarted iView MediaPro and stripped out all those "AppleMark" comments.</p>
+<p>All done.  I'm one happy chappy now. All I need to do is delete the old iPhoto library and files and I'm iPhoto free.</p>

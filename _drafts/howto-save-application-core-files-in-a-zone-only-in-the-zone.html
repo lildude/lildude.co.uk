@@ -1,0 +1,22 @@
+---
+layout: post
+title: 'HOWTO: Save Application Core Files in A Zone Only in the Zone'
+date: 2012-03-07 08:28:14.000000000 -08:00
+tags:
+- Solaris
+- zones
+- HOWTO
+- coreadm
+type: post
+published: true
+---
+<p>When an app core is created in a ngz, coreadm from the zone and global pick it up making 2 core files. It seems that this is to be expected looking at the note at the end of the coreadm man page and there is a workaround procedure in a coreadm doc.</p>
+<p>http://docs.oracle.com/cd/E23823_01/html/817-0403/tscore-7.html</p>
+<p>--- man page ---<br />
+When a process is dumping core, up to three core files can be produced: one in the per-process location, one in the system-wide global location, and, if the process was running in a local (non-global) zone, one in the global location for the zone in which that process was running. Each core file is generated according to the effective options for the corresponding location.<br />
+---</p>
+<p>"coreadm -d global" doesn't work quite right it prevents all core file from that zone (global) from being created too.</p>
+<p>An RFE will be created for this, but in the mean time this can be easily done as follows:</p>
+<p>globalzone# /var/cores/%z/core.%f@%t.%p<br />
+globalzone# mkdir /var/cores/global/</p>
+<p>Because the only zonename directory that exists in the global zone is /var/cores/global that means you won't get cores written in /var/cores in the global zone for processes from a non global zone.</p>

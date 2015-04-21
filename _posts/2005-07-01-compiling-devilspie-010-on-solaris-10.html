@@ -1,0 +1,58 @@
+---
+layout: post
+title: Compiling Devilspie 0.10 on Solaris 10
+date: 2005-07-01 07:44:00.000000000 -07:00
+tags:
+- Solaris
+- HOWTO
+- Metacity
+- devilspie
+type: post
+published: true
+---
+<p><!--redirect_msg--><br />
+I used to use <a href="http://www.burtonini.com/blog/computers/devilspie">Devilspie</a> 0.7 on Solaris 9 some time ago, but for some reason stopped - can't remember why.  </p>
+<p>Well, today I decided I'd compile <a href="http://www.burtonini.com/blog/computers/devilspie/devilspie-0.10/">Devilspie 0.10</a> to run on Solaris 10 on a SunRay as a normal bog standard user, and boy was it fun.  As I've had so much fun, I thought I'd document it for anyone else who may be wanting to do the same thing.</p>
+<p><!--more--></p>
+<p><strong>GOAL</strong>: Compile and install Devilspie 0.10 in my home directory so that it would run on a Solaris 10 Sunray and workstation, using Gnome 2.6, without having to install any additional software over and above that already supplied with Solaris 10.</p>
+<p>Well, I was almost 100% successful, I needed to install one app first. The following steps should help anyone compile Devilspie on Solaris 10.</p>
+<p>1.  Download the source code tarball - <a href="http://www.burtonini.com/computing/devilspie-0.10.tar.gz">devilspie-0.10.tar.gz</a> - and extract it to a directory of your choice.</p>
+<p>Now this is the step that caused me to stray from the original goal - unforunately, Solaris 10 doesn't come with GOB-2 by default, so you need to compile it yourself.  Don't worry, it's not very big and doesn't take very long.  </p>
+<p>2.  Download the <a href="http://www.5z.com/jirka/gob.htm">GOB-2</a> source code tarball - <a href="http://ftp.5z.com/pub/gob/gob2-2.0.11.tar.gz">gob2-2.0.11.tar.gz</a> - and extract it to a directory of your choice.</p>
+<p>3.  Compile and install GOB-2 using the usual "./configure, make and make" install steps.  I also used the "--prefix" option to install it in my home directory.</p>
+<p>4.  Configure your path to include your custom install of gob2. Without gob2 in your path, make will fail with the following error:</p>
+<p><code><br />
+Making all in src<br />
+tristate-dummy.gob<br />
+bash: tristate-dummy.gob: command not found<br />
+*** Error code 127<br />
+make: Fatal error: Command failed for target `tristate-dummy.c'<br />
+</code></p>
+<p>5.  Configure Devilspie, but include the X11 libs as follows:</p>
+<p><code><br />
+$ LIBS=-lX11 ./configure<br />
+</code></p>
+<p>If you forget the LIBS part, make fails with the following error:</p>
+<p><code><br />
+/usr/sfw/bin/gcc -Wall -g -O2  -o devilspie  tristate-dummy.o devilspie-matcher.o  devilspie-matcher-windowname.o devilspie-matcher-always.o  devilspie-action.o devilspie-action-debug.o devilspie-action-decorate.o  devilspie-action-exec.o devilspie-action-hide.o  devilspie-action-layer.o devilspie-action-opacity.o  devilspie-action-resize.o devilspie-action-savegeometry.o devilspie-action-setgeometry.o devilspie-action-setwintype.o  devilspie-action-setworkspace.o config-parser.o flurb.o devilspie.o  xutils.o -lwnck-1 -lgtk-x11-2.0 -lstartup-notification-1 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lmlib -lpangoxft-1.0 -lpangox-1.0 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lxml2 -lpthread -lz -lm -lsocket -lnsl -lpopt<br />
+Undefined                       first referenced<br />
+ symbol                             in file<br />
+XMoveResizeWindow                   devilspie-action-setgeometry.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XGetWindowAttributes                xutils.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XFree                               devilspie-action-opacity.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XSync                               devilspie-action-opacity.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XSendEvent                          xutils.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XGetWindowProperty                  devilspie-action-opacity.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XDeleteProperty                     devilspie-action-opacity.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XChangeProperty                     devilspie-action-decorate.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XQueryTree                          devilspie-action-opacity.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+XInternAtom                         xutils.o  (symbol belongs to implicit dependency /usr/lib/libX11.so.4)<br />
+ld: fatal: Symbol referencing errors. No output written to devilspie<br />
+collect2: ld returned 1 exit status<br />
+*** Error code 1<br />
+make: Fatal error: Command failed for target `devilspie'<br />
+</code></p>
+<p>Make should complete successfully without any further errors.</p>
+<p>6.  Install Devilspie - make install.</p>
+<p>That's it.  You should now be able to use Devilspie as detailed in the README supplied with the tarball.</p>
+<p>FYI: You can remove GOB-2 if you want.  It's only needed for the compilation of Devilspie.  You can remove it by running "make uninstall" from the gob2 source directory (gob2-2.0.11by default).</p>

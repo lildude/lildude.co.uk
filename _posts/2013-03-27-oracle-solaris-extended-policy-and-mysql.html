@@ -1,0 +1,16 @@
+---
+layout: post
+title: Oracle Solaris Extended Policy and MySQL
+date: 2013-03-27 01:59:41.000000000 -07:00
+tags:
+- Security
+- Solaris 11
+- link
+- extended policy
+type: post
+published: true
+---
+<p>This is a great article showing <a href="http://docs.oracle.com/cd/E26502_01/html/E29015/privtask-1.html" target="_blank">Solaris Extended Policy</a> on Solaris 11 in response to another Oracle engineer's details on setting up something similar on Linux using AppArmor and SELinux.  I love the little dig in the opening paragraph...</p>
+<blockquote cite="https://blogs.oracle.com/gfaden/entry/oracle_solaris_extended_policy_and"><p>Jeremy Smyth has posted two entries on his blog describing how the mandatory access controls in AppArmor and SELinux apply to MySQL. That provides me an opportunity to demonstrate the Extended Policy functionality in Oracle Solaris. While Solaris provides an equivalent level of policy granularity, it doesn't need a knob to disable enforcement; nor does it require relabeling the filesystem to make the policy effective. Note in the steps below, that we never need to inform the kernel that the policy is updated because the policy is maintained in each process credential, not in a system-wide kernel database.<br />
+— <a href="https://blogs.oracle.com/gfaden/entry/oracle_solaris_extended_policy_and">Oracle Solaris Extended Policy and MySQL</a></p></blockquote>
+<p>If you've not played with <a href="http://docs.oracle.com/cd/E26502_01/html/E29015/privtask-1.html" target="_blank">extended policy</a> (it's really just about getting very granular with privileges) on Solaris yet, I encourage you to do so.  You'll be amazed at how much you can lock down your applications and how easy it is, and without the need to unnecessarily elevate privileges.</p>

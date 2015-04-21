@@ -1,0 +1,22 @@
+---
+layout: post
+title: 'HOWTO: Upgrade from Solaris 10 to Solaris 11'
+date: 2011-11-09 08:00:00.000000000 -08:00
+tags:
+- HOWTO
+- upgrade
+- Solaris 11
+type: post
+published: true
+---
+<p>Now that Solaris 11 is officially available, people are going to start seriously consider upgrading to it and one of the first questions is going to be: How do I upgrade my Solaris 10 or lower systems to Solaris 11?</p>
+<p>Unfortunately, you <strong>CAN'T</strong>.  There is no direct upgrade installer or other tool that will allow you to upgrade from earlier releases of Solaris to Solaris 11.  This is primarily due to the vast changes in the packaging mechanism in Solaris 10.<br />
+next<br />
+To quote the <a href="http://download.oracle.com/docs/cd/E23824_01/html/E24456/index.html" target="_blank">Transitioning From Oracle Solaris 10 to Oracle Solaris 11</a> guide:</p>
+<blockquote><p>There are no upgrade methods or tools available to transition your Oracle Solaris 10 system to Oracle Solaris 11. You cannot use an installer to upgrade from Oracle Solaris 10 to Oracle Solaris 11. You must perform a fresh installation of the Oracle Solaris 11 software by using one of the installation options that are described in this chapter.</p></blockquote>
+<p>In order to start using Solaris 11, it needs to be a clean install.  Once installed, you can then decide what you want to do with your Solaris 10 host and the applications running on it.</p>
+<p>Thanks to the Solaris binary guarantee, provided your application is using documented interfaces, it should run without modification on Solaris 11, so you can manually transition your users, applications and data to Solaris 11 if you wish.</p>
+<p>Alternatively, you can create a Solaris 10 non-global zone on your Solaris 11 host and install a flash archive of your original Solaris 10 host into the Solaris 10 non-global zone using the <a href="http://download.oracle.com/docs/cd/E23824_01/html/E24456/transzone-1.html#scrolltoc" target="_blank">physical-to-virtual process</a>.</p>
+<p>There is no support for Solaris 8 and 9 branded zones on Solaris 11 and you can't nest zones: ie you can't run Solaris 8 or 9 or even Solaris 10 native zones in a Solaris 10 zone on a Solaris 11 host.</p>
+<p>For Solaris 8 and 9 zones, you will need to continue using Solaris 10.</p>
+<p>For those eager to <a href="http://download.oracle.com/docs/cd/E23824_01/html/E24456/upgrade-1.html#scrolltoc" target="_blank">upgrade from Solaris 11 Express or Early Access (EA) to Solaris 11</a>, the process is dead easy and really gives you an idea of things to come in the future when you need to upgrade, or update.</p>

@@ -1,0 +1,44 @@
+---
+layout: post
+title: 'HOWTO: Change Wordpress Table Prefix'
+date: 2007-05-30 02:23:32.000000000 -07:00
+tags:
+- Wordpress
+- HOWTO
+type: post
+published: true
+---
+<p>In an attempt to tidy up my backend Wordpress databases, I thought I'd change the Wordpress table prefix and the move all my Wordpress tables into a single database.</p>
+<p>Before actually moving the tables, I took the plunge of just renaming them by changing the table prefix to uniquely identify which Wordpress installation they belong to.</p>
+<p>I did this as follows...</p>
+<p><!--more--></p>
+<ol>
+<li>Dump the table names and prepend the new prefix:
+<div class="console"><code># for x in `/usr/local/bin/mysqlshow --user=${DB_USER} \<br />
+--password=${DB_PASSWD} \<br />
+--host=${DB_HOST} \<br />
+${DB_NAME} | grep ${OLD_WP_PREFIX} | grep -v ^Database | tr -d " | "`<br />
+do<br />
+     echo "RENAME TABLE ${DB_NAME}.$x TO ${DB_NAME}.${NEW_WP_PREFIX}_$x;"<br />
+done</code></div>
+<p>You'll see all I did was to prepend a new prefix to the old one as all I'm doing is identifying which Wordpress installation the tables relate to.</li>
+<li>Copy the output from the above into phpMySQL and ran it. This output can also be directed back into mysql on the CLI.  All my tables took on their new names successfully.</li>
+<li>Modify my <code>wp-config.php</code> to reflect the correct <code>$table_prefix</code></li>
+</ol>
+<p><!--wsa:LongPostMiddle--></p>
+<p>Voila!!! At face value this appears to work and your blog will appear as it did before.  That is until you attempt to login. You'll be presented with this lovely message:</p>
+<blockquote><p>You do not have sufficient permissions to access this page.</p></blockquote>
+<p>Even when attempting to login as admin.  The cause?  Simple, some of the Wordpress options are actually saved using the Wordpress prefix.  You will now need to open up your favourite MySQL admin tool and modify the following:</p>
+<p>In table <code>${NEW_WP_PREFIX}_options</code>:</p>
+<ul>
+<li>Option <code>${OLD_WP_PREFIX}_user_roles</code></li>
+</ul>
+<p>In table <code>${NEW_WP_PREFIX}_usermeta</code>:</p>
+<ul>
+<li>Option <code>${OLD_WP_PREFIX}_capabilities</code></li>
+<li>Option <code>${OLD_WP_PREFIX}_user_level</code></li>
+<li>Option <code>${OLD_WP_PREFIX}_autosave_draft_ids</code></li>
+</ul>
+<p>The last will only exist if you have saved a draft whilst editing.  For each of these, you need to change the <code>${OLD_WP_PREFIX}</code> part to reflect your new prefix, eg: <code>wp_user_roles</code> becomes <code>new_wp_user_roles</code>.</p>
+<p>You may need to change other options from plugins that store the prefix as part of the variable name.</p>
+<p>If you're using the <a href="http://www.bad-behavior.ioerror.us/">Bad Behaviour</a> plugin, you'll also need to disable it, remove it's option entries from the <code>_options</code> table and re-enable the plugin.</p>

@@ -1,0 +1,28 @@
+---
+layout: post
+title: 'HOWTO: Migrate UFS Root With Multiple Filesystems to ZFS'
+date: 2010-09-08 03:01:00.000000000 -07:00
+tags:
+- Solaris
+- HOWTO
+- ZFS
+- filesystem
+- root
+- UFS
+type: post
+published: true
+---
+<p>I've detailed before how to migrate a UFS root filesystem to ZFS, but what I didn't cover was the scenario where the original UFS root has things like <code>/var</code> and <code>/opt</code> on different filesystems.  This isn't actually documented much beyond the following line in the ZFS Admin Guide:</p>
+<blockquote><p>If the UFS root file system has components on different slices, they are migrated to the ZFS root pool. </p></blockquote>
+<p>And that is indeed the case.  <code>/var</code>, <code>/opt</code> and other "essential" filesystems will be merged into the single root filesystem.</p>
+<p>Now you can't have these directories on their own zpools, but you can have them in their own ZFS filesystems on the root pool with a little bit of jiggery-pokery before hand: just inject this step BEFORE creating the alternate boot environment (ie just before you run lucreate):</p>
+<div class="terminal"># zfs create rootpool/ROOT<br />
+# zfs create rootpool/ROOT/zfsBE<br />
+# zfs create rootpool/ROOT/zfsBE/var<br />
+# zfs create rootpool/ROOT/zfsBE/opt</p>
+<p># zfs umount rootpool/ROOT/zfsBE/opt<br />
+# zfs umount rootpool/ROOT/zfsBE/var<br />
+# zfs umount rootpool/ROOT/zfsBE<br />
+# zfs umount rootpool/ROOT</p></div>
+<p>NOTE: I've used the same BE and root pool names as I used in the UFS to ZFS migration details.</p>
+<p>Now it's worth pointing out that this method is NOT officially supported so if something goes wrong, you're on your own.</p>

@@ -1,0 +1,46 @@
+---
+layout: post
+title: Can't Install pkg On OpenSolaris snv_127
+date: 2009-11-18 13:24:43.000000000 -08:00
+tags:
+- Software
+- Operating Systems
+- OpenSolaris
+- installation
+- pkg
+type: post
+published: true
+---
+<p>I encountered a problem this evening that I can't really explain, I couldn't install any pkgs via the Package Manager or command line.  Both were failing with the same error:</p>
+<div class="terminal">
+<pre>$ pfexec pkg install SUNWant
+Creating Plan -                        
+pkg: The following pattern(s) did not match any packages in the current catalog.
+Try relaxing the pattern, refreshing and/or examining the catalogs:
+	SUNWant
+
+$</pre>
+</div>
+<p>At the time I had 2 pkg publishers defined:</p>
+<div class="terminal">
+<pre>$ pkg publisher
+PUBLISHER                     TYPE     STATUS   URI
+OpenSolaris-dev  (preferred)  origin   online   http://pkg.opensolaris.org/dev/
+WebStack                      origin   online   http://pkg.opensolaris.org/webstack/
+$</pre>
+</div>
+<p>Both look good to me and have been working fine.  </p>
+<p>I tried rebuilding the index, but this didn't seem to make any difference, so as usual, I turned to my trusted browser and found this <a href="http://www.opensolaris.org/jive/thread.jspa?threadID=117930">thread</a>.  Whilst not the same pkg, looks like I'm not alone in hitting this issue.  I checked my GUI in more depth and found I too was experiencing the same problem with it only showing installed pkgs.</p>
+<p>The final entry in the thread in which the user details their solution sounded good, however I'm not too keen on the idea of unnecessarily hacking at files.  The interesting part about this comment was the "requirement" for a publisher named "opensolaris.org".  Huh??  I've not needed this in the past and though I did have one, it was inactive so wouldn't (shouldn't?) have been used.  Oh well, maybe something has changed without notice.</p>
+<p>So, armed with this info,  I fired up the GUI, removed my old opensolaris.org/release publisher which had the name "opensolaris.org" assigned to it and then added a new opensolaris.org entry, but this time pointing at the opensolaris.org/dev repo.</p>
+<p>A short while later my pkg publishers looked like this:</p>
+<div class="terminal">
+<pre>$ pkg publisher             
+PUBLISHER                     TYPE     STATUS   URI
+OpenSolaris-dev  (preferred)  origin   online   http://pkg.opensolaris.org/dev/
+WebStack                      origin   online   http://pkg.opensolaris.org/webstack/
+opensolaris.org               origin   online   http://pkg.opensolaris.org/dev/
+$</pre>
+</div>
+<p>... and I was able to install the pkgs I wanted without any problems.</p>
+<p>I'm not really sure if it was changing the name of the repo or the refreshing of the catalogs that resolved the issue, but it's working now :-) .</p>

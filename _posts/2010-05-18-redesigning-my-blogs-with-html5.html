@@ -1,0 +1,89 @@
+---
+layout: post
+title: Redesigning My Blogs With HTML5
+date: 2010-05-18 06:57:01.000000000 -07:00
+tags:
+- Coding
+- Internet
+- html5
+- article
+- nav
+- header
+- footer
+type: post
+published: true
+---
+<p>Following the <a href="http://lildude.co.uk/starting-another-move-to-habari">recent decision</a> to finally pull finger and migrate this site across to <a href="http://habariproject.org">Habari</a>, I thought I'd look into using as much of the evolving <a href="http://www.w3.org/TR/html5/">HTML5 spec</a> as I can, within the limits of what most browsers support.  Now I'm going to admit that I've not read the whole spec (how much free time to you think I have? ) but I have glanced through the tags and seen there is a lot of new and potentially exciting stuff there.  In this post I'm going to concentrate on the structural things I'm implementing.</p>
+<p>My blogs, like millions of others, have always followed a very similar generic structure:</p>
+<pre><code class="prettyprint">
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;div id="header"&gt;
+	&lt;!-- header stuff in here --&gt;
+&lt;/div&gt;
+&lt;div id="content"&gt;
+	&lt;!-- content stuff in here --&gt;
+	&lt;div class="post"&gt;&lt;!-- blog post --&gt;&lt;/div&gt;
+	&lt;div class="post"&gt;&lt;!-- blog post --&gt;&lt;/div&gt;
+	&lt;div class="post"&gt;&lt;!-- blog post --&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="sidebar"&gt;
+	&lt;!-- sidebar stuff in here --&gt;
+&lt;/div&gt;
+&lt;div id="footer"&gt;
+	&lt;!-- footer stuff in here --&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Now there is nothing wrong with this and it suits my needs.  You can clearly see the intention of the different sections. However from a functional markup perspective they don't really differ: they're all using the same <code>&lt;div&gt;</code> tag.  This is primarily because HTML4 has no method to differentiate these functions in the markup.  HTML5 does and this is what I'm going to start using.</p>
+<p>Whilst browsing through the spec, I discovered HTML5 now has some new structural type tags that could be used to differentiate the various sections in the markup: <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code>, <code>&lt;article&gt;</code> and <code>&lt;nav&gt;</code>.  Each of these can be used multiple times within a page.</p>
+<p>The working draft of the spec conveniently includes a brief usage description for each tag:</p>
+<p><code>&lt;header&gt;</code> :<br />
+<blockquote>The header element represents a group of introductory or navigational aids. [...] The header element can also be used to wrap a section's table of contents, a search form, or any relevant logos.<br />
+<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-header-element">W3C Working Draft</a></cite></p></blockquote>
+<p><code>&lt;footer&gt;</code> :<br />
+<blockquote>The footer element represents a footer for its nearest ancestor sectioning content or sectioning root element. A footer typically contains information about its section such as who wrote it, links to related documents, copyright data, and the like.<br />
+<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-footer-element">W3C Working Draft</a></cite></p></blockquote>
+<p><code>&lt;article&gt;</code> :<br />
+<blockquote>The article element represents a component of a page that consists of a self-contained composition in a document, page, application, or site and that is intended to be independently distributable or reusable, e.g. in syndication. This could be a forum post, a magazine or newspaper article, a blog entry, a user-submitted comment, an interactive widget or gadget, or any other independent item of content.<br />
+<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-article-element">W3C Working Draft</a></cite></p></blockquote>
+<p><code>&lt;nav&gt;</code> :<br />
+<blockquote>The nav element represents a section of a page that links to other pages or to parts within the page: a section with navigation links.<br />
+<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-nav-element">W3C Working Draft</a></cite></p></blockquote>
+<p>The little snippets I've included above don't do each of the tags justice, so if you want to find out more about their usage, check out the relevant entries in the spec.</p>
+<p>Now with the knowledge of these tags in mind, I'm implementing the following basic structure:</p>
+<pre><code class="prettyprint">
+&lt;html&gt;
+&lt;head&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;header&gt;
+	&lt;!-- header stuff in here --&gt;
+&lt;/header&gt;
+&lt;div id="content"&gt;
+	&lt;!-- content stuff in here --&gt;
+	&lt;article&gt;&lt;!-- blog post --&gt;&lt;/article&gt;
+	&lt;article&gt;&lt;!-- blog post --&gt;&lt;/article&gt;
+	&lt;article&gt;&lt;!-- blog post --&gt;&lt;/article&gt;
+&lt;/div&gt;
+&lt;nav&gt;
+	&lt;!-- sidebar stuff in here --&gt;
+&lt;/nav&gt;
+&lt;footer&gt;
+	&lt;!-- footer stuff in here --&gt;
+&lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>This is just a brief outline.  The <code>&lt;header&gt;</code> and <code>&lt;footer&gt;</code> usage is self explanatory, but you may be wondering why I've used <code>&lt;nav&gt;</code> for the sidebar.  Well, it's because the content of the side bar is mainly navigational in nature rather than actually being content.</p>
+<p>I've use a <code>&lt;div&gt;</code> for the content because that's what the <code>&lt;div&gt;</code> tag is for.  There is now the <code>&lt;section&gt;</code> tag in HTML5, but by my understanding of it in the spec, this wouldn't be an appropriate use for it here.</p>
+<p>There are however a couple of catches with experimenting with new evolving stands. I encountered two in particular:</p>
+<ol>
+<li>I encountered display and layout problems with the new <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code> and <code>&lt;nav&gt;</code> tags until I made them block elements within my stylesheet using:
+<p><code class="prettyprint">header, footer, nav, article {display:block;}</code></p>
+<p>Some research revealed this has a lot to do with the fact that most browsers don't have default styles information for these elements, so I had to add them myself.</li>
+<li>IE doesn't display elements it doesn't know about due to the way it parses the DOM (more details <a href="http://blog.whatwg.org/supporting-new-elements-in-ie">here</a>). Thankfully, this is easy enough to <a href="http://remysharp.com/2009/01/07/html5-enabling-script/">workaround</a> <strong>BUT</strong> it requires the user have Javascript enabled. This should hopefully be resolved when IE 9 comes out with it's HTML5 support</li>
+</ol>
+<p>Thanks to the intentions of the of the <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code> and <code>&lt;nav&gt;</code> tags within HTML5, each of these are likely to be used multiple times in a single page so I'll probably need to add some identifiers when it comes to styling them.</p>
+<p>As I go through the process of learning more about HTML5 as I redesign this site, I'll be implementing the changes on my personal site too.  You won't see these changes here until I finally flick the switch, but I've already implemented the above basic structure there, so you can take a look at the source, if you're interested.</p>

@@ -1,0 +1,14 @@
+---
+layout: post
+title: phpSmug 1.0.10 and 1.1.7 Now Available
+date: 2008-03-04 10:24:43.000000000 -08:00
+tags:
+- PHP
+- SmugMug
+- API
+- phpSmug
+- wrapper
+type: post
+published: true
+---
+<p>I've had a busy couple of afternoons quashing bugs and enhancing <a href="http://lildude.co.uk/projects/phpsmug/">phpSmug</a> further. This release sees the re-introduction of anonymous method call caching (Ticket <a href="http://dev.lildude.co.uk/phpSmug/ticket/18">#18</a>), enableCache() now checks cache directory is writeable (Ticket <a href="http://dev.lildude.co.uk/phpSmug/ticket/19">#19</a>), die_on_error is now acknowledged consistently. If die_on_error is NOT set, it's up to the application developer to check getErrorCode and getErrorMessage after each method call. (Ticket <a href="http://dev.lildude.co.uk/phpSmug/ticket/20">#20</a>), I've added clearCache() function to easily empty the cache. (Ticket <a href="http://dev.lildude.co.uk/phpSmug/ticket/22">#22</a>) and I've Stopped caching the results of failed method calls when die_on_error is set. (Ticket <a href="http://dev.lildude.co.uk/phpSmug/ticket/23">#23</a>).</p>

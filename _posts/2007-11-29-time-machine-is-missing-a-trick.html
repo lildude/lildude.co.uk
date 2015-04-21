@@ -1,0 +1,18 @@
+---
+layout: post
+title: Time Machine is Missing a Trick
+date: 2007-11-29 23:59:50.000000000 -08:00
+tags:
+- Software
+type: post
+published: true
+---
+<p>The first thing I've played with since updating to OS X Leopard is Time Machine and I have to admit I'm slightly disappointed.</p>
+<p>Time Machine is a fantastic addition to any operating system, and it's brilliant and very cool how it makes backing up and restoring so easy, however it's using a standard Journaled HFS filesystem (from the output of mount):</p>
+<p><code>/dev/disk2s3 on /Volumes/TimeMachine (hfs, local, journaled) </code></p>
+<p>(I called my backup disk TimeMachine for easy identification).</p>
+<p>Why isn't Time Machine using ZFS? Apple advertised they would include ZFS support in OS X, but only seem to have offer read-only support, and haven't actually taken advantage of this brilliant filesystem in anyway.</p>
+<p>A bit of searching seems to indicate one of the reasons they can't use ZFS just yet is because Time Machine takes advantage of directory hard linking, which ZFS doesn't support (at this time). </p>
+<p>I know disks are cheap these days, but using hard links seems a bit wasteful.  What if you have a 2Gb file and all you change is 10 bytes in the file?  The WHOLE file is backed up again. Surely using something like the ZFS snapshot functionality would have been a better idea. </p>
+<p>I would have thought the snapshot functionality of ZFS would have been ideal for Time Machine, but I guess Apple have other ideas.  Who knows, maybe they'll change this when read/write ZFS support is officially supplied.</p>
+<p>Talking of ZFS, time for me to download the <a href="https://connect.apple.com/cgi-bin/WebObjects/MemberSite.woa/wa/getSoftware?bundleID=19884">ZFS Beta Seed</a> and bring all the joys of fully functional ZFS to OS X.</p>
