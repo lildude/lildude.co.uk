@@ -94,3 +94,14 @@ body {
   color:#555;
   font-weight:bold;
 }
+
+.page-list {
+  float: right;
+  margin-top: -17px;
+  font-size: 13px;
+}
+
+.page-list li {
+  display: inline;
+  margin-left: 10px;
+}
