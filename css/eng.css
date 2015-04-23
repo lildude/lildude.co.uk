@@ -7,6 +7,24 @@ body {
   color:#727272;
 }
 
+/*---:[ Image alignment ]:---*/
+img.alignleft, img.left { float: left; margin-right: 10px }
+img.alignright, img.right { float: right; margin-left: 10px }
+img.aligncenter, img.center { clear: both; display: block; float: none; margin: 0 auto; }
+img.alignnone, img.block { clear: both; display: block; }
+img[align="left"] { clear: left; float: left; margin-right: 10px }
+img[align="right"] { clear: right; float: right; margin-left: 10px }
+img[align="middle"] { clear: both; display: block; float: none; margin: 0 auto; }
+/* Everywhere */
+/*---:[ Other Alignment ]:---*/
+.center, .centered { margin: 0 auto; text-align: center; }
+.alignright { float: right; margin-left: 1.571em; }
+.alignleft { float: left; margin-right: 1.571em; }
+
+/* Everywhere */
+embed, object, video, iframe { max-width: 100%; }
+
+
 .masthead {
   background:#fafafa;
   border-bottom:1px solid #ededed;
