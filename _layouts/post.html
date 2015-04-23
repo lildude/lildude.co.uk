@@ -6,7 +6,7 @@ layout: default
   <h1 class="post-title">{{ page.title }}</h1>
   <p class="meta">
     {% if site.name and site.name != "" %}
-      <a href="/about/" class="post-author-image"><img src="https://avatars.githubusercontent.com/{{ site.name }}?s=40" alt="{{ site.name }}" /></a>
+      <a href="/about/" class="post-author-image"><img src="/assets/avatar-40x40.png" alt="{{ site.name }}" /></a>
     {% endif %}
     Posted {% if site.name and site.name != "" %}by <a href="/about/" class="post-author">{{ site.name }}</a> {% endif %}
     on <span class="post-date">{{ page.date | date: "%d %B %Y" }}</span>
