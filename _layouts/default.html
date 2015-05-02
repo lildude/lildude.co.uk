@@ -1,25 +1,45 @@
+---
+layout: compress
+---
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
   <head>
     <link href="http://gmpg.org/xfn/11" rel="profile">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {% if site.google-site-verification %}
+    <meta name=google-site-verification content="{{ site.google-site-verification }}" />
+    {% endif %}
 
     <!-- Enable responsiveness on mobile devices-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-
+    <meta name="description" content="{% if page.title == "Home" %}{{ site.description }} {% if paginator.page > 1 %} (Page {{ paginator.page }}) {% endif %}{% else %}{{ post.content | strip_html | truncate:140}}{% endif %}">
     <title>
-      {% if page.title %}
-        {{ page.title }} - {{ site.title }}
+      {% if page.title == "Home" %}
+        {{ site.title }} · {{ site.tagline }}
       {% else %}
-        {{ site.title }}
+        {{ page.title }} · {{ site.title }}
       {% endif %}
+      {% if paginator.page > 1 %} (Page {{ paginator.page }}) {% endif %}
     </title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ site.baseurl }}/css/poole.css">
-    <link rel="stylesheet" href="{{ site.baseurl }}/css/syntax.css">
-    <link rel="stylesheet" href="{{ site.baseurl }}/css/eng.css">
+    {% if jekyll.environment == 'local' %}
+      <link rel="stylesheet" href="{{ site.baseurl }}/css/screen.css">
+    {% else %}
+      <style type="text/css">
+        {% capture include_to_scssify %}
+          {% include screen.scss %}
+        {% endcapture %}
+        {{ include_to_scssify | scssify }}
+      </style>
+    {% endif %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400,700,400italic,700italic">
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ site.baseurl }}img/apple-touch-icon-144-precomposed.png">
+    <link rel="shortcut icon" href="{{ site.baseurl }}img/favicon.ico">
 
     <!-- RSS -->
     <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ site.baseurl }}/atom.xml">
