@@ -1,14 +1,40 @@
-name: "lildude"
-author: '@lildude'
-markdown: redcarpet
-exclude: ["script", "Gemfile", "Gemfile.lock"]
-permalink: /:title/
-timezone: Europe/London
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
 
-title: Col's Tech
-description: This site is the home to my random technical ramblings. The intention is to offer information and help in subjects that have stumped me or are of particular interest to me, and that may be of use to others out there, with a slant towards UNIX, Solaris and OpenSolaris.
-baseurl: ""
+# Permalinks
+permalink:        :title
 
+# Setup
+title:            Col's Tech
+description:      This site is the home to my random technical ramblings. The intention is to offer information and help in subjects that have stumped me or are of particular interest to me, and that may be of use to others out there, with a slant towards UNIX, Solaris and OpenSolaris.
+url:              https://lildude.co.uk
+baseurl:          ""
+
+# Author
+name:             "lildude"
+author:           '@lildude'
+timezone:         Europe/London
+
+# Custom vars
+google-site-verification:
+
+# SASS
+sass:
+  sass_dir:       _scss
+  style:          compressed
+
+compress_html:
+  clippings:      all
+  comments:       ["<!-- ", " -->"]
+  endings:        all
+  ignore:
+    envs:         []
+
+# Plugins
 gems:
   - jekyll-mentions
   - jemoji
+
+# Don't copy these files to the generated site
+exclude: [CNAME, Gemfile, Gemfile.lock, LICENSE.md, Rakefile, README.md]
