@@ -132,7 +132,10 @@ task :integrate do
   FileUtils.mv Dir.glob("#{source_dir}/#{stash_dir}/*.*"), "#{source_dir}/#{posts_dir}/"
 end
 
-
+desc "Generate and display locally"
+task :server do
+  system("bundle exec jekyll serve --watch --safe")
+end
 
 
 ## -- Misc Functions -- ##
