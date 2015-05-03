@@ -10,7 +10,7 @@ title:            Col's Tech
 description:      This site is the home to my random technical ramblings. The intention is to offer information and help in subjects that have stumped me or are of particular interest to me, and that may be of use to others out there, with a slant towards UNIX, Solaris and OpenSolaris.
 tagline:          But what is it good for?
 url:              https://lildude.co.uk
-baseurl:          ""
+baseurl:          /
 
 # Author
 name:             "lildude"
