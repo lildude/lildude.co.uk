@@ -19,7 +19,6 @@ editor          = "atom"      # default editor to use to open and edit your new 
 desc "Begin a new post in #{posts_dir}"
 task :new, :title do |t, args|
   title = args.title || get_stdin("Enter a title for your post: ")
-  #filename = "#{drafts_dir}/#{Time.now.strftime('%Y-%m-%d')}-#{title.to_url}.#{new_post_ext}"
   filename = "#{drafts_dir}/#{title.to_url}.#{new_post_ext}"
   if File.exist?(filename)
     abort("rake aborted!") if ask("#{filename} already exists. Do you want to overwrite?", ['y', 'n']) == 'n'
@@ -56,20 +55,18 @@ end
 
 # Taken from http://davidensinger.com/2013/08/how-i-use-reduce-to-minify-and-optimize-assets-for-production/
 # TODO: Only minify recently modified or added files by default.
-desc "Minify _site/"
-task :minify, :dir do |t, args|
-  dir = args.dir || "_site/"
-  if dir == "_site/"
-    file_exts = [".css", ".html", ".js", ".xml"]
-  else
-    file_exts = [".gif", ".jpg", ".jpeg", ".png"]
-  end
-  puts "\n## Compressing static assets in #{dir}".yellow
+desc "Minify assets"
+task :minify do |t, args|
+  file_exts = [".gif", ".jpg", ".jpeg", ".png"]
+  puts "\n## Compressing static assets".yellow
   original = 0.0
   compressed = 0
-  Dir.glob("#{dir}**/*.*") do |file|
+  # Grab time of last compress run
+  last_run = Time.at(IO::readlines("assets/.last-compressed")[1].strip.to_i)
+  Dir.glob("assets/**/*.*") do |file|
     case File.extname(file)
     when *file_exts
+      if File.stat(file).mtime > last_run
         puts "Processing: #{file}"
         original += File.size(file).to_f
         min = Reduce.reduce(file)
@@ -77,28 +74,36 @@ task :minify, :dir do |t, args|
           f.write(min)
         end
         compressed += File.size(file)
-      else
-        puts "Skipping: #{file}"
+        # Write last compressed date to file.
+        t = Time.now
+        File.open("assets/.last-compressed", "w+") { |f| f.puts "# #{t.to_s}\n#{t.to_i}" }
       end
+    else
+      puts "Skipping: #{file}"
+    end
   end
-  puts "Total compression %0.2f\%" % (((original-compressed)/original)*100)
+  puts "Total compression %0.2f\%" % (((original-compressed)/original)*100) if compressed > 0
 end
 
 # Taken from http://davidensinger.com/2013/07/automating-jekyll-deployment-to-github-pages-with-rake/ and changed for the gh-pages branch
 desc "Deploy _site/ to gh-pages branch"
 task :deploy_gh do
+  unless Dir.glob("#{stash_dir}/*.*").empty?
+    puts "ERROR: #{stash_dir} is not empty. Unstash and try again".red
+    exit
+  end
   puts "\n## Deleting gh-pages branch".yellow
   ok_failed(system("git branch -D gh-pages 1>/dev/null"))
   puts "\n## Creating new gh-pages branch and switching to it".yellow
   ok_failed(system("git checkout -b gh-pages 1>/dev/null"))
   puts "\n## Generating _site content".yellow
-  ok_failed(system("jekyll build 1> /dev/null"))
+  ok_failed(system("bundle exec jekyll build 1> /dev/null"))
   puts "\n## Removing _site from .gitignore".yellow
   ok_failed(system("sed -i '' -e 's/_site//g' .gitignore"))
   puts "\n## Miniying _site".yellow
   ok_failed(Rake::Task["minify"].execute)
   puts "\n## Adding _site".yellow
-  ok_failed(system("git add .gitignore _site"))
+  ok_failed(system("git add .gitignore _site assets/.last-compressed"))
   message = "Build site at #{Time.now.utc}"
   puts "\n## Building site".yellow
   ok_failed(system("git commit -m \"#{message}\" 1>/dev/null"))
@@ -117,20 +122,19 @@ task :deploy do
   ok_failed(system("git push deploy master gh-pages --force 1>/dev/null"))
 end
 
-# usage rake isolate[my-post]
-# TODO: Detect images in this post and only minify these.
-desc "Move all other posts than the most recently changed to a temporary stash location (stash) so regenerating the site happens much more quickly."
-task :isolate, :filename do |t, args|
-  stash_dir = "#{source_dir}/#{stash_dir}"
+desc "Move all but the last 20 posts to the temporary stash location"
+task :stash do
   FileUtils.mkdir(stash_dir) unless File.exist?(stash_dir)
-  Dir.glob("#{source_dir}/#{posts_dir}/*.*") do |post|
-    FileUtils.mv post, stash_dir unless post.include?(args.filename)
-  end
+  puts "\n## Stashing all but the last 20 posts".yellow
+  FileUtils.mv Dir.glob("#{posts_dir}/*.*")[0..-21], stash_dir
+  puts "Posts stash. Unstash with `rake unstash`"
 end
 
-desc "Move all stashed posts back into the posts directory, ready for site generation."
-task :integrate do
-  FileUtils.mv Dir.glob("#{source_dir}/#{stash_dir}/*.*"), "#{source_dir}/#{posts_dir}/"
+desc "Move all stashes posts back"
+task :unstash do
+  puts "\n## Unstashing all posts".yellow
+  FileUtils.mv Dir.glob("#{stash_dir}/*.*"), posts_dir
+  puts "Posts unstashed"
 end
 
 desc "HTML Proof site"
