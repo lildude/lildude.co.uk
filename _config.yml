@@ -30,7 +30,7 @@ compress_html:
   comments:       ["<!-- ", " -->"]
   endings:        all
   ignore:
-    envs:         []
+    envs:         [local]
 
 # Plugins
 gems:
