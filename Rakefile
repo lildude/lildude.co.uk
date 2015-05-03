@@ -3,6 +3,7 @@ require "bundler/setup"
 require "stringex"
 require "reduce"
 require "yaml"
+require "html/proofer"
 
 ## -- Misc Configs -- ##
 public_dir      = "_site"     # compiled site directory
@@ -130,6 +131,12 @@ end
 desc "Move all stashed posts back into the posts directory, ready for site generation."
 task :integrate do
   FileUtils.mv Dir.glob("#{source_dir}/#{stash_dir}/*.*"), "#{source_dir}/#{posts_dir}/"
+end
+
+desc "HTML Proof site"
+task :htmlproof do
+  sh "bundle exec jekyll build"
+  HTML::Proofer.new("./_site", {:href_ignore => ['/tag'], :typhoeus => { :verbose => false, :followlocation => true }, :parallel => { :in_processes => 5}}).run
 end
 
 desc "Generate and display locally"
