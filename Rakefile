@@ -136,12 +136,12 @@ end
 desc "HTML Proof site"
 task :htmlproof do
   sh "bundle exec jekyll build"
-  HTML::Proofer.new("./_site", {:disable_external => true, :empty_alt_ignore => true, :typhoeus => { :verbose => false, :followlocation => true }, :parallel => { :in_processes => 5}}).run
+  HTML::Proofer.new("./_site", {:disable_external => true, :empty_alt_ignore => true, :typhoeus => { :verbose => false, :followlocation => true }, :parallel => { :in_processes => 10}}).run
 end
 
 desc "Generate and display locally"
 task :server do
-  system("JEKYLL_ENV=local bundle exec jekyll serve --watch --safe")
+  system("JEKYLL_ENV=local bundle exec jekyll serve --watch")
 end
 
 
