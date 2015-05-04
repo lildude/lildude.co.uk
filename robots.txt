@@ -1,0 +1,32 @@
+# Blocking seoprofiler.com/bot as it seems to be ignoring individual rules
+User-agent: spbot
+Disallow: /
+
+User-agent: *
+Disallow: /*trackback
+Disallow: /*p=
+Disallow: /*q=
+Disallow: /cgi-bin
+Disallow: /images
+Disallow: /admin
+Disallow: /ano/
+Disallow: /search
+# Don't want robots to crawl my gallery anymore - 22 Apr 2010
+Disallow: /gallery/*
+Disallow: /category
+Disallow: /comments/feed
+Disallow: /*/feed/$
+Disallow: /*/feed/rss/$
+Disallow: /*/trackback/$
+Disallow: /*/*/feed/$
+Disallow: /*/*/feed/rss/$
+Disallow: /*/*/trackback/$
+Disallow: /*/*/*/feed/$
+Disallow: /*/*/*/feed/rss/$
+Disallow: /*/*/*/trackback/$
+# Don't allow robots to crawl my comment atom feeds
+Disallow: /*/atom/comments$
+# Don't allow robots to crawl my tag atom feeds
+Disallow: /*/tag/*/atom*
+# Don't allow robots to crawl my tags anymore - 3 May '15
+Disallow: /tag/*
