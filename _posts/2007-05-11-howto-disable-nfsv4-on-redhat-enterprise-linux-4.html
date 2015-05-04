@@ -9,7 +9,7 @@ tags:
 type: post
 published: true
 ---
-<p>Believe it or not, this isn't actually clearly documented anywhere.  Due to my <a href="http://lildude.co.uk/2007/05/nfsv4-on-linux-is-broken/">issues with the way <acronym title="Network Filesystem">NFSv4</acronym> works on Linux</a>, I've had to disable NFSv4 on <acronym title="Suse Linux Enterprise Server">SLES10</acronym> and <acronym title="RedHat Enterprise Linux">RHEL4</acronym> in order for my Linux mounts to play nicely with Solaris 10's automountd. </p>
+<p>Believe it or not, this isn't actually clearly documented anywhere.  Due to my <a href="/nfsv4-on-linux-is-broken/">issues with the way <acronym title="Network Filesystem">NFSv4</acronym> works on Linux</a>, I've had to disable NFSv4 on <acronym title="Suse Linux Enterprise Server">SLES10</acronym> and <acronym title="RedHat Enterprise Linux">RHEL4</acronym> in order for my Linux mounts to play nicely with Solaris 10's automountd. </p>
 <p>Doing this on SLES was very easy, just change '<code>NFS4_SUPPORT="yes"</code>' to '<code>NFS4_SUPPORT="no"</code>' in <code>/etc/sysconfig/nfs</code>.  However, this doesn't work on RHEL.  It reads the file, but doesn't do anything with this variable.</p>
 <p>A quick bit of script reading revealed how to do it. /etc/init.d/nfs passes the  contents of $RPCNFSDARGS to rpc.nfsd when it starts it.  This variable isn't declared anywhere, so we'll use it to disable NFSv4 as follows:</p>
 <div class="console"><code># echo "RPCNFSDARGS='--no-nfs-version 4'" >> /etc/sysconfig/nfs<br />

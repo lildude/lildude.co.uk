@@ -94,7 +94,7 @@ myzfs/data    18K   944M    18K  /Volumes/myzfs/data<br />
 $</code></div>
 <p>And you'll find Finder shows it too:</p>
 <p><img class="center" src="/assets/myzfsdatainfinder.jpg" alt="myzfs/data shown in Finder" title="myzfs/data shown in Finder" /></p>
-<p>You can find more about what you can do with ZFS in my <a href="http://lildude.co.uk/2006/09/zfs-cheatsheet/">ZFS Cheatsheet</a>, just note it's based on the functionality available in OpenSolaris.  OS X may not have all this functionality yet.</p>
+<p>You can find more about what you can do with ZFS in my <a href="/zfs-cheatsheet/">ZFS Cheatsheet</a>, just note it's based on the functionality available in OpenSolaris.  OS X may not have all this functionality yet.</p>
 <h3>Be Careful</h3>
 <p>Now for the important part: right at the beginning, I said ZFS <strong>WILL</strong> crash your Mac.  I wasn't joking.  Just remove the device you have been using, try access it in Finder and see what I mean.</p>
 <p>Unfortunately OS X isn't too good at detecting missing devices under ZFS control yet, so it panics your system.  You can prevent this by ensuring you export your ZFS filesystem BEFORE you attempt to disconnect your devices using:</p>

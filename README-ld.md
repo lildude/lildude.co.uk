@@ -94,6 +94,12 @@ This is really of no interest to anyone other than me and is for the moment a sc
   sed -i.bak -E 's:http\://lildude.co.uk/user/sites/lildude.co.uk/files/([0-9]{4}/)?([0-9]{2}/)?:/assets/:g' *
   ```
 
+- Update all links back to myself that use the old format to use the new URL format:
+
+  ```
+  cd _posts
+  sed -i.bak -E 's:http\://lildude.co.uk/([0-9]{4}/)([0-9]{2}/):/:g' *
+  ```
 
 ## How I deploy to my own server
 
