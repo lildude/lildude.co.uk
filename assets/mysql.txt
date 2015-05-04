@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<!--
+    Copyright 2005 Sun Microsystems, Inc.  All rights reserved.
+    Use is subject to license terms.
+    MySQL.xml : MySQL manifest, Scott Fehrman, Systems Engineer
+    updated: 2005-09-16
+-->
+
+<service_bundle type='manifest' name='MySQL'>
+<service name='application/database/mysql' type='service' version='1'>
+
+   <single_instance />
+
+   <dependency
+      name='filesystem'
+      grouping='require_all'
+      restart_on='none'
+      type='service'>
+      <service_fmri value='svc:/system/filesystem/local' />
+   </dependency>
+
+   <exec_method 
+      type='method' 
+      name='start'
+      exec='/etc/sfw/mysql/mysql.server start'
+      timeout_seconds='120' />
+
+   <exec_method 
+      type='method' 
+      name='stop'
+      exec='/etc/sfw/mysql/mysql.server stop'
+      timeout_seconds='120' />
+
+   <instance name='default' enabled='false' />
+
+   <stability value='Unstable' />
+
+   <template>
+      <common_name>
+         <loctext xml:lang='C'>MySQL RDBMS 4.0.15</loctext>
+      </common_name>
+      <documentation>
+         <manpage title='mysql' section='1' manpath='/usr/sfw/share/man' />
+      </documentation>
+   </template>
+
+</service>
+</service_bundle>
