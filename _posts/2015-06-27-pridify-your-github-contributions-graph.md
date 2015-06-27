@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pridify Your GitHub Contributions Graph"
-date: 2015-06-27 19:03:38 +0100
+date: 2015-06-27 19:17:41 +0100 2015-06-27 19:03:38 +0100
 tags:
 - GitHub
 - javascript
