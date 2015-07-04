@@ -85,6 +85,17 @@ task :minify do
   puts "Total compression %0.2f\%" % (((original-compressed)/original)*100) if compressed > 0
 end
 
+desc "Optimise images"
+task :optimise_imgs do
+  # Grab time of last compress run
+  last_run = File.exist?("assets/.last-compressed") ? Time.at(IO::readlines("assets/.last-compressed")[1].strip.to_i) : Time.new(1990)
+
+  # TODO: Use imageOptim to modify just the files that have changed - https://imageoptim.com/command-line.html
+  # Write last compressed date to file.
+  t = Time.now
+  File.open("assets/.last-compressed", "w+") { |f| f.puts "# #{t.to_s}\n#{t.to_i}" }
+end
+
 # Taken from http://davidensinger.com/2013/07/automating-jekyll-deployment-to-github-pages-with-rake/ and changed for the gh-pages branch
 desc "Deploy _site/ to gh-pages branch"
 task :deploy_gh do
