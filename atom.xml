@@ -7,7 +7,7 @@ layout:
  <link href="{{ site.baseurl }}/atom.xml" rel="self"/>
  <link href="{{ site.baseurl }}"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
- <id>{{ site.baseurl }}</id>
+ <id>{{ site.url }}/</id>
  <author>
    <name>{{ site.author }}</name>
  </author>
@@ -15,7 +15,7 @@ layout:
  {% for post in site.posts %}
  <entry>
    <title type="html">{{ post.title | xml_escape }}</title>
-   <link href="{{ site.baseurl }}{{ post.url }}"/>
+   <link href="{{ site.baseurl }}{{ post.url }}/"/>
    <updated>{{ post.date | date_to_xmlschema }}</updated>
    <id>{{ site.baseurl }}{{ post.id }}</id>
    <content type="html">{{ post.content | xml_escape }}</content>
