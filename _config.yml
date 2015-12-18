@@ -31,6 +31,7 @@ compress_html:
   endings:        all
   ignore:
     envs:         [local]
+  profile:        false
 
 # Plugins
 gems:
