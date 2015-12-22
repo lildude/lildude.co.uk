@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem "github-pages", "34"
+gem "github-pages", "40"
 gem "stringex"
 gem "reduce"
 gem "jemoji"
