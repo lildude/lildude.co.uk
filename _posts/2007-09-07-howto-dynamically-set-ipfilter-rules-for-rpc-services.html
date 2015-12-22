@@ -23,9 +23,9 @@ published: true
 <p>Unfortunately, Shawn didn't provide all the scripts he uses in his solution when discussing it on his blog, but he did post them on the <a href="http://www.opensolaris.org/jive/forum.jspa?forumID=37">security-discuss forum</a> at <a href="http://www.opensolaris.org">opensolaris.org</a> sometime last year.  Locating these was a bit challenging, but I've done just this and made this post to make it easier for you.</p>
 <p><!--wsa:LongPostMiddle--></p>
 <p>In order to implement Shawn's solution, you need to download the following files (I've copied them locally):</p>
-<p><code><a href="http://lildude.co.uk/shared/scripts/shell/ipfilter_rpcbind">ipfilter_rpcbind</a></code> - This is the service method. Place in <code>/lib/svc/method/</code><br />
-<code><a href="http://lildude.co.uk/shared/scripts/shell/ipfilter_rpcbind.cfg">ipfilter_rpcbind.cfg</a></code> - This is an example config file. Customize and place in <code>/etc/ipf/</code><br />
-<code><a href="http://lildude.co.uk/shared/scripts/shell/ipfilter_rpcbind.xml">ipfilter_rpcbind.xml</a></code> - This is the service manifest. Place in <code>/var/svc/manifest/application/</code></p>
+<p><code><a href="/shared/scripts/shell/ipfilter_rpcbind">ipfilter_rpcbind</a></code> - This is the service method. Place in <code>/lib/svc/method/</code><br />
+<code><a href="/shared/scripts/shell/ipfilter_rpcbind.cfg">ipfilter_rpcbind.cfg</a></code> - This is an example config file. Customize and place in <code>/etc/ipf/</code><br />
+<code><a href="/shared/scripts/shell/ipfilter_rpcbind.xml">ipfilter_rpcbind.xml</a></code> - This is the service manifest. Place in <code>/var/svc/manifest/application/</code></p>
 <p>Next, import the manifest:</p>
 <div class="terminal"># /usr/sbin/svccfg -v import \<br />
 /var/svc/manifest/application/ipfilter_rpcbind.xml</div>
