@@ -15,7 +15,7 @@ published: true
 <p><img class="alignleft" src="/assets/openid-icon.png" alt="OpenID Icon" />With all the news of big companies like Yahoo!, IBM, Google, Verisign and Microsoft <a href="http://www.vnunet.com/vnunet/news/2209238/heavyweights-join-openid">throwing their weight behind</a> <a href="http://www.openid.net">OpenID</a>, I thought I'd investigate this avenue and ultimately ended up jumping on the bandwagon.</p>
 <p>The whole point of OpenID is you could use one identity to gain access to a multitude of websites.  This is a great idea, but I'm not comfortable with someone else proving who I am. I like to do this myself, so I set to creating my own OpenID server.</p>
 <p>This document will detail how you too can setup your own, single identity, OpenID provider (IdP), with <a href="http://en.wikipedia.org/wiki/Cruft">cruft</a> free URIs, using <a href="http://siege.org/projects/phpMyID/">phpMyID</a>.  Don't worry, it's not a particularly complex process and shouldn't take you more than about 30 minutes to setup, regardless of operating system.</p>
-<p>Once finished, you can use your website URI (I use <a href="http://lildude.co.uk">http://lildude.co.uk</a>) as your OpenID.</p>
+<p>Once finished, you can use your website URI (I use <a href="/">lildude.co.uk</a>) as your OpenID.</p>
 <p><!--more-->
 <ol>
 <li>Download and extract the latest copy of phpMyID from <a href="http://siege.org/projects/phpMyID/">http://siege.org/projects/phpMyID/</a>.  At the time of writing, the current revision os 0.8 (<a href="http://siege.org/projects/phpMyID/phpMyID-0.8.tgz">tgz</a> / <a href="http://siege.org/projects/phpMyID/phpMyID-0.8.zip">zip</a>).</li>
@@ -52,7 +52,7 @@ published: true
 <pre>      &lt;link rel="openid.server" href="http://yourdomain/id/" /&gt;
       &lt;link rel="openid.delegate" href="http://yourdomain/id/" /&gt;</pre>
 <p>Set the href values to your IdP URI (both entries must be the same), and <a href="http://www.openidenabled.com/resources/openid-test/checkup">check your setup</a> again.  This time, enter your main website address, eg http://yourdomain, in the "Check an ID" box.  This should work as before.</li>
-<p>That's it.  Now you can login to sites that accept OpenID using your main website URI.  In my case, I use http://lildude.co.uk.</p>
+<p>That's it.  Now you can login to sites that accept OpenID using your main website URI.  In my case, I use /.</p>
 <p>If you want a simple multi-user OpenID implementation, then why not check out <a href="http://wiki.guruj.net/Clamshell!Home">Clamshell</a> - it's phpMyID with the added multi-user functionality added on.</p>
 <p>Feel free to post comments to this post using your new OpenID and see how the SREG information is used to populate your name, email and URI (this will be your OpenID URI) for your comment.</p>
 </ol>
