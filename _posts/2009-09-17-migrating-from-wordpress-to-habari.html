@@ -28,7 +28,7 @@ RewriteRule ^(.+)/$  /$1 [R=301,L]</pre>
 <p>This is a bit of a belt-and-braces approach as the <code>.htaccess</code> rewrite rules would take effect before the Wordpress plugin had a chance, but better safe than sorry.  This entry also ensures the redirects continue once I'd switched to Habari.</p>
 <h3>Plugins and Functionality</h3>
 <p>Once the permalink changes were in place and I was waiting for Google to do it's magic (so I could verify things were good in <a href="https://www.google.com/webmasters/">Webmaster Tools</a>) I concentrated on the functionality I was using in Wordpress, what I wanted to continue to use, and what Habari plugins I'd need to get this functionality. If you don't already know, Habari works on a very minimalist approach.  If you want fancy functionality, you implement it via a plugin.  Only the bare essentials that would be used by most users are included in the core software.</p>
-<p>Sadly, all my needs and requirements weren't met by the vast collection of plugins available in the <a href="http://trac.habariproject.org/habari-extras/browser/plugins">habari-extras</a> repository or listed <a href="http://wiki.habariproject.org/en/Available_Plugins">here</a> so I had to whip out <a href="http://lildude.co.uk/netbeans-65-is-a-great-php-ide/">NetBeans</a> and Mercurial and get coding.</p>
+<p>Sadly, all my needs and requirements weren't met by the vast collection of plugins available in the <a href="http://trac.habariproject.org/habari-extras/browser/plugins">habari-extras</a> repository or listed <a href="http://wiki.habariproject.org/en/Available_Plugins">here</a> so I had to whip out <a href="/netbeans-65-is-a-great-php-ide/">NetBeans</a> and Mercurial and get coding.</p>
 <p>I'll come back to the list of plugins I ended up creating and using later on, because before I could actually get coding, I needed to set up my "Test and Dev Bed"...</p>
 <h3>Test and Dev Bed</h3>
 <p>In order to make my testing and coding life easy and consistent, I set up two development environments:  one on my OpenSolaris host at work (which closely mimics my <a href="http://www.joyent.com/">hosting provider</a>) and one on my Mac at home, with my Mercurial repositories (for all my own custom code) stored on the server behind this site.  Using local test beds means I'm not held up by network latency, outages or any other remote problems.</p>
@@ -37,7 +37,7 @@ RewriteRule ^(.+)/$  /$1 [R=301,L]</pre>
 <p>In the end I ended up coding 8 plugins from scratch and modifying a few others.  Where possible, I've fed back my changes directly to the author or directly to the habari-extras repository.</p>
 <p>My final list of plugins looks almost<sup>*</sup> like this...</p>
 <ul>
-<li><a href="http://lildude.co.uk/projects/hb-audio-player">HB Audio Player</a> by Colin Seymour (<a href="http://colinseymour.co.uk/dominic-the-italian-christmas-donkey">see it in action</a>)<sub>[<a href="#1">1</a>]</sub></li>
+<li><a href="/projects/hb-audio-player">HB Audio Player</a> by Colin Seymour (<a href="http://colinseymour.co.uk/dominic-the-italian-christmas-donkey">see it in action</a>)<sub>[<a href="#1">1</a>]</sub></li>
 <li><a href="http://habariproject.org/">AutoParagraph</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
 <li><a href="http://habariproject.org/">Autopinger</a> by  Habari Community <sub>[<a href="#3">3</a>]</sub></li>
 <li><a href="http://habariproject.org/">Comment Notifier</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
@@ -47,7 +47,7 @@ RewriteRule ^(.+)/$  /$1 [R=301,L]</pre>
 <li><a href="http://habariproject.org/">Fresh Comments</a> by Joel Lee <sub>[<a href="#3">3</a>]</sub></li>
 <li><a href="http://habariproject.org/">GoogleAnalytics</a> by Graham Christensen and Habari Community <sub>[<a href="#3">3</a>]</sub></li>
 <li><a href="http://habariproject.org/">Habari Media Silo</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
-<li><a href="http://lildude.co.uk/projects/hb-cumulus">HB-Cumulus</a> by Colin Seymour (<a href="http://colinseymour.co.uk/">see it in action - sidebar</a>)</li>
+<li><a href="/projects/hb-cumulus">HB-Cumulus</a> by Colin Seymour (<a href="http://colinseymour.co.uk/">see it in action - sidebar</a>)</li>
 <li><a href="http://drunkenmonkey.org/projects/jambo">Jambo</a> by Drunken Monkey Labs <sub>[<a href="#3">3</a>]</sub></li>
 <li><a href="http://habariproject.org/">Monthly Archives</a> by Habari Community <sub>[<a href="#5">5</a>]</sub></li>
 <li><a href="http://habariproject.org/">Page Menu</a> by Owen Winkler <sub>[<a href="#3">3</a>]</sub></li>
