@@ -111,8 +111,8 @@ task :deploy_gh do
   ok_failed(system("bundle exec jekyll build 1> /dev/null"))
   puts "\n## Removing _site from .gitignore".yellow
   ok_failed(system("sed -i '' -e 's/_site//g' .gitignore"))
-  #puts "\n## Miniying _site".yellow
-  #ok_failed(Rake::Task["minify"].execute)
+  puts "\n## Miniying _site".yellow
+  ok_failed(Rake::Task["minify"].execute)
   puts "\n## Adding _site".yellow
   ok_failed(system("git add .gitignore _site assets/.last-compressed"))
   message = "Build site at #{Time.now.utc}"
