@@ -96,9 +96,8 @@ task :optimise_imgs do
   File.open("assets/.last-compressed", "w+") { |f| f.puts "# #{t.to_s}\n#{t.to_i}" }
 end
 
-# Taken from http://davidensinger.com/2013/07/automating-jekyll-deployment-to-github-pages-with-rake/ and changed for the gh-pages branch
-desc "Deploy _site/ to gh-pages branch"
-task :deploy_gh do
+desc "Deploy master to Digital Ocean using rsync and copy _site/ to gh-pages branch and push to GitHub repo."
+task :deploy do
   unless Dir.glob("#{stash_dir}/*.*").empty?
     puts "ERROR: #{stash_dir} is not empty. Unstash and try again".red
     exit
@@ -113,6 +112,8 @@ task :deploy_gh do
   ok_failed(system("sed -i '' -e 's/_site//g' .gitignore"))
   puts "\n## Miniying _site".yellow
   ok_failed(Rake::Task["minify"].execute)
+  puts "\## Deploying to Digital Ocean".yellow
+  ok_failed(system("rsync --compress --recursive --checksum --delete --itemize-changes _site/ do1:www/static-sites/lildude/"))
   puts "\n## Adding _site".yellow
   ok_failed(system("git add .gitignore _site assets/.last-compressed"))
   message = "Build site at #{Time.now.utc}"
@@ -126,13 +127,6 @@ task :deploy_gh do
   ok_failed(system("git push origin master gh-pages --force 1>/dev/null"))
 end
 
-desc "Deploy to Digital Ocean"
-task :deploy do
-  ok_failed(Rake::Task["deploy_gh"].execute)
-  puts "\## Deploying to Digital Ocean".yellow
-  ok_failed(system("git push deploy master gh-pages --force 1>/dev/null"))
-end
-
 desc "HTML Proof site"
 task :htmlproof do
   sh "bundle exec jekyll build"
@@ -140,6 +134,7 @@ task :htmlproof do
     :disable_external => true,
     :empty_alt_ignore => true,
     :verbose => true,
+    :href_swap => {%r{(?<!\/)^\/{1}(?!\/)} => "https://lildude.co.uk/"}, # Matches /foo/doo but not //foo/doo - useful for protocol-less links.
     :typhoeus => { :verbose => true, :followlocation => true },
     :parallel => { :in_processes => 1}}).run
 end
