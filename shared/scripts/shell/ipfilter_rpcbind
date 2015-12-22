@@ -1,0 +1,90 @@
+#!/bin/ksh
+#
+# Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
+# Use is subject to license terms.
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License, Version 1.0 only
+# (the "License").  You may not use this file except in compliance
+# with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+#
+# Author:  Borgan Chu, 03/04/2006
+#
+# This script is to add extra IPF rules to allow certain hosts/network to access
+# certain ports.
+#
+# This script will be executed at the start/restart of it's dependant
+# services as listed in /ipfilter:rpcbind
+#
+# Configuration File needs to be in the following format
+#
+#ypserv:pool/1001 pool/1003
+#
+# Modified by: Shawn Ferry shawn.ferry <at> sun.com
+# svcs type modifications 
+# stop/start/restart
+# rule cleanup
+
+. /lib/svc/share/smf_include.sh
+
+
+PATH=/usr/sbin:/usr/bin
+config=/etc/ipf/ipfilter_rpcbind.cfg
+
+addrule()
+{
+  rpcinfo -p localhost | nawk -v service=$1 -v src=$2 -v dest=$3 '($NF == service) {print "pass in quick proto "$3" from "src"  to "dest" port = "$4" keep state group 100"}' | sort -u
+}
+
+disable()
+{
+     /usr/sbin/ipfstat -i | /usr/bin/grep "group 100" | /usr/sbin/ipf -r -f -
+}
+
+enable()
+{
+	[ -f $config ] || ( echo "\nConfiguration file $config does not exist!\n" ; exit $SMF_EXIT_ERR_CONFIG )
+
+while read entry
+do
+  service=`echo $entry|awk -F: '{print $1}'`
+  hosts=`echo $entry|awk -F: '{print $2}'`
+  for host in $hosts
+  do
+    addrule $service $host any | ipf -f -
+  done
+done < $config
+}
+
+
+case $1 in
+        start)
+                enable
+                ;;
+        stop)
+                disable
+                ;;
+        restart)
+                enable
+                disable
+                ;;
+        *)
+                echo "\nOne of stop, start, restart must be provided\n"
+		exit $SMF_EXIT_ERR_FATAL
+                ;;
+
+esac

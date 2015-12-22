@@ -1,0 +1,22 @@
+if (!this.m_sessionId || this.m_sessionId == timedOutSessionId) {
+  try {
+      this.m_sessionId = null;
+      if (timedOutSessionId) {
+          this.log( "prompting to reconnect.", "session timeout" );
+          // Disabling annoying prompt
+          // var prompt = getWindowWatcher().getNewPrompter(null);
+          var prompt = '';
+          var bundle = getWcapBundle();
+          if (!prompt.confirm(
+                  bundle.GetStringFromName(
+                      "reconnectConfirmation.label"),
+                  bundle.formatStringFromName(
+                      "reconnectConfirmation.text",
+                      [this.uri.hostPort], 1 ) )) {
+              this.log( "reconnect cancelled." );
+              throw new Components.Exception(
+                  "Login failed. Invalid session ID.",
+                  Components.interfaces.
+                  calIWcapErrors.WCAP_LOGIN_FAILED );
+          }
+      }

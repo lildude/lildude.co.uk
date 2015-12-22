@@ -1,0 +1,18 @@
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>CSS :after Property Test</title>
+	<style type="text/css">
+		img.flickr-srcd:after {
+			content: url("/assets/flickr_logo-small-sideways.gif");
+			padding-left: 5px;
+		}
+	</style>
+</head>
+<body>
+	<p>The image below, should have a flickr Logo to the right of it, if your browser renders this correctly:</p>
+	<img class="flickr-srcd" src="http://farm1.static.flickr.com/121/276074021_43bc40b104_m.jpg" alt=""/>
+	<p>If you're curious, it should look like this, as rendered in Opera:</p>
+	<img src="/assets/CSSFlickrLogo.png" alt=""/>
+</body>
+</html>

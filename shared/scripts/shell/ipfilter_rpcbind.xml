@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
+<!-- 
+#
+# Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
+# Use is subject to license terms.
+#
+# CDDL HEADER START
+#
+# The contents of this file are subject to the terms of the
+# Common Development and Distribution License, Version 1.0 only
+# (the "License").  You may not use this file except in compliance
+# with the License.
+#
+# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+# or http://www.opensolaris.org/os/licensing.
+# See the License for the specific language governing permissions
+# and limitations under the License.
+#
+# When distributing Covered Code, include this CDDL HEADER in each
+# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+# If applicable, add the following below this CDDL HEADER, with the
+# fields enclosed by brackets "[]" replaced with your own identifying
+# information: Portions Copyright [yyyy] [name of copyright owner]
+#
+
+Shawn Ferry shawn.ferry <at> sun.com
+Service manifest for mainting dynamic ipfilter rules
+-->
+<service_bundle type="manifest" name="sungrid:ipfilter">
+
+  <service name="application/ipfilter" type="service" version="1">
+
+    <single_instance/> <!-- maybe more than one if this gets complex -->
+
+        <dependency name="ipfilter" grouping="require_all" restart_on="refresh" type="service">
+	    <service_fmri value="svc:/network/ipfilter:default"/>
+        </dependency>
+
+  
+      <!-- dsmonitor full mode instnace -->
+      <instance name="rpcbind" enabled="true">
+	      <dependency name="rpc_bind" grouping="require_all" restart_on="refresh" type="service">
+		      <service_fmri value="svc:/network/rpc/bind:default"/>
+	      </dependency>
+
+	      <dependency name="ipfilter_rpcbind_config" grouping="require_all" restart_on="refresh" type="path">
+		      <service_fmri value="file://localhost/etc/ipf/ipfilter_rpcbind.cfg"/>
+	      </dependency>
+
+	      <dependency name="rpc_services" grouping="require_any" restart_on="refresh" type="service">
+		      <service_fmri value="svc:/network/nis/xfr:default"/>
+		      <service_fmri value="svc:/network/nis/server:default"/>
+		      <service_fmri value="svc:/network/nis/client:default"/>
+		      <service_fmri value="svc:/network/nis/update:default"/>
+		      <service_fmri value="svc:/network/nis/passwd:default"/>
+		      <service_fmri value="svc:/network/nfs/server:default"/>
+		      <service_fmri value="svc:/network/nfs/client:default"/>
+	      </dependency>
+
+        <exec_method type="method" name="start" exec="/lib/svc/method/ipfilter_rpcbind start" timeout_seconds="30"/>
+        <exec_method type="method" name="stop" exec="/lib/svc/method/ipfilter_rpcbind stop" timeout_seconds="60"/>
+
+        <property_group name="startd" type="framework">
+                <propval name="duration" type="astring" value="transient"/>
+        </property_group>
+
+        <template>
+            <common_name>
+                <loctext xml:lang="C">
+			Dynamic rpc service rules for ipfilter
+                </loctext>
+            </common_name>
+            <description>
+              <loctext xml:lang="C">
+		      Add Dynamic rpc services rules to ipfilter refresh rules on
+		      restart/refresh of various services to maintain rules.
+
+		      Manually clearing and reloading ipfilter rules with ipf will not
+		      trigger this service to restart/refresh.
+		      e.g. ipf -Fa -f /etc/ipf/ipf.conf 
+              </loctext>
+            </description>
+            <documentation>
+	        <manpage title="ipf" section="1M" manpath="/usr/share/man"/>
+	        <manpage title="ipfstat" section="1M" manpath="/usr/share/man"/>
+	        <manpage title="ipf.conf" section="4" manpath="/usr/share/man"/>
+            </documentation>
+        </template>
+      </instance>
+  
+      <stability value="Unstable"/>
+  </service>
+
+</service_bundle>
