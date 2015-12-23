@@ -113,7 +113,7 @@ task :deploy do
   puts "\n## Miniying _site".yellow
   ok_failed(Rake::Task["minify"].execute)
   puts "\## Deploying to Digital Ocean".yellow
-  ok_failed(system("rsync --compress --recursive --checksum --delete --itemize-changes _site/ do1:www/static-sites/lildude/"))
+  ok_failed(system("rsync --compress --recursive --checksum --delete --itemize-changes --iconv=utf-8-mac,utf-8 _site/ do1:www/static-sites/lildude/")) # Requires rsync 3 on the Mac.
   puts "\n## Adding _site".yellow
   ok_failed(system("git add .gitignore _site assets/.last-compressed"))
   message = "Build site at #{Time.now.utc}"
