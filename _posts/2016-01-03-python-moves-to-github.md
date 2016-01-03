@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Python Moves to GitHub"
-date: 2016-01-03 11:14:11 +0000
+date: 2016-01-03 11:19:52 +0000 2016-01-03 11:14:11 +0000
 tags:
 - GitHub
 - python
