@@ -9,10 +9,10 @@ type: post
 published: true
 ---
 
-Before joining GitHub, I'd configured all my GitHub notifications to be email-only.  I then joined GitHub and was instantly drowned in notifications.  Partly because I now have a lot more GitHub repositories to watch and participate it, but mostly because my onboarding buddy accidentally set me up watching every single github/* repository.  Whoops!
+Before joining GitHub, I'd configured all my GitHub notifications to be email-only.  I then joined GitHub and was instantly drowned in notifications.  Partly because I now have a lot more GitHub repositories to watch and participate it, but mostly because my on-boarding buddy accidentally set me up watching every single github/* repository.  Whoops!
 
-The quickest solution at the time was to disable email notifications and switch to web only whilst I whittled down the list of repositories I watch.  I believe I've now got a perfect balance, however now I'm finding I'm missing out on things or getting to them too late because I rarely check my web notifications.
+The quickest solution at the time was to disable email notifications for everything except "Participating" and switch to web-only whilst I whittled down the list of repositories I watch.  I believe I've now got a perfect balance, however now I'm finding I'm missing out on things because I get to them too late as I rarely check my web notifications.
 
 So as of today, I've disabled all web notifications and will be relying solely on email notifications.
 
-My thinking is I should be able to respond in a more timely manner than before and now miss out on things I really don't want to.  I can also use Google's Inbox functionality to remind me of those notifications I want to come back to at a later date.
+My thinking is I should be able to respond in a more timely manner than before and not miss out on things I really don't want to.  I can also use Google's Inbox functionality to remind me of those notifications I want to come back to at a later date.
