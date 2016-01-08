@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Switching to Email-only GitHub Notifications"
-date: 2016-01-08 15:50:23 +0000
+date: 2016-01-08 16:21:34 +0000 2016-01-08 15:50:23 +0000
 tags:
 - GitHub
 - notifications
