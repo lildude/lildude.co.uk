@@ -8,16 +8,7 @@ title: Home
   <div class="post">
     <div class="post-content">
       <h1 class="post-title"><a href="{{site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
-      <p class="meta">
-        {% if site.name and site.name != "" %}
-          <a href="/about/" class="post-author-image"><img src="/assets/avatar-40x40.png" alt="{{ site.name }}" width=20 height=20 /></a>
-        {% endif %}
-        Posted
-        {% if site.name and site.name != "" %}
-          by <a href="/about/" class="post-author">{{ site.name }}</a>
-        {% endif %}
-        on <span class="post-date">{{ post.date | date: "%d %B %Y" }}</span>
-      </p>
+      {{ post.excerpt | strip_html | truncatewords:50 | strip_newlines }}
     </div>
   </div>
   {% endfor %}
