@@ -102,27 +102,41 @@ task :deploy do
     puts "ERROR: #{stash_dir} is not empty. Unstash and try again".red
     exit
   end
-  puts "\n## Deleting gh-pages branch".yellow
-  ok_failed(system("git branch -D gh-pages 1>/dev/null"))
-  puts "\n## Creating new gh-pages branch and switching to it".yellow
-  ok_failed(system("git checkout -b gh-pages 1>/dev/null"))
-  puts "\n## Generating _site content".yellow
-  ok_failed(system("bundle exec jekyll build 1> /dev/null"))
-  puts "\n## Removing _site from .gitignore".yellow
-  ok_failed(system("sed -i '' -e 's/_site//g' .gitignore"))
   puts "\n## Miniying _site".yellow
   ok_failed(Rake::Task["minify"].execute)
+
+  puts "\n## Update minified files".yellow
+  ok_failed(system("git add assets"))
+  ok_failed(system("git commit -m \"Update minified files\" 1>/dev/null"))
+
+  puts "\n## Deleting gh-pages branch".yellow
+  ok_failed(system("git branch -D gh-pages 1>/dev/null"))
+
+  puts "\n## Creating new gh-pages branch and switching to it".yellow
+  ok_failed(system("git checkout -b gh-pages 1>/dev/null"))
+
+  puts "\n## Generating _site content".yellow
+  ok_failed(system("bundle exec jekyll build 1> /dev/null"))
+
+  puts "\n## Removing _site from .gitignore".yellow
+  ok_failed(system("sed -i '' -e 's/_site//g' .gitignore"))
+
   puts "\## Deploying to Digital Ocean".yellow
   ok_failed(system("rsync --compress --recursive --checksum --delete --itemize-changes --iconv=utf-8-mac,utf-8 _site/ do1:www/static-sites/lildude/")) # Requires rsync 3 on the Mac.
+
   puts "\n## Adding _site".yellow
   ok_failed(system("git add .gitignore _site assets/.last-compressed"))
-  message = "Build site at #{Time.now.utc}"
+
   puts "\n## Building site".yellow
+  message = "Build site at #{Time.now.utc}"
   ok_failed(system("git commit -m \"#{message}\" 1>/dev/null"))
+
   puts "\n## Forcing the _site subdirectory to be project root".yellow
   ok_failed(system("git filter-branch --subdirectory-filter _site/ -f 1>/dev/null"))
+
   puts "\n## Switching back to master branch".yellow
   ok_failed(system("git checkout master 1>/dev/null"))
+
   puts "\n## Pushing all branches to origin".yellow
   ok_failed(system("git push origin master gh-pages --force 1>/dev/null"))
 end
