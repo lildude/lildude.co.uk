@@ -12,6 +12,8 @@ tagline:          But what is it good for?
 url:              https://lildude.co.uk
 baseurl:          ""
 
+paginate:         25
+
 # Author
 name:             "lildude"
 author:           '@lildude'
