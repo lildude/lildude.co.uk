@@ -13,6 +13,10 @@ posts_dir       = "_posts"    # directory for blog files
 new_post_ext    = "md"        # default new post file extension when using the new_post task
 editor          = "atom"      # default editor to use to open and edit your new posts
 
+## -- Site -- ##  This is so I can easily share the same Rakefile between all my sites.
+config = YAML.load_file('_config.yml')
+$site = config["url"].match(/(?<=https:\/\/)[a-z][^.]*/)[0]
+
 ## -- Tasks -- ##
 
 # usage rake new_post[my-new-post] or rake new_post['my new post'] or rake new_post (defaults to "new-post")
@@ -45,7 +49,7 @@ task :publish, :draft_file do |t, args|
   puts "Publishing #{draft_post}".yellow
   # Update the date to the publish date
   post = File.read(filename)
-  File.write(filename, post.gsub(/^date:.*?/, "date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}"))
+  File.write(filename, post.sub!(/^date:.*?$/, "date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}"))
   # Get post title for nice commit message.
   f = YAML.load_file(filename)
   post_title = f["title"]
@@ -85,29 +89,18 @@ task :minify do
   puts "Total compression %0.2f\%" % (((original-compressed)/original)*100) if compressed > 0
 end
 
-desc "Optimise images"
-task :optimise_imgs do
-  # Grab time of last compress run
-  last_run = File.exist?("assets/.last-compressed") ? Time.at(IO::readlines("assets/.last-compressed")[1].strip.to_i) : Time.new(1990)
-
-  # TODO: Use imageOptim to modify just the files that have changed - https://imageoptim.com/command-line.html
-  # Write last compressed date to file.
-  t = Time.now
-  File.open("assets/.last-compressed", "w+") { |f| f.puts "# #{t.to_s}\n#{t.to_i}" }
-end
-
 desc "Deploy master to Digital Ocean using rsync and copy _site/ to gh-pages branch and push to GitHub repo."
 task :deploy do
   unless Dir.glob("#{stash_dir}/*.*").empty?
     puts "ERROR: #{stash_dir} is not empty. Unstash and try again".red
     exit
   end
-  puts "\n## Miniying _site".yellow
-  ok_failed(Rake::Task["minify"].execute)
-
-  puts "\n## Update minified files".yellow
-  ok_failed(system("git add assets"))
-  ok_failed(system("git commit -m \"Update minified files\" 1>/dev/null"))
+  # This doesn't do anything except slow things down.
+  #puts "\n## Miniying _site".yellow
+  #ok_failed(Rake::Task["minify"].execute)
+  #puts "\n## Update minified files".yellow
+  #ok_failed(system("git add assets"))
+  #ok_failed(system("git commit -m \"Update minified files\" 1>/dev/null"))
 
   puts "\n## Deleting gh-pages branch".yellow
   ok_failed(system("git branch -D gh-pages 1>/dev/null"))
@@ -122,7 +115,7 @@ task :deploy do
   ok_failed(system("sed -i '' -e 's/_site//g' .gitignore"))
 
   puts "\## Deploying to Digital Ocean".yellow
-  ok_failed(system("rsync --compress --recursive --checksum --delete --itemize-changes --iconv=utf-8-mac,utf-8 _site/ do1:www/static-sites/lildude/")) # Requires rsync 3 on the Mac.
+  ok_failed(system("/usr/local/bin/rsync --compress --recursive --checksum --delete --itemize-changes --iconv=utf-8-mac,utf-8 _site/ do1:www/static-sites/#{$site}/")) # Requires rsync 3 on the Mac.
 
   puts "\n## Adding _site".yellow
   ok_failed(system("git add .gitignore _site assets/.last-compressed"))
@@ -140,15 +133,15 @@ task :deploy do
   puts "\n## Pushing all branches to origin".yellow
   ok_failed(system("git push origin master gh-pages --force 1>/dev/null"))
 end
-
 desc "HTML Proof site"
 task :htmlproof do
   sh "bundle exec jekyll build"
   HTML::Proofer.new("./_site", {
-    :disable_external => true,
+    :disable_external => false,
+    :cache => { :timeframe => '2w' },
     :empty_alt_ignore => true,
     :verbose => true,
-    :href_swap => {%r{(?<!\/)^\/{1}(?!\/)} => "https://lildude.co.uk/"}, # Matches /foo/doo but not //foo/doo - useful for protocol-less links.
+    :href_swap => {%r{(?<!\/)^\/{1}(?!\/)} => "https://#{$site}.co.uk/"}, # Matches /foo/doo but not //foo/doo - useful for protocol-less links.
     :typhoeus => { :verbose => true, :followlocation => true },
     :parallel => { :in_processes => 1}}).run
 end
