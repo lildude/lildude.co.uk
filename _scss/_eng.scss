@@ -152,6 +152,15 @@ embed, object, video, iframe { max-width: 100%; }
   background:#f8f8f8;
 }
 
+pre code {
+  white-space: pre;
+  word-wrap: normal;
+  word-break: normal;
+}
+pre {
+  overflow-x: scroll;
+}
+
 .base {
   border-top:1px solid #efefef;
   padding:20px 0;
