@@ -36,6 +36,10 @@ compress_html:
     envs:         [local]
   profile:        false
 
+# Configure RedCarpet
+redcarpet:
+  extensions:       [tables, autolink, strikethrough, footnotes, superscript]
+
 # Plugins
 gems:
   - jekyll-mentions
