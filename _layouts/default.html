@@ -4,19 +4,19 @@ layout: compress
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
   <head>
-    <link href="http://gmpg.org/xfn/11" rel="profile">
+    <link href="http://gmpg.org/xfn/11" rel="profile" />
     <link rel="canonical" href="{{ site.url }}{{ page.url | remove:'index.html' }}" />
-    <link href="{{ site.url }}/atom.xml" rel="alternate" title="{{ site.title }} - Atom Feed" type="application/atom+xml">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="{{ site.url }}/atom.xml" rel="alternate" title="{{ site.title }} - Atom Feed" type="application/atom+xml" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     {% if site.google-site-verification %}
-    <meta name=google-site-verification content="{{ site.google-site-verification }}" />
+    <meta name="google-site-verification" content="{{ site.google-site-verification }}" />
     {% endif %}
 
     <!-- Enable responsiveness on mobile devices -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <meta name="description" content="{% if page.title == "Home" %}{{ site.description }} {% if paginator.page > 1 %} (Page {{ paginator.page }}) {% endif %}{% else %}{{ content | strip_html | truncatewords:50 | strip_newlines | escape_once }}{% endif %}">
-    <meta name="keywords" content="{% for tag in page.tags %}{{ tag | downcase }}{% if forloop.last != true %}, {% endif %}{% endfor %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="description" content="{% if page.title == "Home" %}{{ site.description }} {% if paginator.page > 1 %} (Page {{ paginator.page }}) {% endif %}{% else %}{{ content | strip_html | truncatewords:50 | strip_newlines | escape_once }}{% endif %}" />
+    <meta name="keywords" content="{% for tag in page.tags %}{{ tag | downcase }}{% if forloop.last != true %}, {% endif %}{% endfor %}" />
     <title>
       {% if page.title == "Home" %}
         {{ site.title }} · {{ site.tagline }}
@@ -28,7 +28,7 @@ layout: compress
 
     <!-- CSS -->
     {% if jekyll.environment == 'local' %}
-      <link rel="stylesheet" href="{{ site.baseurl }}/css/screen.css">
+      <link rel="stylesheet" href="{{ site.baseurl }}/css/screen.css" />
     {% else %}
       <style type="text/css">
         {% capture include_to_scssify %}
@@ -39,11 +39,11 @@ layout: compress
     {% endif %}
 
     <!-- Icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ site.baseurl }}/img/apple-touch-icon.png">
-    <link rel="shortcut icon" href="{{ site.baseurl }}/img/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ site.baseurl }}/img/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="{{ site.baseurl }}/img/favicon.ico" />
 
     <!-- RSS -->
-    <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ site.baseurl }}/atom.xml">
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ site.baseurl }}/atom.xml" />
 
   </head>
 
