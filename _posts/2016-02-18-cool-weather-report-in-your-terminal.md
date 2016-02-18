@@ -11,7 +11,7 @@ published: true
 
 I spend so much of my life in my terminal (iTerm2) and have become quite the CLI nerd.  Imagine my delight when I discovered I can get a pretty cool looking weather forecast with a single command: `curl wttr.in`:
 
-![wttr.in](/assets/wttr.in.png)
+![wttr.in](/assets/wttr_in.png)
 
 By default, it shows you the weather based on your current location, determined by your IP address - I'm nowhere near Northampton :smile: - but you can specify a location by appending it to the end, eg `curl wttr.in/London`.
 
