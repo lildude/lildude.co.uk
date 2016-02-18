@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Cool Weather Report in Your Terminal"
-date: 2016-02-18 10:46:59 +0000
+date: 2016-02-18 10:56:03 +0000
 tags:
 - weather
 - cli
