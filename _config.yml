@@ -3,7 +3,7 @@ markdown:         redcarpet
 highlighter:      rouge
 
 # Permalinks
-permalink:        /:title/
+permalink:        :title
 
 # Setup
 title:            Col's Tech
