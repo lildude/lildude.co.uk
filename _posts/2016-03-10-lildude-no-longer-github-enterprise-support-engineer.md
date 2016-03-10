@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "@lildude is No Longer a GitHub Enterprise Support Engineer"
-date: 2016-03-10 16:16:17 +0000
+date: 2016-03-10 16:29:50 +0000
 tags:
 - career
 type: post
