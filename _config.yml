@@ -15,7 +15,7 @@ baseurl:          ""
 paginate:         25
 
 # Author
-name:             "Colin Seymour"
+name:             "lildude"
 author:           '@lildude'
 timezone:         Europe/London
 
