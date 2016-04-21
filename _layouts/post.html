@@ -4,23 +4,16 @@ layout: default
 
 <div class="post h-entry">
   <h1 class="post-title p-name">{{ page.title }}</h1>
-  {% comment %}
-  <p class="meta">
-    {% if site.name and site.name != "" %}
-      <a href="/about/" class="post-author-image"><img src="/assets/avatar-40x40.png" alt="{{ site.name }}" width=20 height=20 /></a>
-    {% endif %}
-    Posted {% if site.name and site.name != "" %}by <a href="/about/" class="post-author">{{ site.name }}</a> {% endif %}
-    on <span class="post-date">{{ page.date | date: "%d %B %Y" }}</span>
-  </p>
-  {% endcomment %}
 
   {{ content }}
 
   <p class="meta">
-    <span class="post-date dt-published" datetime="{{ page.date }}">— Published {{ page.date | date: "%d %B %Y" }}</span>
+    <span class="post-date dt-published" datetime="{{ page.date | date_to_xmlschema }}">— Published {{ page.date | date: "%d %B %Y" }}</span>
     {{ hCard stuffs }}
     <span style="display:none">
       <span class="p-author h-card">{{ site.name }}</span>
+      <img class="u-photo" src="{{ site.baseurl }}/img/profile.png" alt="" />
+      <a href="{{ page.url }}" class="u-url">{{ page.url }}</a>
     </span>
   </p>
 </div>
