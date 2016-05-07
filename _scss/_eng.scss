@@ -1,4 +1,5 @@
-/* Google fonts, from https://fonts.googleapis.com/css?family=Open+Sans:300,700,300italic,700italic*/
+/* Google fonts, from https://fonts.googleapis.com/css?family=Open+Sans:300,700,300italic,700italic
+Experimenting with native fonts ala https://github.com/twbs/bootstrap/pull/19098
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -23,17 +24,19 @@
   font-weight: 700;
   src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(https://fonts.gstatic.com/s/opensans/v13/PRmiXeptR36kaC0GEAetxhbnBKKEOwRKgsHDreGcocg.woff) format('woff');
 }
+*/
 
 html {
   font-size:16px;
 }
 
 body {
-  font-family:"Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
   color:#727272;
 }
 
 /*---:[ Image alignment ]:---*/
+img { margin: 0 }
 img.alignleft, img.left { float: left; margin-right: 10px }
 img.alignright, img.right { float: right; margin-left: 10px }
 img.aligncenter, img.center { clear: both; display: block; float: none; margin: 0 auto; }
