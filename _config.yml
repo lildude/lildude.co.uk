@@ -1,5 +1,5 @@
 # Dependencies
-markdown:         redcarpet
+markdown:         kramdown
 highlighter:      rouge
 
 # Permalinks
@@ -39,6 +39,10 @@ compress_html:
 # Configure RedCarpet
 redcarpet:
   extensions:       [tables, autolink, strikethrough, footnotes, superscript]
+
+kramdown:
+  input:            GFM
+  smart_quotes:     ["apos", "apos", "quot", "quot"]  # Don't do smart quoting by replacing like for like.
 
 # Plugins
 gems:
