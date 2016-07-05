@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Using `&lt;details&gt;` on GitHub"
-date: 2016-07-05 10:45:48 +0100
+date: 2016-07-05 11:01:44 +0100
 tags:
 - GitHub
 type: post
