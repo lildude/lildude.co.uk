@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Sort an Array of Strings by Severity in Ruby"
-date: 2016-08-16 16:29:12 +0100
+date: 2016-08-16 17:17:33 +0100
 tags:
 - ruby
 - programming
