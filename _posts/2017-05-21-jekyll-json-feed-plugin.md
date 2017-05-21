@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Jekyll JSON Feed Plugin"
-date: 2017-05-21 13:03:31 +0100
+date: 2017-05-21 13:12:08 +0100
 tags:
 - Jekyll
 - JSON
