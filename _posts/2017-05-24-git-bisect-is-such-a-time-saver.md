@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "'git bisect' is Such a Timesaver"
-date: 2017-05-24 15:13:23 +0100
+date: 2017-05-24 15:42:08 +0100
 tags:
 - git
 - shorts
