@@ -31,14 +31,10 @@ compress_html:
   clippings:      all
   comments:       ["<!-- ", " -->"]
   endings:        all
-  startings: [html, body] # Google Webmaster tools needs the <head> tag.
+  startings:      [html, body] # Google Webmaster tools needs the <head> tag.
   ignore:
     envs:         [local]
   profile:        false
-
-# Configure RedCarpet
-redcarpet:
-  extensions:       [tables, autolink, strikethrough, footnotes, superscript]
 
 kramdown:
   input:            GFM
@@ -46,7 +42,7 @@ kramdown:
 
 # Plugins
 gems:
-  - jekyll-mentions
+  - jekyll-sitemap
   - jekyll-paginate
   - jekyll-json-feed
 
