@@ -23,10 +23,10 @@ published: true
 <li>Modify <code>/etc/vfstab</code> and<br />
                  - change <code>rootfs</code> to be <code>/devices/ramdisk:a</code><br />
 	         - remove swap<br />
-	         - remove <code>/tmp</code> so it's not swap backed</p>
+	         - remove <code>/tmp</code> so it's not swap backed
 </li>
 <li>Now use the <code>/boot/solaris/bin/root_archive</code> command to build the RAM disk image:
 <p>eg <code># /boot/solaris/bin/root_archive pack solaris.img &lt;dir&gt;</code></p>
-<p>... where &lt;dir&gt; is the directory you've got your working filesystem in.</li>
+<p>... where &lt;dir&gt; is the directory you've got your working filesystem in.</p></li>
 </ol>
 <p>Now you have a RAM disk image, there's nothing really stopping you from loading it from the network via pxegrub/pxelinux, or from a local disk.</p>

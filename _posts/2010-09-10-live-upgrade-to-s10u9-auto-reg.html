@@ -12,7 +12,7 @@ published: true
 <p>With the release of Solaris 10 9/10 many people will be downloading and setting up their environments to perform the upgrade and installs of this new release.  As you may know by now, Solaris 10 9/10 now has <a href="http://docs.sun.com/app/docs/doc/821-1907/autoreg" target="_blank">Oracle Solaris Auto Registration</a> functionality.</p>
 <p>I mentioned this in my release post and referred to the new auto_reg keyword for the <code>sysidcfg</code> used for installing a system via jumpstart.  What I didn't mention was this auto registration information is also needed when performing a live upgrade.</p>
 <p>If you attempt to perform a live upgrade as you did previously, without supplying the auto-reg info, you'll see something like this:</p>
-<div class="terminal"># luupgrade -n S10U9 -u -s /mnt</p>
+<div class="terminal"># luupgrade -n S10U9 -u -s /mnt
 <p>System has findroot enabled GRUB<br />
 No entry for BE &lt;S10U9&gt; in GRUB menu<br />
 Copying failsafe kernel from media.<br />

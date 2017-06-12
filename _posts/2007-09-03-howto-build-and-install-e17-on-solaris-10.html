@@ -8,7 +8,7 @@ tags:
 type: post
 published: true
 ---
-<p><img class="alignleft" src="/assets/elogo.png" alt="E Logo" />These details come following a request by <a href="http://sujithemmanuel.blogspot.com/">Sujith Emmanuel</a> following a post I made about <a href="/e17-running-on-solaris-10/">getting E17 working on Solaris 10</a> Sunray servers.</p>
+<p><img class="alignleft" src="/assets/elogo.png" alt="E Logo" />These details come following a request by <a href="http://sujithemmanuel.blogspot.com/">Sujith Emmanuel</a> following a post I made about <a href="/e17-running-on-solaris-10">getting E17 working on Solaris 10</a> Sunray servers.</p>
 <p>None of these details are Sunray specific.  Thankfully e17 is relocatable and is intelligent enough to workout if it's been moved.  I detail installing the files in my home directory as this is the only directory that is common on ALL the Sunray servers, and is the only one I have write permissions to.</p>
 <p>I've used these same details to install E17 on Nevada (snv 70) into /opt/e17 on an Ultra 20 (x86), so these instructions will work for both SPARC and x86 hosts.</p>
 <p>These instructions only detail building the basic window manager.  Once you've got this built, you can then go ahead and try building the rest of the components.  You will need to check the README files and work out the dependencies. I'll update this post when I get a chance to do this.<br />
@@ -41,7 +41,7 @@ published: true
 <h3>Build Environment</h3>
 <p>To ensure consistency, and ease the build process, whilst at the same time removing the need to use LD_LIBRARY_PATH when running E17, you need to configure your environment. If you've compiled software correctly on Solaris, there really should be no need to set LD_LIBRARY_PATH for anything, unless you're developing a new version of a library. See <a href="http://developers.sun.com/solaris/articles/build_sw_on_solaris.html">Building Software on the Solaris OS</a> for more details.</p>
 <p>I set the following environment variables.</p>
-<pre lang="text">EPATH=$HOME/apps/sparc/e17-041 
+<pre lang="text">EPATH=$HOME/apps/sparc/e17-041
 PATH=/usr/sfw/bin:/usr/bin:/sbin:/usr/sbin:/usr/ccs/bin:/usr/dt/bin:\
          /usr/openwin/bin:/usr/sfw/bin:$EPATH/bin
 LDFLAGS="-L/usr/sfw/lib,-R/usr/sfw/lib,-L$EPATH/lib,-R$EPATH/lib"
@@ -66,7 +66,7 @@ $ make
 $ make install</pre>
 <h3>Bugs</h3>
 <p>At the time of writing there appears to only be 1 bug that stops the build and installation process - <a href="http://bugs.enlightenment.org/show_bug.cgi?id=186">Bug 186</a> - which stops Enlightenment from building with the following error:</p>
-<pre lang="text">Undefined symbol        first referenced in file 
+<pre lang="text">Undefined symbol        first referenced in file
 MAX                     e_actions.o</pre>
 <p>In order to resolve this bug, and allow Enlightenment to compile, you need to modify enlightenment-0.16.999.041/src/bin/e_actions.c and add the following lines above the first "define" line:</p>
 <pre lang="text">#ifndef MAX

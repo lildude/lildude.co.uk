@@ -16,7 +16,7 @@ published: true
 <blockquote><p>I'm looking to set my home.php to show only 2 posts, but leave all other entry.multiple.php show whatever default number I set in Habari options (whether it be 5, 10 or 20). Is there something simple to add to home.php to tell it to show only 2 posts? Have not found anything on the wiki or forums regarding this, and trying to accomplish without a plugin (not even sure if there is a plugin available anyways). using trunk version.</p></blockquote>
 <p>In order to reduce the effect on performance by this change, you actually want the query to only pull the two posts you want rather than pulling the number you've configured (10 by default) and then only display the first two.  There are actually two ways of doing this: </p>
 <ol>
-<li>Via a plugin</p>
+<li>Via a plugin
 <p>The <a href="http://www.habariproject.org/dist/plugins/customquery/">customquery</a> plugin allows you to change the number of posts on the home page, and others.</li>
 <li>Via code directly in your theme.
 <p>The following code added to the theme class within the <code>theme.php</code> file supplied with your theme will do the trick:</p>

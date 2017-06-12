@@ -16,12 +16,12 @@ published: true
 <p>The whole point of OpenID is you could use one identity to gain access to a multitude of websites.  This is a great idea, but I'm not comfortable with someone else proving who I am. I like to do this myself, so I set to creating my own OpenID server.</p>
 <p>This document will detail how you too can setup your own, single identity, OpenID provider (IdP), with <a href="http://en.wikipedia.org/wiki/Cruft">cruft</a> free URIs, using <a href="http://siege.org/projects/phpMyID/">phpMyID</a>.  Don't worry, it's not a particularly complex process and shouldn't take you more than about 30 minutes to setup, regardless of operating system.</p>
 <p>Once finished, you can use your website URI (I use <a href="/">lildude.co.uk</a>) as your OpenID.</p>
-<p><!--more-->
+<p><!--more--></p>
 <ol>
 <li>Download and extract the latest copy of phpMyID from <a href="http://siege.org/projects/phpMyID/">http://siege.org/projects/phpMyID/</a>.  At the time of writing, the current revision os 0.8 (<a href="http://siege.org/projects/phpMyID/phpMyID-0.8.tgz">tgz</a> / <a href="http://siege.org/projects/phpMyID/phpMyID-0.8.zip">zip</a>).</li>
 <li>Now for probably the most complex step, so we'll get it over and done with early. You need to generate a MD5 hash of the username and password you plan on using for your OpenID authentication. The method you use depends on which operating system you are using and what tools you have access to.
 <ul>
-<li>Solaris 10 or later:</p>
+<li>Solaris 10 or later:
 <div class="terminal">$ echo -n 'username:phpMyID:password' | digest -a md5</div>
 </li>
 <li>Other versions of Solaris, Linux and Mac OS X with OpenSSL installed:
@@ -34,24 +34,24 @@ published: true
 <pre>      &lt;?php echo md5("username:phpMyID:password")  ?&gt;</pre>
 </li>
 </ul>
-<p>You need to replace "<em>username</em>" with the username you wish to use and "<em>password</em>" with the secure password you wish to use.  Do <strong>NOT</strong> change the "phpMyID" string.</li>
+<p>You need to replace "<em>username</em>" with the username you wish to use and "<em>password</em>" with the secure password you wish to use.  Do <strong>NOT</strong> change the "phpMyID" string.</p></li>
 <li>Edit <code>MyID.config.php</code> and change the following two lines:
 <pre>        'auth_username' =>      'test',
         'auth_password' =>      '37fa04faebe5249023ed1f6cc867329b',</pre>
-<p>Set 'auth_username' to he username you used in step 2, and set 'auth_password' to the string you got from one of the methods detailed in step 2.</li>
+<p>Set 'auth_username' to he username you used in step 2, and set 'auth_password' to the string you got from one of the methods detailed in step 2.</p></li>
 <p>In theory, that's all that's needed, you could now go ahead and upload the directory and set the appropriate headers (more on those later) however I said we'd make things cruft free, so lets carry on.</p>
 <p><!--wsa:LongPostMiddle--></p>
 <li>Rename <code>MyID.config.php</code> to <code>index.php</code>, and if necessary configure your web server to allow <code>index.php</code> as a valid <a href="http://httpd.apache.org/docs/2.0/mod/mod_dir.html#directoryindex">DirectoryIndex</a>. Whilst you're at it, rename the <code>phpMyID-0.8</code> directory to something simple like <code>id</code> for ease of use.
-<p>Now if you were to upload the <code>id</code> directory to the root of your web site, your OpenID Provider (IdP) URI would be <code>http://yourdomain/id/</code>. Take note of this, you'll need it in a moment.</li>
+<p>Now if you were to upload the <code>id</code> directory to the root of your web site, your OpenID Provider (IdP) URI would be <code>http://yourdomain/id/</code>. Take note of this, you'll need it in a moment.</p></li>
 <li>Edit the <code>index.php</code> file in the <code>id</code> directory and uncomment (remove the # sign) the '<code>idp_url</code>' line and set the value to your IdP determined above.  Mine is:
 <pre>      'idp_url'       =>      '/id/'</pre>
 <p>Whilst you're at it, feel free to uncomment and set appropriate values for the "<em>Simple Registration Extension</em>" (SREG) section of this file. This helps sites you login with using your OpenID to gather useful information about you. See the <a href="http://openid.net/specs/openid-simple-registration-extension-1_0.html">SREG spec</a> for more details.</p>
-<p>If you feel the need to change anything else in this file, please consult the <code>README.txt</code> supplied with phpMyID <strong>BEFORE</strong> making any changes.</li>
+<p>If you feel the need to change anything else in this file, please consult the <code>README.txt</code> supplied with phpMyID <strong>BEFORE</strong> making any changes.</p></li>
 <li>Now upload the <code>id</code> directory to your web server and <a href="http://www.openidenabled.com/resources/openid-test/checkup">check your setup</a>. In the box that appears enter your IdP determined in step 4. If all goes well, you should get a "Try Logging in" link and logging in using the username and password you set in step 2 should succeed.</li>
 <li>Now this IdP isn't the best to use.  By all means, use it if you want, but I like to use my site URI without the <code>/id/</code> part.  To do this, add the following lines to the header of your main site:
 <pre>      &lt;link rel="openid.server" href="http://yourdomain/id/" /&gt;
       &lt;link rel="openid.delegate" href="http://yourdomain/id/" /&gt;</pre>
-<p>Set the href values to your IdP URI (both entries must be the same), and <a href="http://www.openidenabled.com/resources/openid-test/checkup">check your setup</a> again.  This time, enter your main website address, eg http://yourdomain, in the "Check an ID" box.  This should work as before.</li>
+<p>Set the href values to your IdP URI (both entries must be the same), and <a href="http://www.openidenabled.com/resources/openid-test/checkup">check your setup</a> again.  This time, enter your main website address, eg http://yourdomain, in the "Check an ID" box.  This should work as before.</p></li>
 <p>That's it.  Now you can login to sites that accept OpenID using your main website URI.  In my case, I use /.</p>
 <p>If you want a simple multi-user OpenID implementation, then why not check out <a href="http://wiki.guruj.net/Clamshell!Home">Clamshell</a> - it's phpMyID with the added multi-user functionality added on.</p>
 <p>Feel free to post comments to this post using your new OpenID and see how the SREG information is used to populate your name, email and URI (this will be your OpenID URI) for your comment.</p>

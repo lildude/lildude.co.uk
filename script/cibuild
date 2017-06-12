@@ -1,2 +1,2 @@
 #!/bin/bash
-rake test
+bundle exec rake test

@@ -33,7 +33,7 @@ compress_html:
   endings:        all
   startings:      [html, body] # Google Webmaster tools needs the <head> tag.
   ignore:
-    envs:         [local]
+    envs:         [test, local]
   profile:        false
 
 kramdown:

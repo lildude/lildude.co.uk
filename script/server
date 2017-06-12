@@ -1,2 +1,2 @@
 #!/bin/bash
-rake server
+bundle exec rake server

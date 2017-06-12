@@ -36,7 +36,7 @@ VPN>   >> contacting host (my.vpn.servername) for login information...
   >> warning: Unable to process response from my.vpn.servername.
   >> error: Connection attempt failed.  Please try again.
   >> state: Disconnected
-VPN> %         
+VPN> %
 </pre>
 </div>
 <p>Nothing useful there, as I expected, but what about the strace file?  Well, it did have something interesting...</p>
@@ -44,7 +44,7 @@ VPN> %
 socket(PF_INET, SOCK_DGRAM|SOCK_NONBLOCK, IPPROTO_IP) = 13
 connect(13, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("8.8.8.8")}, 16) = 0
 poll([{fd=13, events=POLLOUT}], 1, 0)   = 1 ([{fd=13, revents=POLLOUT}])
-<strong>sendto(13, "=*<pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre><pre wp-pre-tag-1></pre>\thostnameukdomain"..., 41, MSG_NOSIGNAL, NULL, 0) = 41</strong>
+<strong>sendto(13, "=*\thostnameukdomain"..., 41, MSG_NOSIGNAL, NULL, 0) = 41</strong>
 poll([{fd=13, events=POLLIN}], 1, 5000) = 1 ([{fd=13, revents=POLLIN}])
 ioctl(13, FIONREAD, [100])              = 0
 </pre>

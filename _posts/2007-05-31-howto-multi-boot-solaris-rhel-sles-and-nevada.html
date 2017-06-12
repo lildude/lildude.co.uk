@@ -102,7 +102,7 @@ sda2: &lt;solaris: [s0] sda8 [s1] sda9 [s2] sda10 [s3] sda11 [s4] sda12 [s5] sda
 <p><strong>Easy SSH:</strong></p>
 <p>As you're multibooting, each OS will have a different SSH host key.  This plays havoc with your known_hosts file, so to ease ssh connections, copy the /etc/ssh/ssh_host_*_key* from one of the operating systems to /etc/ssh/ on each of the other operating systems installed.  </p>
 <p><strong>Problematic NFSv4:</strong></p>
-<p>As part of my configuration, I export a filesystem for access from remote systems.  Unfortunately, the NFSv4 implementation on Linux is just plain wrong and <a href="/nfsv4-on-linux-is-broken/">causes havoc with the Solaris automounter</a>.  Accordingly, I had to <a href="/howto-disable-nfsv4-on-redhat-enterprise-linux-4/">disable NFSv4 on RHEL</a> and SLES.</p>
+<p>As part of my configuration, I export a filesystem for access from remote systems.  Unfortunately, the NFSv4 implementation on Linux is just plain wrong and <a href="/nfsv4-on-linux-is-broken">causes havoc with the Solaris automounter</a>.  Accordingly, I had to <a href="/howto-disable-nfsv4-on-redhat-enterprise-linux-4">disable NFSv4 on RHEL</a> and SLES.</p>
 <h3>Screenshots</h3>
 <p>Of course we need some screenshots too.  I personally think the SLES desktop is the cleanest and most pleasing on the eye with Nevada coming in a close 2nd.  Solaris 10 is horrible.</p>
 <div class="center">

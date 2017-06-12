@@ -16,10 +16,10 @@ published: true
 <p>This is quite a pain free experience and has worked well for me.  I never actually delete the alternate BE as I don't need the space.  However, other people need to and ever since GRUB was introduced into Solaris 10 (x86 only) they encounter the following error when attempting to delete the BE that contains the GRUB menu:</p>
 <div class="terminal">
 # ludelete -n snv_22<br />
-ERROR: The boot environment <snv_22> contains the GRUB menu.<br />
+ERROR: The boot environment &lt;snv_22&gt; contains the GRUB menu.<br />
 ERROR: You are not allowed to delete this BE.<br />
 Unable to delete boot environment.<br />
-#</snv_22></div>
+#</div>
 <p>This is a long standing issue (I've got a workaround if you want it) that has plagued many a sysadmin using Live Upgrade on Solaris 10 x86 and Nevada.  Well, not any more.</p>
 <p><!--more-->This morning I decided I'd upgrade from snv_94 to snv_96 and I hit a hurdle on the first command - the lurename.  I was presented with this message:</p>
 <div class="terminal">
@@ -40,10 +40,10 @@ Live Upgrade packages.</p>
 <p>So I did as instructed...</p>
 <div class="terminal">
 # /usr/lib/lu/lux86menu_propagate /cdroms/prefcs/os/nv/combined.nvx_wos/94/<br />
-Validating the contents of the media </cdroms/prefcs/os/nv/combined.nvx_wos/94/>.<br />
+Validating the contents of the media &lt;/cdroms/prefcs/os/nv/combined.nvx_wos/94/&gt;.<br />
 The media is a standard Solaris media.<br />
 The media contains a Solaris operating system image.<br />
-The media contains <solaris> version <11>.<br />
+The media contains &lt;solaris&gt; version &lt;11&gt;.<br />
 Installing latest Live Upgrade packages from media<br />
 Updating Live Upgrade packages on all BEs<br />
 Successfully updated Live Upgrade packages on all BEs<br />
@@ -57,32 +57,32 @@ stage2 written to partition 1, 265 sectors starting at 50 (abs 41945765)<br />
 System does not have an applicable x86 boot partition<br />
 install GRUB to all BEs successful<br />
 Converting root entries to findroot<br />
-Generated boot signature <be_snv_88> for BE <snv_88><br />
-Converting GRUB menu entry for BE <snv_88><br />
-Added findroot entry for BE <snv_88> to GRUB menu<br />
-Generated boot signature <be_snv_94> for BE <snv_94><br />
-Converting GRUB menu entry for BE <snv_94><br />
-Added findroot entry for BE <snv_94> to GRUB menu<br />
+Generated boot signature &lt;be_snv_88&gt; for BE &lt;snv_88&gt;<br />
+Converting GRUB menu entry for BE &lt;snv_88&gt;<br />
+Added findroot entry for BE &lt;snv_88&gt; to GRUB menu<br />
+Generated boot signature &lt;be_snv_94&gt; for BE &lt;snv_94&gt;<br />
+Converting GRUB menu entry for BE &lt;snv_94&gt;<br />
+Added findroot entry for BE &lt;snv_94&gt; to GRUB menu<br />
 No more bootadm entries. Deletion of bootadm entries is complete.<br />
-Changing GRUB menu default setting to <8><br />
+Changing GRUB menu default setting to &lt;8&gt;<br />
 Done eliding bootadm entries.<br />
-File </boot/grub/menu.lst> propagation successful<br />
+File &lt;/boot/grub/menu.lst&gt; propagation successful<br />
 Menu propagation successful<br />
-File </etc/lu/GRUB_slice> deletion successful<br />
+File &lt;/etc/lu/GRUB_slice&gt; deletion successful<br />
 Successfully deleted GRUB_slice file<br />
-File </etc/lu/GRUB_root> deletion successful<br />
+File <&lt;etc/lu/GRUB_root&gt; deletion successful<br />
 Successfully deleted GRUB_root file<br />
 Propagating findroot GRUB for menu conversion.<br />
-File </etc/lu/installgrub.findroot> propagation successful<br />
-File </etc/lu/stage1.findroot> propagation successful<br />
-File </etc/lu/stage2.findroot> propagation successful<br />
-File </etc/lu/GRUB_capability> propagation successful<br />
+File &lt;/etc/lu/installgrub.findroot&gt; propagation successful<br />
+File &lt;/etc/lu/stage1.findroot&gt; propagation successful<br />
+File &lt;/etc/lu/stage2.findroot&gt; propagation successful<br />
+File &lt;/etc/lu/GRUB_capability&gt; propagation successful<br />
 Deleting stale GRUB loader from all BEs.<br />
-File </etc/lu/installgrub.latest> deletion successful<br />
-File </etc/lu/stage1.latest> deletion successful<br />
-File </etc/lu/stage2.latest> deletion successful<br />
+File &lt;/etc/lu/installgrub.latest&gt; deletion successful<br />
+File &lt;/etc/lu/stage1.latest&gt; deletion successful<br />
+File &lt;/etc/lu/stage2.latest&gt; deletion successful<br />
 Conversion was successful<br />
-#</snv_94></snv_94></snv_94></be_snv_94></snv_88></snv_88></snv_88></be_snv_88></solaris></div>
+#</div>
 <p>Done. And comparison of the two menu.lst file indicates we've got two identical GRUB menus - one in each of my BEs, which means I'll be able to delete any one of them, if I so wish.</p>
 <div class="terminal">
 # luumount snv_88<br />

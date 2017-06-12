@@ -10,7 +10,7 @@ tags:
 type: post
 published: true
 ---
-<p>I've just updated my home installation of OpenSolaris 2008.05 with all the snv_90 bits (<a href="/opensolaris-update-to-build-90/">using my own instructions</a>) and it's gone all quite smoothly. Don't try it if you're on dial-up or have a small bandwidth cap as the update downloaded is just short of 1GB of data.</p>
+<p>I've just updated my home installation of OpenSolaris 2008.05 with all the snv_90 bits (<a href="/opensolaris-update-to-build-90">using my own instructions</a>) and it's gone all quite smoothly. Don't try it if you're on dial-up or have a small bandwidth cap as the update downloaded is just short of 1GB of data.</p>
 <p>For those interested, he's the output from the whole process (captured after the event):</p>
 <p><!--more-->First, "zfs list" before we performed the update:</p>
 <div class="terminal">
@@ -35,12 +35,12 @@ col@opensolaris:~$
 <div class="terminal">
 <pre>col@opensolaris:~$ pfexec pkg image-update
 DOWNLOAD                                    PKGS       FILES     XFER (MB)
-Completed                                533/533 13882/13882 1172.63/1172.63 
+Completed                                533/533 13882/13882 1172.63/1172.63
 
 PHASE                                        ACTIONS
-Removal Phase                              3109/3109 
-Update Phase                             13792/13792 
-Install Phase                              5837/5837 
+Removal Phase                              3109/3109
+Update Phase                             13792/13792
+Install Phase                              5837/5837
 A clone of opensolaris exists and has been updated and activated. On next boot the Boot Environment
  opensolaris-1 will be mounted on '/'. Reboot when ready to switch to this updated BE.
 col@opensolaris:~$ pfexec mount -F zfs rpool/ROOT/opensolaris-1 /mnt
@@ -76,6 +76,6 @@ rpool/export                                               10.2M  5.25G    19K  
 rpool/export@install                                           0      -    19K  -
 rpool/export/home                                          10.2M  5.25G  10.1M  /export/home
 rpool/export/home@install                                    18K      -    21K  -
-col@opensolaris:~$ 
+col@opensolaris:~$
 </pre>
 </div>

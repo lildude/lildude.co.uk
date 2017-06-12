@@ -156,10 +156,10 @@ task :test do
     :check_favicon => true,
     :check_html => true,
     :disable_external => true,
-    :cache => { :timeframe => '2w' },
-    :empty_alt_ignore => true,
+    :cache => { :timeframe => '30s' },
+    :empty_alt_ignore => false,
     :verbose => true,
-    :href_swap => {%r{(?<!\/)^\/{1}(?!\/)} => "https://#{$site}.co.uk/"}, # Matches /foo/doo but not //foo/doo - useful for protocol-less links.
+    :href_swap => {%r{(?<!\/)^\/{1}(?!\/)} => config["url"]}, # Matches /foo/doo but not //foo/doo - useful for protocol-less links.
     :typhoeus => { :verbose => true, :followlocation => true },
     :parallel => { :in_processes => 3}}).run
 end
