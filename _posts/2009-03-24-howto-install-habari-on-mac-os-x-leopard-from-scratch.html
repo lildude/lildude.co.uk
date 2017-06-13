@@ -54,7 +54,7 @@ published: true
 <li>Reboot.  Once you're system has rebooted, it should be running in 32-bit mode.</li>
 <li>To enable PHP support, uncomment the following line in <code>/private/etc/apache2/httpd.conf</code>:
 <p><code>LoadModule php5_module libexec/apache2/libphp5.so</code></p>
-<p>If you're going to install Habari into the main document root (<code>/Library/WebServer/Documents</code>), you'll need to find "<code>AllowOverride None</code>" within the <code><Directory "/Library/WebServer/Documents"></code> section of this file and change it to "<code>AllowOverride All</code>" so that the <code>.htaccess</code> file used by Habari will work.</p>
+<p>If you're going to install Habari into the main document root (<code>/Library/WebServer/Documents</code>), you'll need to find "<code>AllowOverride None</code>" within the <code>&lt;Directory "/Library/WebServer/Documents"&gt;</code> section of this file and change it to "<code>AllowOverride All</code>" so that the <code>.htaccess</code> file used by Habari will work.</p>
 <p>If you're going to install Habari into a user's "Sites" directory, you'll need to make the same change in the user's <code>/private/etc/apache2/users/[username].conf</code> file.</p>
 <p>After making changes, restart Apache using one of the following methods (remember this as we'll be doing this agan later):<br />
 <a id="restartapache"></a><br />

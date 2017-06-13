@@ -153,10 +153,10 @@ task :test do
   sh "JEKYLL_ENV=test bundle exec jekyll build"
   HTMLProofer.check_directory("./_site", {
     :assume_extension => true,
-    :check_favicon => true,
+    :check_favicon => false,
     :check_html => true,
     :disable_external => true,
-    :cache => { :timeframe => '30s' },
+    :cache => { :timeframe => '2w' },
     :empty_alt_ignore => false,
     :verbose => true,
     :href_swap => {%r{(?<!\/)^\/{1}(?!\/)} => config["url"]}, # Matches /foo/doo but not //foo/doo - useful for protocol-less links.

@@ -23,7 +23,7 @@ Unable to delete boot environment.<br />
 <p>This is a long standing issue (I've got a workaround if you want it) that has plagued many a sysadmin using Live Upgrade on Solaris 10 x86 and Nevada.  Well, not any more.</p>
 <p><!--more-->This morning I decided I'd upgrade from snv_94 to snv_96 and I hit a hurdle on the first command - the lurename.  I was presented with this message:</p>
 <div class="terminal">
-# lurename -e snv_88 -n snv_96        </p>
+# lurename -e snv_88 -n snv_96<br />
 <p>This system contains only a single GRUB menu for all boot environments. To<br />
 enhance reliability and improve the user experience, live upgrade requires<br />
 you to run a one time conversion script to migrate the system to multiple<br />
@@ -70,7 +70,7 @@ File &lt;/boot/grub/menu.lst&gt; propagation successful<br />
 Menu propagation successful<br />
 File &lt;/etc/lu/GRUB_slice&gt; deletion successful<br />
 Successfully deleted GRUB_slice file<br />
-File <&lt;etc/lu/GRUB_root&gt; deletion successful<br />
+File &lt;etc/lu/GRUB_root&gt; deletion successful<br />
 Successfully deleted GRUB_root file<br />
 Propagating findroot GRUB for menu conversion.<br />
 File &lt;/etc/lu/installgrub.findroot&gt; propagation successful<br />

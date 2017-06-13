@@ -16,7 +16,7 @@ published: true
 <h3>Security Vulnerabilities in HB-Cumulus 1.8 and Lower</h3>
 <p>This week an announcement was made on <strong><a href="http://seclists.org/fulldisclosure/2011/Sep/101" target="_blank">Seclist.org about a XSS and HTML Injection vulnerability</a></strong> in all the plugins that use the original tagcloud.swf from WP-Cumulus (which includes HB-Cumulus).</p>
 <p>The XSS vulnerability was fixed a long long time ago in HB-Cumulus - 19 December 2009 - so if you are running HB-Cumulus 1.4 or earlier, you <strong>MUST</strong> upgrade.</p>
-<p>The HTML Injection issue isn't really much of an issue and I go into details <strong><a href="http://lildude.co.uk/security-vulnerabilities-in-hb-cumulus-14-and-lower" target="_blank">here</a></strong> as to why I don't believe this is a real issue to be concerned about.  I have however modified the <code>tagcloud.swf</code> that comes with HB-Cumulus 1.9 and later to mitigate this issue.</div>
+<p>The HTML Injection issue isn't really much of an issue and I go into details <strong><a href="http://lildude.co.uk/security-vulnerabilities-in-hb-cumulus-14-and-lower" target="_blank">here</a></strong> as to why I don't believe this is a real issue to be concerned about.  I have however modified the <code>tagcloud.swf</code> that comes with HB-Cumulus 1.9 and later to mitigate this issue.</p></div>
 <figure class="center"><!-- hb-cumulus --><br />
 <figcaption>HB-Cumulus in action</figcaption>
 </figure>
@@ -60,13 +60,13 @@ published: true
 <li><strong>Using Blocks</strong><br />
     You can show the tag cloud in any area offered by your theme by adding the HB-Cumulus block to that area within the Theme configuration.</li>
 <li><strong>Embed directly into any page or post:</strong><br />
-    You can show the cloud in any page or post by putting the following code into the post/page content:</p>
+    You can show the cloud in any page or post by putting the following code into the post/page content:<br />
 <pre class="prettyprint">&lt;!-- hb-cumulus --&gt;</pre>
-<p>     This tag is NOT case sensitive, so don't worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.</li>
-<li><strong>Via the your theme files directly:</strong><br />
+<p>     This tag is NOT case sensitive, so don't worry too much about the case or spacing. So long as you have all of the above characters in that order, it should display.</p></li>
+<li><p><strong>Via the your theme files directly:</strong><br />
      If your theme does not have support for blocks, you can show the cloud anywhere on your site within your theme files, for example in the sidebar using:</p>
 <pre class="prettyprint">$theme-&gt;hbcumulus();</pre>
-<p>    This IS case sensitive, so you\'ll need to be sure you get it 100% correct.</li>
+<p>    This IS case sensitive, so you\'ll need to be sure you get it 100% correct.</p></li>
 </ol>
 <h2>Additional Information</h2>
 <p>There are a couple of things worth noting for reference purposes:</p>
@@ -88,7 +88,7 @@ published: true
 <li>Maximum Font Size: 25pt</li>
 <li>Number of Tags to show: 30 - set to 0 or nothing to show all tags.</li>
 </ul>
-<p>More information about the options marked with * can be found on the WP-Cumulus <a href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">notes page</a>.
+<p>More information about the options marked with * can be found on the WP-Cumulus <a href="http://wordpress.org/extend/plugins/wp-cumulus/other_notes/">notes page</a>.</p>
 </li>
 <li>Hb-Cumulus will work with Habari 0.7 and later.  It'll probably work with earlier releases too, but this is no longer supported.</li>
 <li>Habari has no concept or categories at the moment, so it'll only show tags.  If and when Habari gets categories, I'll update the plugin to support categories too.</li>

