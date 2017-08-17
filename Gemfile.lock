@@ -1,5 +1,7 @@
-PATH
-  remote: ../../../Development/jekyll-seo-tag
+GIT
+  remote: https://github.com/lildude/jekyll-seo-tag
+  revision: 337ec955633e1cd82eab4a26906757e0ac45b60f
+  branch: lildude-customisations
   specs:
     jekyll-seo-tag (2.0.0)
       jekyll (~> 3.1)
