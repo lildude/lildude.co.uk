@@ -158,6 +158,7 @@ DEPENDENCIES
   github-pages
   html-proofer
   httpclient
+  jekyll
   jekyll-json-feed
   jekyll-paginate
   jekyll-seo-tag!
@@ -165,4 +166,4 @@ DEPENDENCIES
   rake
 
 BUNDLED WITH
-   1.14.6
+   1.15.3
