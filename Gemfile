@@ -12,5 +12,4 @@ group :development, :test do
   gem "rake"
   gem "httpclient"
   gem "html-proofer"
-  gem "jekyll-seo-tag", :path => "~/Development/jekyll-seo-tag" # I have my own customisations.
 end
