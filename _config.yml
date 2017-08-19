@@ -47,4 +47,4 @@ gems:
   - jekyll-json-feed
 
 # Don't copy these files to the generated site
-exclude: [CNAME, Gemfile, Gemfile.lock, LICENSE.md, Rakefile, README.md, README-ld.md]
+exclude: [CNAME, Gemfile, Gemfile.lock, LICENSE.md, Rakefile, README.md, README-ld.md, vendor, .gitignore, .ruby-version, .travis.yml]
