@@ -19,7 +19,7 @@ published: true
 <p>I'm in the process of redesigning my <a href="http://colinseymour.co.uk">personal site</a>, and one of the things I wanted to do was use CSS to place the Flickr logo after any image I include in a post that is stored on Flick.  I do this already with a bit of HTML & CSS, but I need to remember to add the snippet of code everytime I include a Flickr image.  By implementing it in CSS, all I would have to do is ensure I use the correct class name and it would appear automatically. </p>
 <p><!--more--></p>
 <p>So with this in mind, I got testing. First, the HTML:</p>
-<p><code>&lt;img class="flickr-srcd" src="http://farm1.static.flickr.com/121/276074021_43bc40b104_m.jpg" /&gt;</code></p>
+<p><code>&lt;img class="flickr-srcd" src="https://farm1.static.flickr.com/121/276074021_43bc40b104_m.jpg" /&gt;</code></p>
 <p>Pretty simple and easy to understand.  Next the CSS to add the image automatically:</p>
 <p><code>img.flickr-scrd:after {<br />
       content: url("images/flickr_logo-small-sideways.gif");<br />
