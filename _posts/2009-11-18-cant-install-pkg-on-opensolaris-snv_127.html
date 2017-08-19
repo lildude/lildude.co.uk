@@ -30,7 +30,7 @@ WebStack                      origin   online   http://pkg.opensolaris.org/webst
 $</pre>
 </div>
 <p>Both look good to me and have been working fine.  </p>
-<p>I tried rebuilding the index, but this didn't seem to make any difference, so as usual, I turned to my trusted browser and found this <a href="http://www.opensolaris.org/jive/thread.jspa?threadID=117930">thread</a>.  Whilst not the same pkg, looks like I'm not alone in hitting this issue.  I checked my GUI in more depth and found I too was experiencing the same problem with it only showing installed pkgs.</p>
+<p>I tried rebuilding the index, but this didn't seem to make any difference, so as usual, I turned to my trusted browser and found this <a href="https://www.opensolaris.org/jive/thread.jspa?threadID=117930">thread</a>.  Whilst not the same pkg, looks like I'm not alone in hitting this issue.  I checked my GUI in more depth and found I too was experiencing the same problem with it only showing installed pkgs.</p>
 <p>The final entry in the thread in which the user details their solution sounded good, however I'm not too keen on the idea of unnecessarily hacking at files.  The interesting part about this comment was the "requirement" for a publisher named "opensolaris.org".  Huh??  I've not needed this in the past and though I did have one, it was inactive so wouldn't (shouldn't?) have been used.  Oh well, maybe something has changed without notice.</p>
 <p>So, armed with this info,  I fired up the GUI, removed my old opensolaris.org/release publisher which had the name "opensolaris.org" assigned to it and then added a new opensolaris.org entry, but this time pointing at the opensolaris.org/dev repo.</p>
 <p>A short while later my pkg publishers looked like this:</p>

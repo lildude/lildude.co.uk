@@ -21,7 +21,7 @@ published: true
 <p>Next, update the GRUB configuration on your ZFS boot device(s) using</p>
 <div class="terminal">$ pfexec /mnt/boot/solaris/bin/update_grub -R /mnt</div>
 <p>When you're ready to boot into the updated boot environment, you can reboot(1M) or init(1M) as usual.</p>
-<p>Check the <a href="http://www.opensolaris.org/jive/thread.jspa?threadID=62982&amp;tstart=0">announcement thread</a> beforehand for more details.  </p>
+<p>Check the <a href="https://www.opensolaris.org/jive/thread.jspa?threadID=62982&amp;tstart=0">announcement thread</a> beforehand for more details.  </p>
 <p>This is only a one-off step when upgrading to snv_89 or later due to some changed made to GRUB for ZFS boot.</li>
 <li>You may get network timeouts during the upgrade process.  These will cause the upgrade process to fail.  Unfortunately the errors are a bit cryptic due to the python trace dumped, but check the last line; it'll say "<code>timeout: timed out</code>" if you timed out.  You can increase the timeout by setting the <code>PKG_CLIENT_TIMEOUT</code> environment variable to something larger than 30 (seconds).  Try 90 (seconds)</li>
 </ol>
