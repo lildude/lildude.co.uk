@@ -41,10 +41,10 @@ kramdown:
   smart_quotes:     ["apos", "apos", "quot", "quot"]  # Don't do smart quoting by replacing like for like.
 
 # Plugins
-gems:
+plugins:
   - jekyll-sitemap
   - jekyll-paginate
   - jekyll-json-feed
 
 # Don't copy these files to the generated site
-exclude: [CNAME, Gemfile, Gemfile.lock, LICENSE.md, Rakefile, README.md, README-ld.md, vendor, .gitignore, .ruby-version, .travis.yml]
+exclude: [CNAME, Gemfile, Gemfile.lock, LICENSE.md, Rakefile, README.md, README-ld.md, vendor]
