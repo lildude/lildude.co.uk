@@ -41,7 +41,7 @@ kramdown:
   smart_quotes:     ["apos", "apos", "quot", "quot"]  # Don't do smart quoting by replacing like for like.
 
 # Plugins
-gems:
+plugins:
   - jekyll-sitemap
   - jekyll-paginate
   - jekyll-json-feed
