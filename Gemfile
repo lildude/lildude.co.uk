@@ -11,4 +11,5 @@ group :development, :test do
   gem 'rake'
   gem 'httpclient'
   gem 'html-proofer'
+  gem 'stringex'
 end
