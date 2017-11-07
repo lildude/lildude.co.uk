@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Using Lava Lamps for Security"
-date: 2017-11-07 14:50:35 -0800
+date: 2017-11-07 15:04:12 -0800
 tags:
 - Security
 type: post
