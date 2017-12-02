@@ -9,7 +9,7 @@ type: post
 published: true
 ---
 
-Great news: [another major project - Python - is moving to GitHub!!](https://mail.python.org/pipermail/core-workflow/2016-January/000345.html) Not so great news: the substantiation for picking GitHub over GitLab, particularly the first point :disappointed:
+Great news: [another major project - Python - is moving to GitHub!!](https://mail.python.org/pipermail/core-workflow/2016-January/000345.html) Not so great news: the substantiation for picking GitHub over GitLab, particularly the first point 😞
 
 > I don't think this will be a shock to anyone who has followed the
 discussion on this list. The decision is essentially based on:

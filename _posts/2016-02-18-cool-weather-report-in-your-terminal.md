@@ -13,6 +13,6 @@ I spend so much of my life in my terminal (iTerm2) and have become quite the CLI
 
 ![wttr.in](/assets/wttr_in.png)
 
-By default, it shows you the weather based on your current location, determined by your IP address - I'm nowhere near Northampton :smile: - but you can specify a location by appending it to the end, eg `curl wttr.in/London`.
+By default, it shows you the weather based on your current location, determined by your IP address - I'm nowhere near Northampton 🙂 - but you can specify a location by appending it to the end, eg `curl wttr.in/London`.
 
 Run `curl wttr.in/:help` to get more usage info and check out the [repo](https://github.com/chubin/wttr.in) if you want to take a peek at the code behind it.
