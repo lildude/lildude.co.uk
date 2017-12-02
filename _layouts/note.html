@@ -1,0 +1,22 @@
+---
+layout: default
+---
+
+<div class="post h-entry">
+  <span style="display:none">
+    <span rel="author" class="p-author h-card">
+      <img class="u-photo" src="{{ site.baseurl }}/img/profile.png" alt="profile photo" />
+      <a class="p-name u-url" href="https://lildude.co.uk">{{ site.name }}</a>
+    </span>
+    <a href="{{ page.url }}" class="u-url">{{ page.url }}</a>
+    <span class="dt-published">{{ page.date | date_to_xmlschema }}</span>
+  </span>
+
+  <span class="e-content">
+  {{ content }}
+  </span>
+
+  <p class="meta">
+    <span class="post-date">— Published {{ page.date | date: "%d %B %Y" }}</span>
+  </p>
+</div>
