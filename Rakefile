@@ -149,7 +149,7 @@ task :test do
   sh "JEKYLL_ENV=test bundle exec jekyll build"
   HTMLProofer.check_directory("./_site", {
     :assume_extension => true,
-    :check_favicon => true,
+    :check_favicon => false,
     :check_html => true,
     :check_img_http => false,
     :disable_external => true,
