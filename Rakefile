@@ -4,14 +4,12 @@ require "yaml"
 require "html-proofer"
 require 'stringex'
 
-
 ## -- Misc Configs -- ##
 public_dir      = "_site"     # compiled site directory
-stash_dir       = "_stash"    # directory to stash posts for speedy generation
 drafts_dir      = "_drafts"   # directory for draft files
 posts_dir       = "_posts"    # directory for blog files
 new_post_ext    = "md"        # default new post file extension when using the new_post task
-editor          = "atom"      # default editor to use to open and edit your new posts
+editor          = "atom-beta" # default editor to use to open and edit your new posts
 
 ## -- Site -- ##  This is so I can easily share the same Rakefile between all my sites.
 config = YAML.load_file('_config.yml')
@@ -34,32 +32,33 @@ task :new, [:title, :bowfmt, :eowfmt] do |t, args|
     post.puts "layout: post"
     post.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
     post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}"
-    post.puts "tags:"
-    # Add week in review specific tags as these are the same
-    if title.include? "Week in Review:"
-      post.puts "- training\n- review"
-    else
-      post.puts "- "
-    end
+    post.puts "tags: \n-"
     post.puts "type: post"
-    post.puts "published: true"
     post.puts "---"
-    # Add img to top of week in review posts
-    if title.include? "Week in Review:"
-      post.puts "\n![Week in Review: #{args.bowfmt} - #{args.eowfmt}](/assets/week-in-review-#{args.bowfmt.gsub(/[\s']/,'')}-#{args.eowfmt.gsub(/[\s']/,'')}.png){:height=\"240\" width=\"840\" class=\"center\"}"
-    end
   end
   system "#{editor} #{filename}"
 end
 
-desc "New Week in Review post."
-task :wir do
+desc "Begin new short post in _posts"
+task :note do
   now = DateTime.now
-  eow = now - now.wday
-  bow = eow - 6
-  bowfmt = (bow.mon == eow.mon) ? bow.strftime('%-d') : bow.strftime('%-d %b')
-  eowfmt = eow.strftime("%-d %b '%y")
-  Rake::Task["new"].invoke("Week in Review: #{bowfmt} - #{eow.strftime("%-d %b '%y")}", bowfmt, eowfmt)
+  number = now.strftime('%s').to_i % (24 * 60 * 60)
+  date = now.strftime('%F')
+  filename = "_posts/#{date}-#{number.to_s.to_url}.#{new_post_ext}"
+  if File.exist?(filename)
+    abort("rake aborted!") if ask("#{filename} already exists. Do you want to overwrite?", ['y', 'n']) == 'n'
+  end
+  puts "Creating new short post: #{filename}"
+  open(filename, 'w') do |post|
+    post.puts "---"
+    post.puts "layout: note"
+    post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}"
+    post.puts "tags:"
+    post.puts "- note"
+    post.puts "type: post"
+    post.puts "---"
+  end
+  system "#{editor} #{filename}"
 end
 
 desc "Publish a draft post in #{drafts_dir}"
@@ -107,11 +106,6 @@ end
 
 desc "Deploy master to Digital Ocean using rsync and copy _site/ to gh-pages branch and push to GitHub repo."
 task :deploy do
-  unless Dir.glob("#{stash_dir}/*.*").empty?
-    puts "ERROR: #{stash_dir} is not empty. Unstash and try again".red
-    exit
-  end
-
   # This only produces output of there are files to minify.
   Rake::Task["minify"].execute
 
@@ -155,9 +149,9 @@ task :test do
   sh "JEKYLL_ENV=test bundle exec jekyll build"
   HTMLProofer.check_directory("./_site", {
     :assume_extension => true,
-    :check_favicon => false,
+    :check_favicon => true,
     :check_html => true,
-    :check_img_http => true,
+    :check_img_http => false,
     :disable_external => true,
     :cache => { :timeframe => '2w' },
     :empty_alt_ignore => false,
