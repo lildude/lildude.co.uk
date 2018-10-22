@@ -1,0 +1,13 @@
+# Netlify redirects - see https://www.netlify.com/docs/redirects/
+#
+# Old                   New    Code if not 301
+
+# Gone pages
+/tag/*                  /       410
+/admin                  /       410
+
+# Redirects
+
+
+# Renames
+
