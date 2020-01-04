@@ -1,0 +1,22 @@
+name: Sync WP to Static
+
+on:
+  schedule:
+    - cron:  '13 * * * *'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Sync New Posts
+        uses: lildude/symmetrical-parakeet@master
+        with:
+          wordpress_token: ${{ secrets.WORDPRESS_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          post_template: script/template.erb
+          posts_path: _posts
+          wordpress_endpoint: https://public-api.wordpress.com/wp/v2/sites/fundiworks.wordpress.com
+          dont_delete: true
+          include_tagged: "tech"
