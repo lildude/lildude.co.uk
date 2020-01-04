@@ -59,7 +59,7 @@ If these two don't match, there will be :warning: for those items that are known
 
   [2]: http://resizesafari.com/favicon.ico "Title"
 
-- {% if site.markdown != "kramdown" %}:warning:{% endif %} A resized centre-aligned image using kramdown syntax:  
+- {% if site.markdown != "kramdown" %}:warning:{% endif %} A resized centre-aligned image using kramdown syntax:
   `![Bigger centered](/img/profile.png){:height="200" width="200" class="center"}`
 
   ![Bigger centered](/img/profile.png){:height="200" width="200" class="center"}
@@ -114,7 +114,7 @@ Or using "-" + Space:
 
 ## Hard Linebreak
 
-End a line with two or more spaces will create a hard linebreak, called `<br />` in HTML. ( Control + Return )  
+End a line with two or more spaces will create a hard linebreak, called `<br />` in HTML. ( Control + Return )
 Above line ended with 2 spaces.
 
 ## Horizontal Rules
@@ -166,7 +166,7 @@ Spaced dashes:
 
 Footnotes work mostly like reference-style links. A footnote is made of two things: a marker in the text that will become a superscript number; a footnote definition that will be placed in a list of footnotes at the end of the document. A footnote looks like this:
 
-That's some text with a footnote.[^1]  
+That's some text with a footnote.[^1]
 
 [^1]: And that's the footnote.
 
@@ -175,7 +175,7 @@ That's some text with a footnote.[^1]
 
 Wrap with 2 tilde characters:
 
-~~Strikethrough~~  
+~~Strikethrough~~
 
 ### Fenced Code Blocks
 
@@ -190,7 +190,7 @@ a start and end fence lines to delimit the code block.
 ### Tables
 {% if site.markdown != "redcarpet" and site.markdown != "kramdown" %}:red_circle::warning: *Requires `tables` Redcarpet extension or Kramdown w/ GFM.* {% endif %}
 
-A simple table looks like this:  
+A simple table looks like this:
 
 First Header | Second Header | Third Header
 ------------ | ------------- | ------------
@@ -258,7 +258,7 @@ _This is only used by colinseymour.co.uk at the moment._
 
 <img src="/img/profile.png" class="alignright" alt="right image" /> Fusce sem lacus, luctus vel dui ut, lobortis rhoncus velit. Nulla facilisi. Donec et erat accumsan purus dapibus vulputate sit amet sit amet tortor. Vestibulum eu vehicula felis. Suspendisse a enim at justo porttitor luctus. Proin ac urna sapien. Curabitur non aliquam neque. Donec tincidunt, nisi sit amet ullamcorper interdum, magna mi imperdiet lorem, sit amet sagittis neque nulla at enim. Morbi efficitur viverra nibh at tempus. Suspendisse molestie commodo posuere. Fusce aliquam fringilla dictum. Mauris viverra eleifend quam, sit amet vehicula est sagittis sit amet. Praesent lobortis nisi non tellus egestas porttitor.
 
-<img src="http://colinseymour.smugmug.com/photos/274240894_PWUna-S.jpg" class="center stretch" alt="center image" />
+<img src="https://colinseymour.smugmug.com/photos/274240894_PWUna-S.jpg" class="center stretch" alt="center image" />
 
 ---
 
