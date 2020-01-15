@@ -11,7 +11,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Sync New Posts
-        uses: lildude/symmetrical-parakeet@master
+        uses: lildude/sync-wp-to-static@master
         with:
           wordpress_token: ${{ secrets.WORDPRESS_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
