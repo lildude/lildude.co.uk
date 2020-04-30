@@ -19,6 +19,9 @@ name:             "lildude"
 author:           '@lildude'
 timezone:         Europe/London
 
+microblog:
+  username:       lildude
+
 # Custom vars
 google-site-verification: "nwLwtzSTTWphhTl4Xgvpyuz4AsISNYUCbnAfC02hSHA"
 
@@ -44,7 +47,13 @@ kramdown:
 plugins:
   - jekyll-sitemap
   - jekyll-paginate
-  - jekyll-json-feed
+  #- jekyll-json-feed
+  - jekyll-feed
+
+# Configure jekyll-feed
+feed:
+  path: atom.xml
+  use_excerpts: false
 
 # Don't copy these files to the generated site
 exclude: [CNAME, Gemfile, Gemfile.lock, LICENSE.md, Rakefile, README.md, vendor, script]

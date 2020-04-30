@@ -4,8 +4,9 @@ gem 'jekyll'
 #gem 'github-pages'
 gem 'jekyll-sitemap'
 gem 'jekyll-paginate'
-gem 'jekyll-json-feed'
-gem 'jekyll-seo-tag', :git => 'https://github.com/lildude/jekyll-seo-tag', :branch => 'lildude-customisations'
+#gem 'jekyll-json-feed'
+gem 'jekyll-feed'
+gem 'jekyll-seo-tag'
 
 group :development, :test do
   gem 'rake'
