@@ -5,3 +5,4 @@ import.rb
 vendor
 .jekyll-cache
 tmp/
+.netlify/
