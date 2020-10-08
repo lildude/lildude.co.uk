@@ -4,3 +4,4 @@ import.xml
 import.rb
 vendor
 .jekyll-cache
+tmp/
