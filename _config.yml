@@ -49,6 +49,7 @@ plugins:
   - jekyll-paginate
   #- jekyll-json-feed
   - jekyll-feed
+  - jekyll-loading-lazy
 
 # Configure jekyll-feed
 feed:
