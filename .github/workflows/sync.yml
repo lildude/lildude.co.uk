@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v1
       - name: Sync New Posts
         uses: lildude/sync-wp-to-static@master
-        with:
+        env:
           wordpress_token: ${{ secrets.WORDPRESS_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           post_template: script/template.erb
