@@ -22,6 +22,7 @@ timezone:         Europe/London
 microblog:
   username:       lildude
   site:           /ld
+webmentions:      lildude.co.uk
 
 # Custom vars
 google-site-verification: "nwLwtzSTTWphhTl4Xgvpyuz4AsISNYUCbnAfC02hSHA"
