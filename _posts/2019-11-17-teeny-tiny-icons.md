@@ -6,7 +6,7 @@ tags:
 - businessClassTravel
 ---
 
-![Teeny tiny icons](/img/34018e93d65840208be678033fb777fc.jpg){:lazyload="lazy"}
+{% picture u-photo img/34018e93d65840208be678033fb777fc.jpg %}
 
 How earth can you differentiate that many teeny tiny icons on your desktop? I bet you don’t look at them closely at all so stop kidding yourself. 🤣😂
 
