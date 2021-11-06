@@ -7,7 +7,7 @@ permalink:        :title
 
 # Setup
 title:            "@lildude"
-description:      Home of my random technical ramblings. But what is it good for?
+description:      But what is it good for?
 url:              https://lildude.co.uk
 baseurl:          ""
 lang:             en-GB
@@ -42,7 +42,9 @@ defaults:
 
 twitter:
   username:       lildude
-
+github:
+  username:       lildude
+  
 social:
   name:           Colin Seymour
   links:
