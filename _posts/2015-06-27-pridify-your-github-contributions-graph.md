@@ -16,7 +16,7 @@ I saw this Tweet...
 
 ... and thought I wanted some of that too. So here you go, my "pridified" GitHub contributions graph:
 
-![Pridified GitHub contributions graph](/assets/pridified_contributions.png)
+![Pridified GitHub contributions graph](/img/pridified_contributions.png)
 
 For those who want to it too, and don't want to follow another link to the [Gist](https://gist3.github.com/noeldelgado/62cdf5efd985fa4f52ff), open up the Developer Tools in your favourite browser and paste this code into the Javascript console:
 

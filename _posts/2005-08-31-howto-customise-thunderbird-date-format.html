@@ -9,7 +9,7 @@ type: post
 published: true
 ---
 <p>Customising Thunderbird's date format on Unix and Linux.<br />
-<img class="alignleft" src="https://lildude.co.uk/assets/sthunderbird.png" alt="Small Thunderbird Logo" /></p>
+<img class="alignleft" src="https://lildude.co.uk/img/sthunderbird.png" alt="Small Thunderbird Logo" /></p>
 <p>I use <a href="http://www.mozilla.org/products/thunderbird/">Mozilla Thunderbird</a> as my mail client at work on Solaris 10.  One of the annoying things with Thunderbird is the fact that it relies on the current locale setting to format the date and times on emails. As a result changing the date format is a bit of a pain in the arse.</p>
 <p>Normally, my locale is either set to C or en_GB and as a result, my dates are formatted either as "<code>08/31/05 13:10:23</code>" <code>(%m/%d/%y %H:%M:%S)</code> or "<code>31/08/05 1:10pm</code>" <code>(%d/%m/%y %r)</code>.  Now I'm a bit fussy and prefer my dates to be in the UK format, but my times in the American (C) 24 hour format.</p>
 <p>Today, I finally got round to sorting it out... I ran the following oneliner to iterate through all the available installed locales and print off their date and time format:</p>

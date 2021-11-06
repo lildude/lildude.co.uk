@@ -16,7 +16,7 @@ published: true
 ---
 <p>I've been using the <a href="http://www.mozilla.org/projects/calendar/lightning/">Lightning Calendar extension</a>, along with the WCAP extension ('cos we use <a href="http://www.sun.com/software/products/calendar_srvr/index.xml">SJSCS</a>) to access my calendar at work for some time now.</p>
 <p>I've configured the extension/Thunderbird to remember my calendar login details, added my calendars and all in all it works a treat. However, there is one thing that really started to annoy me.  Everytime the session expires, I get this lovely little alert box:</p>
-<p><img class="center" src="/assets/WCAPSessionTimeout.png" alt="WCAP Session Timeout Alert" /></p>
+<p><img class="center" src="/img/WCAPSessionTimeout.png" alt="WCAP Session Timeout Alert" /></p>
 <p><!--more--></p>
 <p>This can be very annoying when in the middle of writing an email, and it's guaranteed to popup during the night.  There also seems to be a slight bug in that when you click OK, an identical alert appears.  Click OK here and everything is hunky dory until the next timeout, and we go through the process again.</p>
 <p>Well, not any more.  I've modified the relevant source code to automatically log me back in without showing the alert by changing the following section in <code>~/.thunderbird/&lt;PROFILENAME&gt;/*/extensions/&lt;EXTDIR&gt;/js/calWcapSession.js</code></p>

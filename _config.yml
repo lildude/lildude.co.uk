@@ -6,13 +6,16 @@ highlighter:      rouge
 permalink:        :title
 
 # Setup
-title:            Col's Tech
-description:      This site is the home to my random technical ramblings. The intention is to offer information and help in subjects that have stumped me or are of particular interest to me, and that may be of use to others out there, with a slant towards UNIX, Solaris and OpenSolaris.
-tagline:          But what is it good for?
+title:            "@lildude"
+description:      But what is it good for?
 url:              https://lildude.co.uk
 baseurl:          ""
+lang:             en-GB
+theme:            minima-dude
 
-paginate:         25
+dns_prefetch:
+  - images.weserv.nl
+  - d33wubrfki0l68.cloudfront.net
 
 # Author
 name:             "lildude"
@@ -27,19 +30,34 @@ webmentions:      lildude.co.uk
 # Custom vars
 google-site-verification: "nwLwtzSTTWphhTl4Xgvpyuz4AsISNYUCbnAfC02hSHA"
 
-# SASS
+# Defaults for the entire site - this ensures my notes and photos which use implied titles don't get a title in the feed
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      title: ""
+
+twitter:
+  username:       lildude
+github:
+  username:       lildude
+  
+social:
+  name:           Colin Seymour
+  links:
+    - https://twitter.com/lildude
+
+minima_dude:
+  date_format: "%-d %b %Y"
+  show_author: false
+
 sass:
   sass_dir:       _scss
   style:          compressed
 
-compress_html:
-  clippings:      all
-  comments:       ["<!-- ", " -->"]
-  endings:        all
-  startings:      [html, body] # Google Webmaster tools needs the <head> tag.
-  ignore:
-    envs:         [test, local]
-  profile:        false
 
 kramdown:
   input:            GFM
@@ -48,10 +66,11 @@ kramdown:
 # Plugins
 plugins:
   - jekyll-sitemap
-  - jekyll-paginate
-  #- jekyll-json-feed
+  - jekyll-seo-tag
   - jekyll-feed
   - jekyll-loading-lazy
+  - jekyll-include-cache
+  - jekyll-image-cache
 
 # Configure jekyll-feed
 feed:
@@ -59,6 +78,27 @@ feed:
   use_excerpts: false
 
 # Don't copy these files to the generated site
-exclude: [CNAME, Gemfile, Gemfile.lock, LICENSE.md, Rakefile, README.md, vendor, script]
+exclude:
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE.md
+  - LICENSE
+  - Rakefile
+  - README.md
+  - vendor
+  - sitespeed-result
+  - script
+  - .jekyll-cache
+  - package.json
+  - package-lock.json
+  - postcss.config.js
+  - tmp
+
 # Include these else they don't take effect
 include: [_headers, _redirects]
+
+# Don't attempt to process these - ie leave as-is
+keep_files:
+  - assets
+  - img

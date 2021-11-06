@@ -47,13 +47,13 @@ published: true
 <li>Ensure the device(s) you are going to use are connected and powered on.</li>
 <li>If these devices already have filesystems like FAT or HFS+, OS X will mount them automatically.  Unmount, but don't eject them by opening up Disk Utility, select the device and click the "Unmount" button.</li>
 <li>Whilst you've got Disk Utility open, right click on the device(s), select "Information" and take note of the "Disk Identifier":
-<p><img class="center" src="/assets/diskinfo.jpg" alt="Disk Information" title="Disk Information" /></p>
+<p><img class="center" src="/img/diskinfo.jpg" alt="Disk Information" title="Disk Information" /></p>
 </li>
 <li>Fire up the terminal and create your ZFS zpool and first filesystem (enter your password when prompted):
 <div class="terminal"><code>$ sudo zpool create <new zfs name> disk#s#</new></code></div>
 <p>... where <code><new zfs name /></code> is any name you want and <code>disk#s#</code> is the "Disk Identifier" you noted above. In my examples I use "myzfs" and  "disk2s1" respectively.</p>
 <p>After a short wait you'll find you now have a new device created and mounted in the finder too:</p>
-<p><img class="center" src="/assets/myzfsinfinder.jpg" alt="myzfs Shown in Finder" title="myzfs Shown in Finder" /></p>
+<p><img class="center" src="/img/myzfsinfinder.jpg" alt="myzfs Shown in Finder" title="myzfs Shown in Finder" /></p>
 <p>This is the zpool we've just created.  It will have a ZFS filesystem on it too.</p></li>
 </ol>
 <p>That's it folks.  You now have a ZFS filesystem that you can use as you would a normal filesystem.  You can confirm this as follows:</p>
@@ -92,7 +92,7 @@ myzfs        380K   944M   268K  /Volumes/myzfs<br />
 myzfs/data    18K   944M    18K  /Volumes/myzfs/data<br />
 $</code></div>
 <p>And you'll find Finder shows it too:</p>
-<p><img class="center" src="/assets/myzfsdatainfinder.jpg" alt="myzfs/data shown in Finder" title="myzfs/data shown in Finder" /></p>
+<p><img class="center" src="/img/myzfsdatainfinder.jpg" alt="myzfs/data shown in Finder" title="myzfs/data shown in Finder" /></p>
 <p>You can find more about what you can do with ZFS in my <a href="/zfs-cheatsheet">ZFS Cheatsheet</a>, just note it's based on the functionality available in OpenSolaris.  OS X may not have all this functionality yet.</p>
 <h3>Be Careful</h3>
 <p>Now for the important part: right at the beginning, I said ZFS <strong>WILL</strong> crash your Mac.  I wasn't joking.  Just remove the device you have been using, try access it in Finder and see what I mean.</p>

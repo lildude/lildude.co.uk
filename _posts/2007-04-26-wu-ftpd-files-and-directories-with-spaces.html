@@ -17,7 +17,7 @@ published: true
 <p>This one got me thinking a bit today, and I didn't find much in the way of info on the net, so here it is for my own and anyone else's reference.</p>
 <p>Solaris 9 and later ships with WU-FTPD as it's FTP server.  General configuration, is done via the <code>/etc/ftpd/ftpaccess</code> file, which is the same file used by WU-FTPD, just in a different location.</p>
 <p>The problem I had was I could create directories from the command line, but couldn't from within Gnome's Nautilus when logging in anonymously. Every attempt resulted in:</p>
-<p><img class="center" src="/assets/permerror.png" alt="Permission Denied" /></p>
+<p><img class="center" src="/img/permerror.png" alt="Permission Denied" /></p>
 <p>Ah, simple permissions I thought.  But wait, it can't be as I can quite easily create directories from the command line.  So I turned to logging.  As soon as I enabled logging, the problem became very clear:</p>
 <p><!--more--></p>
 <div class="console">anonymous(nobody%40gnome.org) of myhost [xxx.xxx.xxx.xxx] tried to create directory /export/ftp/dir01/untitled folder (path-filter)</div>

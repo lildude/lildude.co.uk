@@ -10,7 +10,7 @@ published: true
 
 ... cos now I'm an Enterprise Systems Engineer!!!  
 
-<img src="/assets/celebrate.gif" class="center" width="480" height="360" alt="Obligatory gif" />
+<img src="/img/celebrate.gif" class="center" width="480" height="360" alt="Obligatory gif" />
 
 After just over two years as a support engineer at GitHub, I'm happy to say I'm no longer a support engineer, but am now instead a systems engineer. Instead of supporting GitHub Enterprise, I now get to build, test, fix and enhance it.  I'm technically a developer now.
 
