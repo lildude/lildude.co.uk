@@ -6,8 +6,8 @@ highlighter:      rouge
 permalink:        :title
 
 # Setup
-title:            Col's Tech
-description:      Home to my random technical ramblings. But what is it good for?
+title:            "@lildude"
+description:      Home of my random technical ramblings. But what is it good for?
 url:              https://lildude.co.uk
 baseurl:          ""
 lang:             en-GB
