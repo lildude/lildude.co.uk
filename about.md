@@ -9,7 +9,7 @@ tags:
 type: page
 ---
 
-![](/assets/avatar-128x128.png){: .alignleft}
+![@lildude](/img/avatar-128x128.png){: .alignleft}
 
 Hi there 👋 I'm Colin, welcome to my little technical corner of the internet where I ramble on about tech stuffs that interest me.
 
