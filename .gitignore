@@ -6,3 +6,4 @@ vendor
 .jekyll-cache
 tmp/
 .netlify/
+node_modules
