@@ -1,7 +1,6 @@
 ---
-layout: post
+layout: photo
 date: 2019-11-17 22:33:40 +0000
-type: post
 tags:
 - lookingButNotLooking
 - businessClassTravel
