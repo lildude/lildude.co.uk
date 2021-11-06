@@ -1,0 +1,14 @@
+# Only overwriting the defaults - https://rbuchberger.github.io/jekyll_picture_tag/users/presets/default.html
+presets:
+  default:
+    formats: [webp, original]
+    
+  # Cheeky way of resizing and optimising my photos
+  u-photo:
+    formats: [webp, original]
+    widths: [640]
+    fallback_width: 640
+    fallback_format: jpg
+    dimension_attributes: false
+    attributes:
+      img: 'class="u-photo" loading="lazy"'

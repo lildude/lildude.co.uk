@@ -2,6 +2,7 @@
   "name": "purgecss",
   "version": "2.0.0",
   "devDependencies": {
+    "minimist": "^1.2.5",
     "netlify-plugin-jekyll-cache": "^1.0.0",
     "netlify-plugin-minify-html": "^0.3.1"
   }

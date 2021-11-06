@@ -132,7 +132,7 @@ task :test do
                                 check_img_http: true,
                                 check_iframe_http: true,
                                 cache: { timeframe: '2w' },
-                                empty_alt_ignore: false,
+                                empty_alt_ignore: true,
                                 file_ignore: ['./_site/admin/index.html'],
                                 verbose: true,
                                 # Matches /foo/doo but not //foo/doo - useful for protocol-less links.

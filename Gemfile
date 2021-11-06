@@ -3,15 +3,19 @@
 source 'https://rubygems.org'
 
 gem 'jekyll'
-gem 'jekyll-feed'
-gem 'jekyll-loading-lazy'
-gem 'jekyll-image-cache', git: 'https://github.com/lildude/jekyll-image-cache', branch: 'main'
-gem 'jekyll-paginate'
-gem 'jekyll-sitemap'
-gem 'jekyll-seo-tag'
+
 gem 'minima-dude', git: 'https://github.com/lildude/minima-dude', branch: 'main'
-gem 'jekyll-include-cache'
 gem 'liquid-c'
+
+group :jekyll_plugins do
+  gem 'jekyll-feed'
+  #gem 'jekyll-image-cache', git: 'https://github.com/lildude/jekyll-image-cache', branch: 'main'
+  gem 'jekyll-include-cache'
+  #gem 'jekyll-loading-lazy'
+  gem 'jekyll_picture_tag'
+  gem 'jekyll-seo-tag'
+  gem 'jekyll-sitemap'
+end
 
 group :development, :test do
   gem 'rake'
