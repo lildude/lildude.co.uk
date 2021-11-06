@@ -76,7 +76,6 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Link = "</assets/main.css>; rel=preload; as=style"
     Permissions-Policy = "interest-cohort=()"
 
 [[headers]]
