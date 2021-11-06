@@ -27,12 +27,12 @@ $</div>
 <li>In the window that opens, go to Edit -> Find and search for "clip"</li>
 <li>Select <code>/apps/gnome_settings_daemon/plugins/clipboard</code> from the bottom part of the window <small>[1]</small></li>
 <li>Untick the "active" box in the right hand pane <small>[2]</small>
-<p><img src="/assets/gconfeditorclip.jpg" alt="gconf-editor" width="500px" class="center" /></li>
+<p><img src="/img/gconfeditorclip.jpg" alt="gconf-editor" width="500px" class="center" /></li>
 <li>Close the window</li>
 <li>Log out and log in again *</li>
 </ol>
 <p>That's it.  xclipboard should now work with Gnome.</p>
-<p><img src="/assets/xclipboardgnome.jpg" alt="xclipboard running with Gnome" class="center" /></p>
+<p><img src="/img/xclipboardgnome.jpg" alt="xclipboard running with Gnome" class="center" /></p>
 <p>You can of course make this change via the CLI in one command, and then verify it using gconftool-2(1):</p>
 <div class="terminal">$ gconftool-2 --set /apps/gnome_settings_daemon/plugins/clipboard/active 0 \<br />
 &nbsp;&nbsp;--type bool<br />

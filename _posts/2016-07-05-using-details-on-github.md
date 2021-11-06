@@ -36,10 +36,10 @@ So something like:
 
 ... will show up as follows on GitHub:
 
-![&lt;details&gt; collapsed](/assets/details-collapsed.png)
+![&lt;details&gt; collapsed](/img/details-collapsed.png)
 
 ... and clicking it will change it to reveal the full content:
 
-![<&lt;details&gt; expanded](/assets/details-expanded.png)
+![<&lt;details&gt; expanded](/img/details-expanded.png)
 
 This cool discovery is brought to you by [ericclemmons](https://gist.github.com/ericclemmons/b146fe5da72ca1f706b2ef72a20ac39d).
