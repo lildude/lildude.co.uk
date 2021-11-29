@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Speeding Up My ZSH Shell"
-date: 2021-11-28 11:28:08 +0000
+date: 2021-11-29 10:21:20 +0000
 tags:
 - zsh
 - shell
