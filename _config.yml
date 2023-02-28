@@ -44,7 +44,10 @@ twitter:
   username:       lildude
 github:
   username:       lildude
-  
+mastodon:
+  server:         "mastodon.social"
+  username:       "@lildude"
+
 social:
   name:           Colin Seymour
   links:
