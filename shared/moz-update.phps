@@ -2,7 +2,7 @@
 /**
  * Bringing automatic Thunderbird and Firefox updates to Solaris 10 and OpenSolaris.
  *
- * See http://lildude.co.uk/automatic-updates-thunderbird-firefox-solaris-opensolaris for more details.
+ * See https://lildude.co.uk/automatic-updates-thunderbird-firefox-solaris-opensolaris for more details.
  *
  * Copyright 2010 Colin Seymour
  *
@@ -10,7 +10,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *		http://www.apache.org/licenses/LICENSE-2.0
+ *		https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,12 +26,12 @@
  * I highly recommend you use a local mirror as it's likely to be quicker than
  * the primary mozilla.org servers.
  *
- * Ensure your path is as provided at http://www.mozilla.org/community/mirrors.html
+ * Ensure your path is as provided at https://www.mozilla.org/community/mirrors.html
  *
  * The default mirror here is that provided by the University of Kent in the UK
  * as this is my nearest (and quickest) mirror.
  */
-$mirror = "http://www.mirrorservice.org/sites/releases.mozilla.org/pub/mozilla.org/";
+$mirror = "https://www.mirrorservice.org/sites/releases.mozilla.org/pub/mozilla.org/";
 
 
 /**
@@ -57,7 +57,7 @@ if ( $_GET['a'] && $_GET['v'] && $_GET['b'] ) {
 	$rel = ( $rel == '5.11' ) ? 'opensolaris' : 'solaris-10-fcs';
 	$arch = ( strstr( $arch, 'x86' ) ) ? 'i386' : 'sparc';
 	// We switch to FTP here as the directory listing comes without HTML formatting
-	$url = str_replace( 'http://', 'ftp://', $mirror ) . "/$app/releases/".$$app."/contrib/solaris_tarball/";
+	$url = str_replace( 'https://', 'ftp://', $mirror ) . "/$app/releases/".$$app."/contrib/solaris_tarball/";
 
 	// Grab contents of $url
 	$output = file_get_contents( $url );
@@ -66,7 +66,7 @@ if ( $_GET['a'] && $_GET['v'] && $_GET['b'] ) {
 	preg_match_all( "/^[-a-z0-9\s]+[\s]{4}([0-9]{2,})[\s0-9a-zA-Z:]+\s($app-($cur_VER\-)?[0-9\.\-abrc]{3,}\.en-US\.$rel-$arch\.(partial|complete).mar(\.md5sum)?)/mi", $output, $matches );
 
 	// We use the HTTP download as it seems more reliable than using FTP.
-	$url = str_replace( 'ftp://', 'http://', $url );
+	$url = str_replace( 'ftp://', 'https://', $url );
 	if ( !empty( $matches[0] ) ) {
 		if ( $matches[3][0] ) { // we have a partial
 			$partial = $url . $matches[2][0];
@@ -95,7 +95,7 @@ if ( $_GET['a'] && $_GET['v'] && $_GET['b'] ) {
 
 		preg_match( "/$app-([\.0-9ab]{2,}).+/", $matches[2][2], $matches1 );
 		$new_VER = rtrim( $matches1[1], '.' );
-		$update = '	<update type="minor" version="'.$new_VER.'" extensionVersion="'.$new_VER.'" buildID="20100403004202" detailsURL="http://www.mozilla.com/en-US/'.$app.'/'.$new_VER.'/releasenotes/"><patch type="complete" URL="'.$complete.'" hashFunction="MD5" hashValue="'.$chash.'" size="'.$csize.'"/>';
+		$update = '	<update type="minor" version="'.$new_VER.'" extensionVersion="'.$new_VER.'" buildID="20100403004202" detailsURL="https://www.mozilla.com/en-US/'.$app.'/'.$new_VER.'/releasenotes/"><patch type="complete" URL="'.$complete.'" hashFunction="MD5" hashValue="'.$chash.'" size="'.$csize.'"/>';
 		if ( isset( $partial ) ) {
 			$update .= '<patch type="partial" URL="'.$partial.'" hashFunction="MD5" hashValue="'.$phash.'" size="'.$psize.'"/>';
 		}

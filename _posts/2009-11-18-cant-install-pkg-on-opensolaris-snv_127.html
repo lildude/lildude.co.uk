@@ -14,7 +14,7 @@ published: true
 <p>I encountered a problem this evening that I can't really explain, I couldn't install any pkgs via the Package Manager or command line.  Both were failing with the same error:</p>
 <div class="terminal">
 <pre>$ pfexec pkg install SUNWant
-Creating Plan -                        
+Creating Plan -
 pkg: The following pattern(s) did not match any packages in the current catalog.
 Try relaxing the pattern, refreshing and/or examining the catalogs:
 	SUNWant
@@ -25,8 +25,8 @@ $</pre>
 <div class="terminal">
 <pre>$ pkg publisher
 PUBLISHER                     TYPE     STATUS   URI
-OpenSolaris-dev  (preferred)  origin   online   http://pkg.opensolaris.org/dev/
-WebStack                      origin   online   http://pkg.opensolaris.org/webstack/
+OpenSolaris-dev  (preferred)  origin   online   https://pkg.opensolaris.org/dev/
+WebStack                      origin   online   https://pkg.opensolaris.org/webstack/
 $</pre>
 </div>
 <p>Both look good to me and have been working fine.  </p>
@@ -35,11 +35,11 @@ $</pre>
 <p>So, armed with this info,  I fired up the GUI, removed my old opensolaris.org/release publisher which had the name "opensolaris.org" assigned to it and then added a new opensolaris.org entry, but this time pointing at the opensolaris.org/dev repo.</p>
 <p>A short while later my pkg publishers looked like this:</p>
 <div class="terminal">
-<pre>$ pkg publisher             
+<pre>$ pkg publisher
 PUBLISHER                     TYPE     STATUS   URI
-OpenSolaris-dev  (preferred)  origin   online   http://pkg.opensolaris.org/dev/
-WebStack                      origin   online   http://pkg.opensolaris.org/webstack/
-opensolaris.org               origin   online   http://pkg.opensolaris.org/dev/
+OpenSolaris-dev  (preferred)  origin   online   https://pkg.opensolaris.org/dev/
+WebStack                      origin   online   https://pkg.opensolaris.org/webstack/
+opensolaris.org               origin   online   https://pkg.opensolaris.org/dev/
 $</pre>
 </div>
 <p>... and I was able to install the pkgs I wanted without any problems.</p>

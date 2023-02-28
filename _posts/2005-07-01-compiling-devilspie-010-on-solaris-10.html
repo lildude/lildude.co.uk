@@ -11,14 +11,14 @@ type: post
 published: true
 ---
 <p><!--redirect_msg--><br />
-I used to use <a href="http://www.burtonini.com/blog/computers/devilspie">Devilspie</a> 0.7 on Solaris 9 some time ago, but for some reason stopped - can't remember why.  </p>
-<p>Well, today I decided I'd compile <a href="http://www.burtonini.com/blog/computers/devilspie/devilspie-0.10/">Devilspie 0.10</a> to run on Solaris 10 on a SunRay as a normal bog standard user, and boy was it fun.  As I've had so much fun, I thought I'd document it for anyone else who may be wanting to do the same thing.</p>
+I used to use <a href="https://www.burtonini.com/blog/computers/devilspie">Devilspie</a> 0.7 on Solaris 9 some time ago, but for some reason stopped - can't remember why.  </p>
+<p>Well, today I decided I'd compile <a href="https://www.burtonini.com/blog/computers/devilspie/devilspie-0.10/">Devilspie 0.10</a> to run on Solaris 10 on a SunRay as a normal bog standard user, and boy was it fun.  As I've had so much fun, I thought I'd document it for anyone else who may be wanting to do the same thing.</p>
 <p><!--more--></p>
 <p><strong>GOAL</strong>: Compile and install Devilspie 0.10 in my home directory so that it would run on a Solaris 10 Sunray and workstation, using Gnome 2.6, without having to install any additional software over and above that already supplied with Solaris 10.</p>
 <p>Well, I was almost 100% successful, I needed to install one app first. The following steps should help anyone compile Devilspie on Solaris 10.</p>
-<p>1.  Download the source code tarball - <a href="http://www.burtonini.com/computing/devilspie-0.10.tar.gz">devilspie-0.10.tar.gz</a> - and extract it to a directory of your choice.</p>
+<p>1.  Download the source code tarball - <a href="https://www.burtonini.com/computing/devilspie-0.10.tar.gz">devilspie-0.10.tar.gz</a> - and extract it to a directory of your choice.</p>
 <p>Now this is the step that caused me to stray from the original goal - unforunately, Solaris 10 doesn't come with GOB-2 by default, so you need to compile it yourself.  Don't worry, it's not very big and doesn't take very long.  </p>
-<p>2.  Download the <a href="http://www.5z.com/jirka/gob.htm">GOB-2</a> source code tarball - <a href="http://ftp.5z.com/pub/gob/gob2-2.0.11.tar.gz">gob2-2.0.11.tar.gz</a> - and extract it to a directory of your choice.</p>
+<p>2.  Download the <a href="https://www.5z.com/jirka/gob.htm">GOB-2</a> source code tarball - <a href="https://ftp.5z.com/pub/gob/gob2-2.0.11.tar.gz">gob2-2.0.11.tar.gz</a> - and extract it to a directory of your choice.</p>
 <p>3.  Compile and install GOB-2 using the usual "./configure, make and make" install steps.  I also used the "--prefix" option to install it in my home directory.</p>
 <p>4.  Configure your path to include your custom install of gob2. Without gob2 in your path, make will fail with the following error:</p>
 <p><code><br />

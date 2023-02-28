@@ -11,7 +11,7 @@ type: post
 published: true
 ---
 <p>My Joyent SmartMachine is currently running the latest (2012Q1 at time of writing) pkgsrc binary build of the pkgsrc pkgs.  Unfortunately, this comes with a rather old version of zsh: it comes with zsh 4.2.7 and I want at least zsh 4.3.10.</p>
-<p>So how do I solve this?  Simple, build my own pkg from the pkgsrc repo.  So I duly set about following <a href="http://wiki.joyent.com/wiki/display/jpc2/Building+your+Own+Packages" target="_blank">Joyent's instructions</a> and all seemed to go well until the actual build part:</p>
+<p>So how do I solve this?  Simple, build my own pkg from the pkgsrc repo.  So I duly set about following <a href="https://wiki.joyent.com/wiki/display/jpc2/Building+your+Own+Packages" target="_blank">Joyent's instructions</a> and all seemed to go well until the actual build part:</p>
 <pre class="terminal"># pk build shells/zsh-current
 20121030-111106: this is ref: refs/heads/trunk, gcc 4.7.0, 64bit ABI, for /opt/local
 20121030-111106: skipping 'zfs rollback' functionality, ZFS not delegated properly
@@ -51,14 +51,14 @@ ${PLIST.dynamic}${PLIST.curses}lib/zsh/${PKGVERSION}/zsh/curses.so
 <p>... it's worked.</p>
 <p>To actually install the pkg, I then still had to manually build the pkg_summary.gz (I think the docs may be missing a step somewhere) before I could install the pkg...</p>
 <pre class="terminal"># for a in /opt/pk/packages/trunk/x86_64/All/*.tgz; do pkg_info -X $a >> /opt/pk/packages/trunk/x86_64/All/pkg_summary; done
-# gzip pkg_summary 
+# gzip pkg_summary
 # pkgin -f update
-pkg_summary.gz                                                                    100%  445KB 444.8KB/s 444.8KB/s   00:01    
-cleaning database from http://pkgsrc.joyent.com/sdc6/2012Q2/x86_64/All entries...
+pkg_summary.gz                                                                    100%  445KB 444.8KB/s 444.8KB/s   00:01
+cleaning database from https://pkgsrc.joyent.com/sdc6/2012Q2/x86_64/All entries...
 cleaning database from file:///opt/pk/packages/trunk/x86_64/All entries...
-processing remote summary (http://pkgsrc.joyent.com/sdc6/2012Q2/x86_64/All)...
+processing remote summary (https://pkgsrc.joyent.com/sdc6/2012Q2/x86_64/All)...
 updating database: 100%
-pkg_summary.gz                                                                    100% 2477     2.4KB/s   2.4KB/s   00:00    
+pkg_summary.gz                                                                    100% 2477     2.4KB/s   2.4KB/s   00:00
 processing remote summary (file:///opt/pk/packages/trunk/x86_64/All)...
 updating database: 100%
 # pkgin av | grep zsh

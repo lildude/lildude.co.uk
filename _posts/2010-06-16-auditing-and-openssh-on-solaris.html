@@ -12,20 +12,20 @@ tags:
 type: post
 published: true
 ---
-<p>Many people don't run the SSH that comes with Solaris 9 and later on their Solaris hosts, instead opting for <a href="http://www.openssh.com/">OpenSSH</a> or one of <a href="http://www.ssh.com/">Tectia's SSH</a> products.  Some don't like <a href="https://blogs.sun.com/janp/entry/on_sunssh_versioning">SunSSH's versioning</a>, as it makes it hard to determine if SunSSH is vulnerable to the same issues as OpenSSH (most often it's not or the issue has already been addressed), others rely on features on OpenSSH that haven't made it into SunSSH (there aren't many) and then there are those who's corporate guidelines only allow for a third party solution - probably for uniformity across platforms.  Whatever the reason, all of these people are security conscious so they may also have an auditing (aka BSM) requirement too, and this is where the problem comes to light: they soon discover that it appears that not all events are being recorded for users who connect via this third party SSH software.</p>
-<p>Thankfully it's easy to get OpenSSH working with Solaris auditing thanks to the <a href="https://bugzilla.mindrot.org/show_bug.cgi?id=2">very generous code contributions</a> made by Sun to the OpenSSH community, way back in 2001, that were finally included in <a href="http://www.openssh.com/txt/release-4.0">OpenSSH 4.0</a> and later.  However, despite these contributions, people still miss the details on getting BSM working as they expect and this is what I'll address here.</p>
+<p>Many people don't run the SSH that comes with Solaris 9 and later on their Solaris hosts, instead opting for <a href="https://www.openssh.com/">OpenSSH</a> or one of <a href="https://www.ssh.com/">Tectia's SSH</a> products.  Some don't like <a href="https://blogs.sun.com/janp/entry/on_sunssh_versioning">SunSSH's versioning</a>, as it makes it hard to determine if SunSSH is vulnerable to the same issues as OpenSSH (most often it's not or the issue has already been addressed), others rely on features on OpenSSH that haven't made it into SunSSH (there aren't many) and then there are those who's corporate guidelines only allow for a third party solution - probably for uniformity across platforms.  Whatever the reason, all of these people are security conscious so they may also have an auditing (aka BSM) requirement too, and this is where the problem comes to light: they soon discover that it appears that not all events are being recorded for users who connect via this third party SSH software.</p>
+<p>Thankfully it's easy to get OpenSSH working with Solaris auditing thanks to the <a href="https://bugzilla.mindrot.org/show_bug.cgi?id=2">very generous code contributions</a> made by Sun to the OpenSSH community, way back in 2001, that were finally included in <a href="https://www.openssh.com/txt/release-4.0">OpenSSH 4.0</a> and later.  However, despite these contributions, people still miss the details on getting BSM working as they expect and this is what I'll address here.</p>
 <p><!--more-->
 <div class="alert"><strong>NOTE:</strong> These instructions are based on the latest version of OpenSSH 5.5p1 on Solaris 10, however they apply to Solaris 8 and later and all versions of OpenSSH since 4.0, when BSM support was first integrated.</div>
 <p>When a sysadmin has been told he needs to install OpenSSH and enable auditing on their Solaris hosts, the process normally goes as follows:</p>
 <ol>
-<li>The sysadmin rushes over to <a href="http://sunfreeware.com/">Sunfreeware.com</a> and downloads the necessary packages.</li>
-<li>If they use Sunfreeware.com, they follow <a href="http://sunfreeware.com/openssh9.html">these steps to install and configure OpenSSH</a></li>
+<li>The sysadmin rushes over to <a href="https://sunfreeware.com/">Sunfreeware.com</a> and downloads the necessary packages.</li>
+<li>If they use Sunfreeware.com, they follow <a href="https://sunfreeware.com/openssh9.html">these steps to install and configure OpenSSH</a></li>
 <li>They disable the OS supplied SSH, fire up OpenSSH and then test a couple of logins.</li>
 <li>Once happy OpenSSH is working, they set to configuring auditing.  Not knowing exactly what they want to audit right away, they start off auditing just logins by adding <code>lo</code> to the flags line in <code>/etc/security/audit_control</code>, enable auditing by running <code>/etc/security/bsmconv</code> and then reboot.</li>
 <li>Once the host has come back up, they login and check their audit logs...
 <div class="terminal">
 <pre>$ ssh root@192.168.0.5
-root@192.168.0.5's password: 
+root@192.168.0.5's password:
 Last login: Wed Jun 16 13:38:45 2010
 Sun Microsystems Inc.   SunOS 5.10      Generic January 2005
 # auditreduce -c lo | praudit -s
@@ -74,10 +74,10 @@ file,2010-06-16 16:52:19.000 +01:00,
 <p>And there we have it.  Auditing working with OpenSSH.  In fact, truth be told, auditing was always working here. Had the admin enabled other events to audit or logged out and then in again before checking the audit records, they would have seen an audit record for those events along with the warning. </p>
 <p>If you happen to get output similar to:</p>
 <div class="terminal">
-<pre># auditreduce -c lo | praudit -s      
+<pre># auditreduce -c lo | praudit -s
 file,1970-01-01 01:00:00.000 +01:00,
 file,2010-06-16 16:58:49.000 +01:00,
 #</pre>
 </div>
-<p>... it means either your SSH implementation hasn't been compiled with auditing/BSM support, you've not enabled auditing or you've not configured it correctly so it's time to hit the <a href="http://docs.sun.com/app/docs/doc/816-4557/audittm-1">documentation</a> and test using a Sun supplied login mechanism.  Don't forget that processes need to be restarted in order for them to be picked up by your auditing changes, so if in doubt, reboot.</p>
-<p>On a side note, you may want to seriously consider using the SSH implementation that comes with the OS.  Not only is it supported by the same people who provide you with the OS, it also has some features OpenSSH doesn't, most notably hardware acceleration by default.  See the <a href="http://hub.opensolaris.org/bin/view/Community+Group+security/SSH">SunSSH community page</a> for more details on Sun's implementation.</p>
+<p>... it means either your SSH implementation hasn't been compiled with auditing/BSM support, you've not enabled auditing or you've not configured it correctly so it's time to hit the <a href="https://docs.sun.com/app/docs/doc/816-4557/audittm-1">documentation</a> and test using a Sun supplied login mechanism.  Don't forget that processes need to be restarted in order for them to be picked up by your auditing changes, so if in doubt, reboot.</p>
+<p>On a side note, you may want to seriously consider using the SSH implementation that comes with the OS.  Not only is it supported by the same people who provide you with the OS, it also has some features OpenSSH doesn't, most notably hardware acceleration by default.  See the <a href="https://hub.opensolaris.org/bin/view/Community+Group+security/SSH">SunSSH community page</a> for more details on Sun's implementation.</p>

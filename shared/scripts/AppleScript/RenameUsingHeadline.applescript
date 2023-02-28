@@ -1,10 +1,10 @@
 on run
 	-- get the list of selected ID's in front window
 	set selectedItems to GetSelection()
-	
+
 	-- show about
 	AboutScript()
-	
+
 	-- process each item
 	set theCount to 0
 	tell application "iView MediaPro"
@@ -15,23 +15,23 @@ on run
 			set thePath to the path of theItem
 			--display dialog thePath
 			set theHeadline to the headline of theItem
-			
-			-- form new name by stripping all punctuation from the headline and 
+
+			-- form new name by stripping all punctuation from the headline and
 			-- replace all spaces with underscores
 			set newName to my tidyString(theHeadline)
-			
+
 			-- set newName to theHeadline
-			
+
 			-- if the old name has an extension, append it to new name
 			-- But change it to lower case
 			set nc to the number of characters in theName
 			if character (nc - 3) of theName = "." then
 				set thefileextension to my change_case((get text (nc - 3) through nc of theName), 0)
 			end if
-			
+
 			-- rename
-			if theName ­ (newName & thefileextension) then
-				
+			if theName ï¿½ (newName & thefileextension) then
+
 				--does a file already exist with this name?
 				tell application "Finder"
 					set filefolder to (folder of alias thePath)
@@ -57,7 +57,7 @@ on run
 			--end try
 		end repeat
 	end tell
-	
+
 	ShowResult(theCount)
 end run
 
@@ -69,8 +69,8 @@ on GetSelection()
 		if catalog 1 exists then set selectedItems to the selection of catalog 1
 	end tell
 	if number of items in selectedItems is 0 then
-		display dialog Â
-			"You need to select at least one media item in the front catalog in order to use this script." buttons {"OK"} default button Â
+		display dialog ï¿½
+			"You need to select at least one media item in the front catalog in order to use this script." buttons {"OK"} default button ï¿½
 			"OK" with icon 1 giving up after 10
 		error number -128
 	end if
@@ -79,9 +79,9 @@ end GetSelection
 
 -- Strip punctuation and replace spaces with underscore ------------
 on tidyString(the_string)
-	set the_delims to {"!", "@", "Û", "#", "£", "$", "%", "^", "&", "*", "(", ")", "=", "+", "[", "]", "{", "}", ";", ":", "\"", "'", "\\", "|", ",", "<", ".", ">", "/", "?", "`", "~", "_"}
+	set the_delims to {"!", "@", "ï¿½", "#", "ï¿½", "$", "%", "^", "&", "*", "(", ")", "=", "+", "[", "]", "{", "}", ";", ":", "\"", "'", "\\", "|", ",", "<", ".", ">", "/", "?", "`", "~", "_"}
 	-- store the originals and set up the marker.
-	set {OLD_delim, _marker_} to {AppleScript's text item delimiters, "¤"}
+	set {OLD_delim, _marker_} to {AppleScript's text item delimiters, "ï¿½"}
 	-- process each of the delimiters in the_delims replacing each with the  _marker_
 	repeat with this_delim in the_delims
 		my atid(this_delim) -- see the handler that follows
@@ -116,13 +116,13 @@ end replaceSpaces
 -- about this script ---------------------------------------------
 
 on AboutScript()
-	display dialog Â
+	display dialog ï¿½
 		"This script will rename original files of all selected items using valid values in the \"Headline\" field.
-		
+
 Resulting filenames will have all punctuation removed, and spaces replaced with \"_\".
-		
+
 It will also change the file extension, if present, to lowercase." buttons {"Cancel", "Rename"} default button 2 with icon 1
-	
+
 	set theAnswer to the button returned of the result
 	return theAnswer
 end AboutScript
@@ -142,7 +142,7 @@ on ShowResult(theCount)
 end ShowResult
 
 -- Change case --------------------------------------
--- Taken from http://www.apple.com/applescript/guidebook/sbrt/pgs/sbrt.07.htm
+-- Taken from https://www.apple.com/applescript/guidebook/sbrt/pgs/sbrt.07.htm
 
 on change_case(this_text, this_case)
 	if this_case is 0 then
@@ -156,7 +156,7 @@ on change_case(this_text, this_case)
 	repeat with this_char in this_text
 		set x to the offset of this_char in the comparison_string
 		if x is not 0 then
-			set the new_text to Â
+			set the new_text to ï¿½
 				(the new_text & character x of the source_string) as string
 		else
 			set the new_text to (the new_text & this_char) as string

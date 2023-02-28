@@ -13,7 +13,7 @@ tags:
 type: post
 published: true
 ---
-<p>The pkg repositories have now been updated to included the 2009.06 pkgs (<a href="http://wikis.sun.com/download/attachments/102400619/community1-whats-new.pdf">What's New preso</a> - PDF).  There is no need to perform a clean install, you can just use the Update Manager GUI to update your OpenSolaris 2008.11 release to 2009.06.  </p>
+<p>The pkg repositories have now been updated to included the 2009.06 pkgs (<a href="https://wikis.sun.com/download/attachments/102400619/community1-whats-new.pdf">What's New preso</a> - PDF).  There is no need to perform a clean install, you can just use the Update Manager GUI to update your OpenSolaris 2008.11 release to 2009.06.  </p>
 <p>There is one teeny weeny issue that you may encounter - the Update Manager GUI may tell you that there are no new pkgs available.  Sadly, the solution isn't clear or intuitive from the GUI: you need to update the SUNWipkg pkg first.  The CLI is clearer about this and tells you that you need to update this pkg when you attempt to upgrade using "pfexec pkg image-update".</p>
 <p>So to update via the GUI, quickly fire up a terminal and run:</p>
 <p><code>$ pfexec pkg install SUNWipkg</code></p>

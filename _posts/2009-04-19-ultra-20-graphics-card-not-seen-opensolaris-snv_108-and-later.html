@@ -13,7 +13,7 @@ tags:
 type: post
 published: true
 ---
-<p>Following a recent update to snv_108, I could no longer get any graphics output on my <a href="http://www.sun.com/desktop/workstation/ultra20/">Ultra 20 M2</a> and subsequent updates weren't helping either.  For some reason the graphics card (onboard nVidia Quadro FX 560) was not being seen correctly by the OS and the only indication of a problem was the following in the <code>/var/log/Xorg.log.0</code>:<br />
+<p>Following a recent update to snv_108, I could no longer get any graphics output on my <a href="https://www.sun.com/desktop/workstation/ultra20/">Ultra 20 M2</a> and subsequent updates weren't helping either.  For some reason the graphics card (onboard nVidia Quadro FX 560) was not being seen correctly by the OS and the only indication of a problem was the following in the <code>/var/log/Xorg.log.0</code>:<br />
 <!--more--></p>
 <pre>
 X.Org X Server 1.5.3
@@ -28,7 +28,7 @@ Solaris ABI: 64-bit
 SUNWxorg-server package version: 6.9.0.5.11.10100,REV=0.2008.10.16
 SUNWxorg-graphics-ddx package version: 6.9.0.5.11.10100,REV=0.2008.10.16
 SUNWxorg-mesa package version: 6.9.0.5.11.10100,REV=0.2008.10.16
-        Before reporting problems, check http://sunsolve.sun.com/
+        Before reporting problems, check https://sunsolve.sun.com/
         to make sure that you have the latest version.
 Markers: (--) probed, (**) from config file, (==) default setting,
         (++) from command line, (!!) notice, (II) informational,
@@ -55,6 +55,6 @@ Synopsis: PCIE init err info failed BDF 0x0 on snv_109 (Ultra 20 M2)</p>
 <p>For some reason this has been closed as "Not reproducable", and someone rightly pointed out this shouldn't be the case as it clearly IS reproducable...</p>
 <blockquote><p>This bug is marked as Not Reproducible; however, the problem can occur on any machine that's not running firmware > 1.52.</p></blockquote>
 <p>My machine only had rev 1.45.0 of the firmware, so I needed to at least update my firmware to clear these PCIE errors, and hopefully fix the issue with the graphics.</p>
-<p>Now updating the firmware is a really simple matter: <a href="http://www.sun.com/desktop/workstation/ultra20/downloads.html">download</a> the "Tools and Drivers" ISO image, burn to DVD (as it's about 1.3GB), boot from DVD and select option 2 to perform the update. Assuming you have a DVD burner and free DVD-R on hand.  I didn't so I had to think of another method to perform the update. </p>
+<p>Now updating the firmware is a really simple matter: <a href="https://www.sun.com/desktop/workstation/ultra20/downloads.html">download</a> the "Tools and Drivers" ISO image, burn to DVD (as it's about 1.3GB), boot from DVD and select option 2 to perform the update. Assuming you have a DVD burner and free DVD-R on hand.  I didn't so I had to think of another method to perform the update. </p>
 <p>And that's just what I did.  See <a href="/howto-update-ultra-20-bios-from-a-usb-stick">HOWTO: Update Ultra 20 BIOS From a USB Stick</a> in which I documented the method I took to create a bootable USB stick from the "Drivers and Tools" DVD ISO image which had just enough on it to perform the BIOS update.</p>
 <p>And guess what, it solved my problems: both of them.  It seems there has been a change in the PCI-E software within OpenSolaris that seems to require a later version of BIOS.  Updating the BIOS ensured I met this undocumented/unexpected requirement and now I no longer get the PCIE errors AND my graphics card is recognised and works again.</p>

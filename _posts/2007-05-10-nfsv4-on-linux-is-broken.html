@@ -10,9 +10,9 @@ type: post
 published: true
 ---
 <p>I'm in the process or building a new machine at work (more details later) and I stumbled upon a really annoying "feature" of NFSv4 on Linux (I've only tried RHEL4 and SLES10).  </p>
-<p>It seems you can't expect to export the filesystem as you did with NFSv3 and earlier and then mount it in exactly the same way. Oh no, to <a href="http://www.citi.umich.edu/projects/nfsv4/linux/using-nfsv4.html#exports.">quote their own words</a>:</p>
+<p>It seems you can't expect to export the filesystem as you did with NFSv3 and earlier and then mount it in exactly the same way. Oh no, to <a href="https://www.citi.umich.edu/projects/nfsv4/linux/using-nfsv4.html#exports.">quote their own words</a>:</p>
 <blockquote><p>NFSv4 no longer has a separate "mount" protocol. Instead of exporting a number of distinct exports, an NFSv4 client sees the NFSv4 server's exports as existing inside a single filesystem, called the nfsv4 "pseudofilesystem".</p></blockquote>
 <p>That means if you share <code>/export/tmp</code> from a Linux host running NFSv4, in order to mount it you need to run "<code>mount linuxhost:/ /mnt/foo</code>". This is illogical behaviour.</p>
 <p>This also wreaks havoc with automountd on Solaris which doesn't implement the Linux thinking as Solaris doesn't.  Solaris exports NFSv4 filesystems as it does with NFSv3 and earlier - none of this "pseudofilesystem" crap.  What were the developers thinking?</p>
-<p>One thing is nice to know, <a href="http://linux-nfs.org/pipermail/nfsv4/2006-May/004405.html">they've acknowledged this is a problem</a> that needs fixing, but it seems no one has pulled finger just yet.</p>
+<p>One thing is nice to know, <a href="https://linux-nfs.org/pipermail/nfsv4/2006-May/004405.html">they've acknowledged this is a problem</a> that needs fixing, but it seems no one has pulled finger just yet.</p>
 <p>My solution - use NFSv3.  Disabling NFSv4 on SLES10 is easy (see <code>/etc/sysconfig/nfs</code>), but I've not worked out how to do is on RHEL4 yet though</p>

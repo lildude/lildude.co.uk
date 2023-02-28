@@ -123,23 +123,28 @@ end
 
 desc 'Test site'
 task :test do
-  sh 'JEKYLL_ENV=test bundle exec jekyll build'
-  HTMLProofer.check_directory('./_site', {
-                                assume_extension: true,
-                                check_favicon: true,
-                                check_html: true,
-                                disable_external: true,
-                                check_img_http: true,
-                                check_iframe_http: true,
-                                cache: { timeframe: '2w' },
-                                empty_alt_ignore: true,
-                                file_ignore: ['./_site/admin/index.html'],
-                                verbose: true,
-                                # Matches /foo/doo but not //foo/doo - useful for protocol-less links.
-                                href_swap: { %r{ (?<!\/)^\/{1}(?!\/) } => config['url'] },
-                                typhoeus: { verbose: true, followlocation: true },
-                                parallel: { in_processes: 3 }
-                              }).run
+  sh 'JEKYLL_ENV=production bundle exec jekyll doctor'
+  sh 'JEKYLL_ENV=production bundle exec jekyll build'
+  options = {
+    assume_extension: true,
+    check_favicon: true,
+    check_html: true,
+    disable_external: true,
+    # Disabled until https://github.com/gjtorikian/html-proofer/issues/363 is fixed
+    check_img_http: false,
+    check_iframe_http: true,
+    check_opengraph: true,
+    cache: { timeframe: { external: '2w', internal: '2w' } },
+    empty_alt_ignore: true,
+    ignore_missing_alt: true,
+    file_ignore: ['./_site/admin/index.html'],
+    verbose: true,
+    # Matches /foo/doo but not //foo/doo - useful for protocol-less links.
+    href_swap: { %r{ (?<!/)^/{1}(?!/) } => config['url'] },
+    typhoeus: { verbose: true, followlocation: true },
+    parallel: { in_processes: 3 }
+  }
+  HTMLProofer.check_directory('./_site', options).run
 end
 
 desc 'Generate and display locally'

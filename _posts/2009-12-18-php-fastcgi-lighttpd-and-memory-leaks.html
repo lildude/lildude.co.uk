@@ -10,14 +10,14 @@ tags:
 type: post
 published: true
 ---
-<p>I recently purchased a <a href="http://www.joyent.com/products/publiccloud/accelerator/">1/4GB Joyent Accelerator</a> account (aka zone) and thought as I've got full control of what I run, I'll try the Lighttpd (1.4.22) and PHP FastCGI (5.2.9) combination for my website hosting.  Whilst this worked great and performance was pretty impressive, I'm not too impressed with the memory consumption of the PHP FastCGI processes.</p>
+<p>I recently purchased a <a href="https://www.joyent.com/products/publiccloud/accelerator/">1/4GB Joyent Accelerator</a> account (aka zone) and thought as I've got full control of what I run, I'll try the Lighttpd (1.4.22) and PHP FastCGI (5.2.9) combination for my website hosting.  Whilst this worked great and performance was pretty impressive, I'm not too impressed with the memory consumption of the PHP FastCGI processes.</p>
 <p>My accelerator is limited to 256MB and I was finding I was soon reaching this limit with each php-cgi process consuming at least 20MB, often with one consuming over 100MB!!!.  At one stage this got so bad that I couldn't even login so had to get Joyent to reboot my zone.</p>
 <p>I've tried several things to try and reduce the memory usage including reducing the number of child processes (PHP_FCGI_CHILDREN) to 4 and lowering the number of requests for each process (PHP_FCGI_MAX_REQUESTS) down to 400 and the problem continued.  I've also tried using OpenSolaris resource controls and whilst this stops the entire zone's memory from being hogged by the php-cgi processes, it doesn't stop the copious amounts of memory being munched by these processes.</p>
 <p>For those interested, my fastcgi.server config section is as follows:</p>
-<pre>fastcgi.server =  ( ".php" =>                                        
-                     ( "localhost" =>                                 
-                       (                                              
-                         "socket" => "/tmp/php-fastcgi.socket",       
+<pre>fastcgi.server =  ( ".php" =>
+                     ( "localhost" =>
+                       (
+                         "socket" => "/tmp/php-fastcgi.socket",
                          "bin-path" => "/opt/local/bin/php-cgi",
                          "max-procs" => 1,
                          "bin-environment" => (
@@ -25,7 +25,7 @@ published: true
                                 "PHP_FCGI_MAX_REQUESTS" => "400"
                                 ),
                          "broken-scriptfilename" => "enable"
-                       ) 
+                       )
                      )
                   )</pre>
 <p>max-procs is set to 1 as I was using eAccelerator.</p>

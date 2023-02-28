@@ -10,7 +10,7 @@ tags:
 type: post
 published: true
 ---
-<p>Many applications, like Oracle 11g, need larger than default process values for things like stack size and file descriptors and normally document it in their installation guides. Oracle 11gR2 is very vague about how to <a href="http://download.oracle.com/docs/cd/E11882_01/install.112/e17163/pre_install.htm#CIHFGBCF" target="_blank">configure the "shell limits"</a> and instead concentrates on telling you what it expects and how you can check the current values using <code>ulimit(1)</code>.</p>
+<p>Many applications, like Oracle 11g, need larger than default process values for things like stack size and file descriptors and normally document it in their installation guides. Oracle 11gR2 is very vague about how to <a href="https://download.oracle.com/docs/cd/E11882_01/install.112/e17163/pre_install.htm#CIHFGBCF" target="_blank">configure the "shell limits"</a> and instead concentrates on telling you what it expects and how you can check the current values using <code>ulimit(1)</code>.</p>
 <p><strong>Update - 9 March 2012</strong>: This post has been updated to reflect a correction in behaviour introduced in patch 146654-01 (SPARC) and/or 146670-02 (SPARC) and 146655-01 (x86) and/or 146671-02 (x86).  These patches fix a problem (CR 6911915) where "basic" and "privilege" <code>/etc/project</code> settings we not being set correctly and thus "privileged" <code>/etc/project</code> settings were showing as soft limits in <code>ulimit(1)</code>.</p>
 <h3>Using ulimit(1)</h3>
 <p>Most sysadmins turn to using <code>ulimit(1)</code> to set the appropriate values by adding something like the following to the system-wide <code>/etc/profile</code> or the specific application user's profile (the comments are mine):</p>
@@ -27,7 +27,7 @@ ulimit -n unlimited</code></pre>
 -c: core file size (blocks)    0
 -n: file descriptors           256
 -v: virtual memory size (kb)   unlimited
-$ 
+$
 $ ulimit -Ha
 -t: cpu time (seconds)         unlimited
 -f: file size (blocks)         unlimited
@@ -41,7 +41,7 @@ $ ulimit -Ha
 <ol>
 <li>It adds another location to configure settings for your application which you may forget about.</li>
 <li>If placed in the <code>/etc/profile</code>, these limits will affect ALL users and processes on the system unless you add in various checks in your <code>/etc/profile</code> to try and limit the users this applies to.</li>
-<li>This is an antiquated method of setting these settings.  Projects are the way to go.  You're already using projects to set the semaphore and shared memory settings (<a href="http://download.oracle.com/docs/cd/E11882_01/install.112/e17163/pre_install.htm#autoId39" target="_blank">here in the Oracle 11gR2 docs</a>), so why not use this same functionality for setting these shell limits?</li>
+<li>This is an antiquated method of setting these settings.  Projects are the way to go.  You're already using projects to set the semaphore and shared memory settings (<a href="https://download.oracle.com/docs/cd/E11882_01/install.112/e17163/pre_install.htm#autoId39" target="_blank">here in the Oracle 11gR2 docs</a>), so why not use this same functionality for setting these shell limits?</li>
 </ol>
 <h3>Using Projects</h3>
 <p>So how do you do it in projects?</p>
@@ -102,12 +102,12 @@ $ ulimit -Ha
 $</code></pre>
 <p>... or <code>prctl(1)</code> run as the oracle user in a new shell started after the project modifications...</p>
 <pre class="terminal"><code>
-$ prctl -n process.max-stack-size -t privileged  $$ 
+$ prctl -n process.max-stack-size -t privileged  $$
 process: 13152: zsh
 NAME    PRIVILEGE       VALUE    FLAG   ACTION                       RECIPIENT
 process.max-stack-size
         privileged      32.0MB      -   deny                                 -
-$ prctl -n process.max-file-descriptor -t privileged  $$ 
+$ prctl -n process.max-file-descriptor -t privileged  $$
 process: 13152: zsh
 NAME    PRIVILEGE       VALUE    FLAG   ACTION                       RECIPIENT
 process.max-file-descriptor
@@ -123,12 +123,12 @@ $</code></pre>
 -n: file descriptors           256
 -v: virtual memory size (kb)   unlimited
 $
-$ prctl -n process.max-stack-size -t basic  $$     
+$ prctl -n process.max-stack-size -t basic  $$
 process: 13152: -zsh
 NAME    PRIVILEGE       VALUE    FLAG   ACTION                       RECIPIENT
 process.max-stack-size
         basic           8.00MB      -   deny                             13152
-$ prctl -n process.max-file-descriptor -t basic  $$ 
+$ prctl -n process.max-file-descriptor -t basic  $$
 process: 13152: -zsh
 NAME    PRIVILEGE       VALUE    FLAG   ACTION                       RECIPIENT
 process.max-file-descriptor
@@ -138,7 +138,7 @@ $</code></pre>
 <h3>Setting Unlimited</h3>
 <p>One question that often comes up is...</p>
 <blockquote><p>How do I set one of these values to 'unlimited' via projects like I can using ulimit?</p></blockquote>
-<p>This isn't actually made very clear in the <a href="http://download.oracle.com/docs/cd/E18752_01/html/817-1592/resource.html" target="_blank">Resource Management documentation</a>.  You can't use the word "unlimited" as the resource controls have no concept of "unlimited". Instead, you just need to set the value to the maximum allowed system value.</p>
+<p>This isn't actually made very clear in the <a href="https://download.oracle.com/docs/cd/E18752_01/html/817-1592/resource.html" target="_blank">Resource Management documentation</a>.  You can't use the word "unlimited" as the resource controls have no concept of "unlimited". Instead, you just need to set the value to the maximum allowed system value.</p>
 <p>So what is the maximum allowed system value?  Well you could dig out the tunable parameters guide and trawl through it, but the easiest method is to use <code>prctl(1)</code> to query the "system" value for the appropriate resource control for your current shell.</p>
 <p>For example, to see the maximum stack size, use:</p>
 <pre class="terminal"><code>$ prctl -P -t system -n process.max-stack-size $$
@@ -152,4 +152,4 @@ $</code></pre>
 Oracle Corporation	SunOS 5.10	Generic Patch	January 2005
 unlimited
 #</code></pre>
-<p>You can find further details on using projects for resource management in the <a href="http://download.oracle.com/docs/cd/E18752_01/html/817-1592/resource.html" target="_blank">Resource Management</a> section of the <a href="http://download.oracle.com/docs/cd/E18752_01/html/817-1592/index.html" target="_blank">System Administration Guide: Oracle Solaris Containers-Resource Management and Oracle Solaris Zones</a> guide.</p>
+<p>You can find further details on using projects for resource management in the <a href="https://download.oracle.com/docs/cd/E18752_01/html/817-1592/resource.html" target="_blank">Resource Management</a> section of the <a href="https://download.oracle.com/docs/cd/E18752_01/html/817-1592/index.html" target="_blank">System Administration Guide: Oracle Solaris Containers-Resource Management and Oracle Solaris Zones</a> guide.</p>

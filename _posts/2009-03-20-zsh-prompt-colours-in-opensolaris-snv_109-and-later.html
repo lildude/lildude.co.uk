@@ -14,7 +14,7 @@ tags:
 type: post
 published: true
 ---
-<p>I've just updated my system to the latest <a href="http://www.opensolaris.com">OpenSolaris</a> release (snv_109) and suddenly my ZSH prompt has lost all it's colours (I use them to clearly distinguish between me and the root user - I'm also a bit of a customisation freak ;-) ).</p>
+<p>I've just updated my system to the latest <a href="https://www.opensolaris.com">OpenSolaris</a> release (snv_109) and suddenly my ZSH prompt has lost all it's colours (I use them to clearly distinguish between me and the root user - I'm also a bit of a customisation freak ;-) ).</p>
 <p>A little bit of research soon revealed that OpenSolaris snv_109 and later now ships with ZSH 4.3.9 in which they changed the prompt colouring scheme, and for the better too as it's far easier to understand.</p>
 <p><!--more--><br />
 From the ZSHMISC(1) man page:</p>
@@ -36,7 +36,7 @@ From the ZSHMISC(1) man page:</p>
     PS2="%(!.%F{red}.%F{blue})%_&lt; %f"
 else
     PS1="%{${fg[magenta]}%}[%(!.%{${fg[red]}%}.%{${fg[blue]}%})%m : %{${fg[green]}%}\
-%40&lt;...&lt;%~%{${fg[magenta]}%}]%{${fg[blue]}%}%(!.#.$) %{${fg[default]}%}" 
+%40&lt;...&lt;%~%{${fg[magenta]}%}]%{${fg[blue]}%}%(!.#.$) %{${fg[default]}%}"
     PS2="%(!.%{${fg[red]}%}.%{${fg[blue]}%})%_&lt; %{${fg[default]}%}"
 fi</code></pre>
 <p>If you're curious, this give me the following prompt for a normal user:</p>

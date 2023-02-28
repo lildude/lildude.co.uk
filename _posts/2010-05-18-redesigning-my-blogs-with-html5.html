@@ -13,7 +13,7 @@ tags:
 type: post
 published: true
 ---
-<p>Following the <a href="/starting-another-move-to-habari">recent decision</a> to finally pull finger and migrate this site across to <a href="http://habariproject.org">Habari</a>, I thought I'd look into using as much of the evolving <a href="http://www.w3.org/TR/html5/">HTML5 spec</a> as I can, within the limits of what most browsers support.  Now I'm going to admit that I've not read the whole spec (how much free time to you think I have? ) but I have glanced through the tags and seen there is a lot of new and potentially exciting stuff there.  In this post I'm going to concentrate on the structural things I'm implementing.</p>
+<p>Following the <a href="/starting-another-move-to-habari">recent decision</a> to finally pull finger and migrate this site across to <a href="https://habariproject.org">Habari</a>, I thought I'd look into using as much of the evolving <a href="https://www.w3.org/TR/html5/">HTML5 spec</a> as I can, within the limits of what most browsers support.  Now I'm going to admit that I've not read the whole spec (how much free time to you think I have? ) but I have glanced through the tags and seen there is a lot of new and potentially exciting stuff there.  In this post I'm going to concentrate on the structural things I'm implementing.</p>
 <p>My blogs, like millions of others, have always followed a very similar generic structure:</p>
 <pre><code class="prettyprint">
 &lt;html&gt;
@@ -42,16 +42,16 @@ published: true
 <p>The working draft of the spec conveniently includes a brief usage description for each tag:</p>
 <code>&lt;header&gt;</code> :<br />
 <blockquote>The header element represents a group of introductory or navigational aids. [...] The header element can also be used to wrap a section's table of contents, a search form, or any relevant logos.<br />
-<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-header-element">W3C Working Draft</a></cite></blockquote>
+<cite> - <a href="https://www.w3.org/TR/html5/semantics.html#the-header-element">W3C Working Draft</a></cite></blockquote>
 <code>&lt;footer&gt;</code> :<br />
 <blockquote>The footer element represents a footer for its nearest ancestor sectioning content or sectioning root element. A footer typically contains information about its section such as who wrote it, links to related documents, copyright data, and the like.<br />
-<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-footer-element">W3C Working Draft</a></cite></blockquote>
+<cite> - <a href="https://www.w3.org/TR/html5/semantics.html#the-footer-element">W3C Working Draft</a></cite></blockquote>
 <code>&lt;article&gt;</code> :<br />
 <blockquote>The article element represents a component of a page that consists of a self-contained composition in a document, page, application, or site and that is intended to be independently distributable or reusable, e.g. in syndication. This could be a forum post, a magazine or newspaper article, a blog entry, a user-submitted comment, an interactive widget or gadget, or any other independent item of content.<br />
-<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-article-element">W3C Working Draft</a></cite></blockquote>
+<cite> - <a href="https://www.w3.org/TR/html5/semantics.html#the-article-element">W3C Working Draft</a></cite></blockquote>
 <code>&lt;nav&gt;</code> :<br />
 <blockquote>The nav element represents a section of a page that links to other pages or to parts within the page: a section with navigation links.<br />
-<cite> - <a href="http://www.w3.org/TR/html5/semantics.html#the-nav-element">W3C Working Draft</a></cite></blockquote>
+<cite> - <a href="https://www.w3.org/TR/html5/semantics.html#the-nav-element">W3C Working Draft</a></cite></blockquote>
 <p>The little snippets I've included above don't do each of the tags justice, so if you want to find out more about their usage, check out the relevant entries in the spec.</p>
 <p>Now with the knowledge of these tags in mind, I'm implementing the following basic structure:</p>
 <pre><code class="prettyprint">
@@ -83,7 +83,7 @@ published: true
 <li>I encountered display and layout problems with the new <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code> and <code>&lt;nav&gt;</code> tags until I made them block elements within my stylesheet using:
 <p><code class="prettyprint">header, footer, nav, article {display:block;}</code></p>
 <p>Some research revealed this has a lot to do with the fact that most browsers don't have default styles information for these elements, so I had to add them myself.</p></li>
-<li>IE doesn't display elements it doesn't know about due to the way it parses the DOM (more details <a href="http://blog.whatwg.org/supporting-new-elements-in-ie">here</a>). Thankfully, this is easy enough to <a href="http://remysharp.com/2009/01/07/html5-enabling-script/">workaround</a> <strong>BUT</strong> it requires the user have Javascript enabled. This should hopefully be resolved when IE 9 comes out with it's HTML5 support</li>
+<li>IE doesn't display elements it doesn't know about due to the way it parses the DOM (more details <a href="https://blog.whatwg.org/supporting-new-elements-in-ie">here</a>). Thankfully, this is easy enough to <a href="https://remysharp.com/2009/01/07/html5-enabling-script/">workaround</a> <strong>BUT</strong> it requires the user have Javascript enabled. This should hopefully be resolved when IE 9 comes out with it's HTML5 support</li>
 </ol>
 <p>Thanks to the intentions of the of the <code>&lt;header&gt;</code>, <code>&lt;footer&gt;</code> and <code>&lt;nav&gt;</code> tags within HTML5, each of these are likely to be used multiple times in a single page so I'll probably need to add some identifiers when it comes to styling them.</p>
 <p>As I go through the process of learning more about HTML5 as I redesign this site, I'll be implementing the changes on my personal site too.  You won't see these changes here until I finally flick the switch, but I've already implemented the above basic structure there, so you can take a look at the source, if you're interested.</p>

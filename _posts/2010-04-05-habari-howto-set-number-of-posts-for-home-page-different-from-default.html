@@ -11,13 +11,13 @@ tags:
 type: post
 published: true
 ---
-<p>I've been using, contributing and hacking around <a href="http://www.habariproject.org/">Habari</a> for some time now and I thought it's about time I started sharing my knowledge in a series of "Habari HOWTO" posts. This is the first in what will hopefully turn out to be a large valuable list for Habari users.</p>
-<p>This question was posed on the <a href="http://groups.google.com/group/habari-users">habari-users</a> group by <a href="http://manda-moore.com/">manda</a>:</p>
+<p>I've been using, contributing and hacking around <a href="https://www.habariproject.org/">Habari</a> for some time now and I thought it's about time I started sharing my knowledge in a series of "Habari HOWTO" posts. This is the first in what will hopefully turn out to be a large valuable list for Habari users.</p>
+<p>This question was posed on the <a href="https://groups.google.com/group/habari-users">habari-users</a> group by <a href="https://manda-moore.com/">manda</a>:</p>
 <blockquote><p>I'm looking to set my home.php to show only 2 posts, but leave all other entry.multiple.php show whatever default number I set in Habari options (whether it be 5, 10 or 20). Is there something simple to add to home.php to tell it to show only 2 posts? Have not found anything on the wiki or forums regarding this, and trying to accomplish without a plugin (not even sure if there is a plugin available anyways). using trunk version.</p></blockquote>
 <p>In order to reduce the effect on performance by this change, you actually want the query to only pull the two posts you want rather than pulling the number you've configured (10 by default) and then only display the first two.  There are actually two ways of doing this: </p>
 <ol>
 <li>Via a plugin
-<p>The <a href="http://www.habariproject.org/dist/plugins/customquery/">customquery</a> plugin allows you to change the number of posts on the home page, and others.</li>
+<p>The <a href="https://www.habariproject.org/dist/plugins/customquery/">customquery</a> plugin allows you to change the number of posts on the home page, and others.</li>
 <li>Via code directly in your theme.
 <p>The following code added to the theme class within the <code>theme.php</code> file supplied with your theme will do the trick:</p>
 <p>
@@ -28,4 +28,4 @@ published: true
 <p>All other pages will continue to use the value saved in your "Items per Page" option within the Habari configuration (Dashboard &rarr; Options).</li>
 </ol>
 <p>My preference is for the latter as it doesn't involve installing another plugin and means if I chose to distribute the theme, it wouldn't require the user to install a plugin to get all the functionality required.</p>
-<p>My inspiration for using this method came from a combination of the customquery plugin and the method detailed in the <a href="http://wiki.habariproject.org/en/Asides">"asides" wiki page</a> which uses a more generic action.  As I was already using a similar line for asides, I thought I'd just extend it to limit the pages rather than use a plugin which essentially does just this. </p>
+<p>My inspiration for using this method came from a combination of the customquery plugin and the method detailed in the <a href="https://wiki.habariproject.org/en/Asides">"asides" wiki page</a> which uses a more generic action.  As I was already using a similar line for asides, I thought I'd just extend it to limit the pages rather than use a plugin which essentially does just this. </p>

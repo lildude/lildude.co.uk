@@ -16,16 +16,16 @@ tags:
 type: post
 published: true
 ---
-<p>Installing <a href="http://habariproject.org/">Habari</a> isn't really that complicated, however getting OS X up and running ready for the installation requires a bit of work.</p>
-<p>Mac OS X 10.5 (aka Leopard) conveniently comes with Apache 2 and PHP 5, so most of the work in setting up a <a href="http://en.wikipedia.org/wiki/MAMP">MAMP</a> server has already been done for you.   Sure there are other ways to get a MAMP setup: you can build Apache, MySQL and PHP from sources, you can use <a href="http://www.macports.org/">MacPorts</a> or you can use pre-built packages like <a href="http://www.mamp.info">MAMP</a> or <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a>.  </p>
+<p>Installing <a href="https://habariproject.org/">Habari</a> isn't really that complicated, however getting OS X up and running ready for the installation requires a bit of work.</p>
+<p>Mac OS X 10.5 (aka Leopard) conveniently comes with Apache 2 and PHP 5, so most of the work in setting up a <a href="https://en.wikipedia.org/wiki/MAMP">MAMP</a> server has already been done for you.   Sure there are other ways to get a MAMP setup: you can build Apache, MySQL and PHP from sources, you can use <a href="https://www.macports.org/">MacPorts</a> or you can use pre-built packages like <a href="https://www.mamp.info">MAMP</a> or <a href="https://www.apachefriends.org/en/xampp.html">XAMPP</a>.  </p>
 <p>I prefer to use as much of what is supplied with the OS as possible as there's no point having duplicate applications on a system.  It also makes keeping them up-to-date much easier - it becomes Apple's job, not mine.</p>
 <p>Anyway, in order to get all the way through this article there are a couple of requirements:</p>
-<p>1.  You have <a href="http://developer.apple.com/technology/xcode.html">XCode</a> installed<br />
+<p>1.  You have <a href="https://developer.apple.com/technology/xcode.html">XCode</a> installed<br />
 2.  You're fairly comfortable in using the command line. </p>
 <p>This last requirement isn't strictly true as I will provide all the commands you need to run anyway.</p>
 <p>The rest of this post assumes you've not configured PHP, Apache or MySQL on OS X at all yet.  If you have, don't worry, I'm sure you'll be able to easily pick things up.</p>
 <p><strong>NOTE</strong>: There is one caveat with this approach: Apple's updates may require you to redo any one of the steps below as it may replace files you've modified or provide newer incompatible versions of software.</p>
-<p><strong>Update</strong>:  You can find details on installing gd on OS X as a universal binary for 32-bit and 64-bit <a href="http://osx.topicdesk.com/content/view/135/41/">here</a>.</p>
+<p><strong>Update</strong>:  You can find details on installing gd on OS X as a universal binary for 32-bit and 64-bit <a href="https://osx.topicdesk.com/content/view/135/41/">here</a>.</p>
 <p><!--more--></p>
 <h2>The Web Server</h2>
 <p>Apache already comes pre-configured to work using <code>/Library/WebServer/Documents</code> as the document root, however it's not configured to load the PHP module, so you'll need to do this yourself.</p>
@@ -57,12 +57,12 @@ published: true
 <p>If you're going to install Habari into the main document root (<code>/Library/WebServer/Documents</code>), you'll need to find "<code>AllowOverride None</code>" within the <code>&lt;Directory "/Library/WebServer/Documents"&gt;</code> section of this file and change it to "<code>AllowOverride All</code>" so that the <code>.htaccess</code> file used by Habari will work.</p>
 <p>If you're going to install Habari into a user's "Sites" directory, you'll need to make the same change in the user's <code>/private/etc/apache2/users/[username].conf</code> file.</p>
 <p>After making changes, restart Apache using one of the following methods (remember this as we'll be doing this agan later):<br />
-<a id="restartapache"></a><br />
+<br />
 GUI: Go to System Preferences > Sharing and disable and enable Web Sharing<br />
 CLI: <code>$ sudo apachectl restart</code></p>
 <p>Now you have the Apache and PHP running.</li>
 </ol>
-<p>You can confirm it's working and the check the PHP settings by creating a file (eg <code>phpinfo.php</code>) containing &lt;? phpinfo(); ?&gt; either in <code>/Library/WebServer/Documents</code> or a user's Sites directory and browse to that file using <code>http://localhost/phpinfo.php</code> or <code>http://localhost/~username/phpinfo.php</code> respectively.</p>
+<p>You can confirm it's working and the check the PHP settings by creating a file (eg <code>phpinfo.php</code>) containing &lt;? phpinfo(); ?&gt; either in <code>/Library/WebServer/Documents</code> or a user's Sites directory and browse to that file using <code>https://localhost/phpinfo.php</code> or <code>https://localhost/~username/phpinfo.php</code> respectively.</p>
 <p>This is probably a good idea so you can see what PHP settings required by Habari have already been enabled.</p>
 <h2>The Database</h2>
 <p>You've got a choice here.  If you're just looking for a simple Habari installation and aren't really too concerned about the database backend, then you can go with SQLite.  It's supplied and enabled by default on OS X, so there's nothing more to do on the database side of things.</p>
@@ -70,7 +70,7 @@ CLI: <code>$ sudo apachectl restart</code></p>
 <p>So time to make a choice:</p>
 <p>SQLite: Nothing more to do here, skip to the <a href="#gd">Enabling GD Extension</a> section below.</p>
 <p>MySQL: Read on.</p>
-<p>The easiest option is to <a href="http://dev.mysql.com/downloads/mysql/5.0.html#macosx-dmg">download</a> and use the pre-compiled 32-bit binaries from mysql.com.  As with Apache, there's really no point running 64-bit binaries, so you'll need the 32-bit binaries as we've forced Apache to run in 32-bit mode above. </p>
+<p>The easiest option is to <a href="https://dev.mysql.com/downloads/mysql/5.0.html#macosx-dmg">download</a> and use the pre-compiled 32-bit binaries from mysql.com.  As with Apache, there's really no point running 64-bit binaries, so you'll need the 32-bit binaries as we've forced Apache to run in 32-bit mode above. </p>
 <p>Once downloaded, install the mysql-*.pkg file.  Then if you want MySQL to start automatically on boot, install MySQLStartupItem.pkg.  There's also a Preferences pane that you can use to stop and start MySQL from the Preferences.  To install this copy MySQL.prefPane to <code>/Library/PreferencePanes</code>.</p>
 <p>Once MySQL has been installed, start it and set appropriate passwords as they're all blank by default.  The <code>ReadMe.txt</code> file that comes with the MySQL download details how to start MySQL.</p>
 <p>Once started, you can set the root password as follows:</p>
@@ -78,7 +78,6 @@ CLI: <code>$ sudo apachectl restart</code></p>
 $ /usr/local/mysql/bin/mysqladmin -u root -p{new-password} -h localhost password {new-password}<br />
 $ /usr/local/mysql/bin/mysqladmin -u root -p reload</code></p>
 <p>MySQL should now be up and running and ready for access using your new root password.</p>
-<p><a id="gd"></a></p>
 <h2>Enabling the GD Extension</h2>
 <p>If you have no intentions of using the Habari Media Silo (used for uploading images etc to Habari via the admin interface) within your local Habari installation, you can skip this step and move straight onto configuring <a href="#pdo_mysql">Enabling the PDO_MYSQL Driver</a> section.</p>
 <p>If you want to use the silo plugin, then unfortunately things start to get tougher now, though not too tough, as this is where we start to compile code.</p>
@@ -86,7 +85,7 @@ $ /usr/local/mysql/bin/mysqladmin -u root -p reload</code></p>
 <ol>
 <li>Download the Libjpeg source code and extract the tarball:
 <p><code>$ cd /tmp<br />
-$ curl -O http://www.ijg.org/files/jpegsrc.v6b.tar.gz<br />
+$ curl -O https://www.ijg.org/files/jpegsrc.v6b.tar.gz<br />
 $ tar zxf jpegsrc.v6b.tar.gz<br />
 </code></li>
 <li>Compile and install libjpeg:
@@ -102,7 +101,7 @@ $ sudo make install</code></p>
 <p>Once libjpeg has been installed, we can finally move onto building the GD extension.</li>
 <li>Download the PHP source of the version your Mac is running (the <code>phpinfo()</code> used above will tell you), probably PHP-5.2.6, and extract the tarball:
 <p><code>$ cd /tmp<br />
-$ curl -O http://uk3.php.net/distributions/php-5.2.6.tar.bz2<br />
+$ curl -O https://uk3.php.net/distributions/php-5.2.6.tar.bz2<br />
 $ tar xjf php-5.2.6.tar.bz2</code></li>
 <li>Then move to the expanded directory and execute the following commands to prepare for the compilation of the extension:
 <p><code>$ cd php-5.2.6/ext/gd<br />
@@ -140,7 +139,6 @@ gd<br />
 $</code>
 </li>
 </ol>
-<p><a id="pdo_mysql"></a></p>
 <h2>Enabling the PDO_MYSQL Driver</h2>
 <p>If you've reached this section, then you're intent on getting Habari working with MySQL.</p>
 <p>As OS X doesn't ship with MySQL, it doesn't ship with the PDO driver needed by Habari to connect to MySQL, so we'll create the driver outselves.</p>
@@ -176,4 +174,4 @@ $</code>
 </ol>
 <p>That's it for the hard work.</p>
 <h2>Installing Habari</h2>
-<p>Once you've gone through all the above, you should find installing Habari a walk in the park.  For these steps, I'll turn you over to the official <a href="http://wiki.habariproject.org/en/Installation#Installing_Habari">Habari installation instructions</a>.</p>
+<p>Once you've gone through all the above, you should find installing Habari a walk in the park.  For these steps, I'll turn you over to the official <a href="https://wiki.habariproject.org/en/Installation#Installing_Habari">Habari installation instructions</a>.</p>

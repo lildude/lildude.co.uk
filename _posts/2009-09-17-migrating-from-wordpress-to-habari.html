@@ -11,64 +11,64 @@ tags:
 type: post
 published: true
 ---
-<p>It's taken me a little over a year to put all my soldiers in a row and finally migrate my <a href="http://colinseymour.co.uk">personal blog</a> from <a href="http://www.wordpress.org">Wordpress</a> to <a href="http://habariproject.org">Habari</a>.  </p>
+<p>It's taken me a little over a year to put all my soldiers in a row and finally migrate my <a href="https://colinseymour.co.uk">personal blog</a> from <a href="https://www.wordpress.org">Wordpress</a> to <a href="https://habariproject.org">Habari</a>.  </p>
 <p>This long delay really had nothing to do with Habari or Wordpress, but rather my pedantic desires, constantly changing ideas and the need for me to come up with my own Habari equivalents of Wordpress specific plugins.  I also wanted to create my own theme from scratch.</p>
-<p>In this post I'll detail the steps I took on the road to migrating from my old Wordpress installation to my <a href="http://colinseymour.co.uk/goodbye-wordpress-hello-habari">nice shiny new Habari installation</a>.<br />
+<p>In this post I'll detail the steps I took on the road to migrating from my old Wordpress installation to my <a href="https://colinseymour.co.uk/goodbye-wordpress-hello-habari">nice shiny new Habari installation</a>.<br />
 <!--more--></p>
 <h3>Tidying Up</h3>
-<p>Over the years I've had various permalink structures and have changed them without too much trouble thanks to the <a href="http://www.deanlee.cn/wordpress/permalinks-migration-plugin/">Dean's Permalinks Migration plugin</a>, and this is another one of those occasions.  I wanted my new site to have a leaner-and-meaner permalink structure. So the first thing I did was change my permalinks from:<br />
-<code>http://colinseymour.co.uk/post-name/</code> to <code>http://colinseymour.co.uk/post-name</code>.  No more <code>www</code> and no more trailing slash.  I feel this is now technically more correct as this site is not a sub-domain, hence no <code>www</code>, and each post is not a directory, hence no trailing slash (though I could probably still improve this further).</p>
+<p>Over the years I've had various permalink structures and have changed them without too much trouble thanks to the <a href="https://www.deanlee.cn/wordpress/permalinks-migration-plugin/">Dean's Permalinks Migration plugin</a>, and this is another one of those occasions.  I wanted my new site to have a leaner-and-meaner permalink structure. So the first thing I did was change my permalinks from:<br />
+<code>https://colinseymour.co.uk/post-name/</code> to <code>https://colinseymour.co.uk/post-name</code>.  No more <code>www</code> and no more trailing slash.  I feel this is now technically more correct as this site is not a sub-domain, hence no <code>www</code>, and each post is not a directory, hence no trailing slash (though I could probably still improve this further).</p>
 <p>At the same time I added this "fallback" entry to my <code>.htaccess</code> file...</p>
 <pre class="prettyprint">RewriteEngine On
 RewriteBase /
 RewriteCond %{HTTP_HOST} !^colinseymour.co.uk$ [NC]
-RewriteRule ^(.*)$ http://colinseymour.co.uk/$1 [L,R=301]
+RewriteRule ^(.*)$ https://colinseymour.co.uk/$1 [L,R=301]
 RewriteCond %{REQUEST_URI} ^(.+)/$
 RewriteRule ^(.+)/$  /$1 [R=301,L]</pre>
 <p>This is a bit of a belt-and-braces approach as the <code>.htaccess</code> rewrite rules would take effect before the Wordpress plugin had a chance, but better safe than sorry.  This entry also ensures the redirects continue once I'd switched to Habari.</p>
 <h3>Plugins and Functionality</h3>
 <p>Once the permalink changes were in place and I was waiting for Google to do it's magic (so I could verify things were good in <a href="https://www.google.com/webmasters/">Webmaster Tools</a>) I concentrated on the functionality I was using in Wordpress, what I wanted to continue to use, and what Habari plugins I'd need to get this functionality. If you don't already know, Habari works on a very minimalist approach.  If you want fancy functionality, you implement it via a plugin.  Only the bare essentials that would be used by most users are included in the core software.</p>
-<p>Sadly, all my needs and requirements weren't met by the vast collection of plugins available in the <a href="http://trac.habariproject.org/habari-extras/browser/plugins">habari-extras</a> repository or listed <a href="http://wiki.habariproject.org/en/Available_Plugins">here</a> so I had to whip out <a href="/netbeans-65-is-a-great-php-ide">NetBeans</a> and Mercurial and get coding.</p>
+<p>Sadly, all my needs and requirements weren't met by the vast collection of plugins available in the <a href="https://trac.habariproject.org/habari-extras/browser/plugins">habari-extras</a> repository or listed <a href="https://wiki.habariproject.org/en/Available_Plugins">here</a> so I had to whip out <a href="/netbeans-65-is-a-great-php-ide">NetBeans</a> and Mercurial and get coding.</p>
 <p>I'll come back to the list of plugins I ended up creating and using later on, because before I could actually get coding, I needed to set up my "Test and Dev Bed"...</p>
 <h3>Test and Dev Bed</h3>
-<p>In order to make my testing and coding life easy and consistent, I set up two development environments:  one on my OpenSolaris host at work (which closely mimics my <a href="http://www.joyent.com/">hosting provider</a>) and one on my Mac at home, with my Mercurial repositories (for all my own custom code) stored on the server behind this site.  Using local test beds means I'm not held up by network latency, outages or any other remote problems.</p>
-<p>I then <a href="http://habariproject.org/en/download">installed Habari from SVN</a> on both machines and configured a bare installation with no plugins enabled.  Once both environments were up and running identically, I set to coding my plugins and theme saving each incremental change into Mercurial.</p>
+<p>In order to make my testing and coding life easy and consistent, I set up two development environments:  one on my OpenSolaris host at work (which closely mimics my <a href="https://www.joyent.com/">hosting provider</a>) and one on my Mac at home, with my Mercurial repositories (for all my own custom code) stored on the server behind this site.  Using local test beds means I'm not held up by network latency, outages or any other remote problems.</p>
+<p>I then <a href="https://habariproject.org/en/download">installed Habari from SVN</a> on both machines and configured a bare installation with no plugins enabled.  Once both environments were up and running identically, I set to coding my plugins and theme saving each incremental change into Mercurial.</p>
 <h3>Plugins Continued...</h3>
 <p>In the end I ended up coding 8 plugins from scratch and modifying a few others.  Where possible, I've fed back my changes directly to the author or directly to the habari-extras repository.</p>
 <p>My final list of plugins looks almost<sup>*</sup> like this...</p>
 <ul>
-<li><a href="https://github.com/lildude/HB-Audio-Player">HB Audio Player</a> by Colin Seymour (<a href="http://colinseymour.co.uk/dominic-the-italian-christmas-donkey">see it in action</a>)<sub>[<a href="#1">1</a>]</sub></li>
-<li><a href="http://habariproject.org/">AutoParagraph</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
-<li><a href="http://habariproject.org/">Autopinger</a> by  Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Comment Notifier</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Core Dash Modules</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
-<li><a href="http://habariproject.org/">Custom Query</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">FeedBurner</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Fresh Comments</a> by Joel Lee <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">GoogleAnalytics</a> by Graham Christensen and Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Habari Media Silo</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
-<li><a href="https://github.com/lildude/HB-Cumulus">HB-Cumulus</a> by Colin Seymour (<a href="http://colinseymour.co.uk/">see it in action - sidebar</a>)</li>
-<li><a href="http://drunkenmonkey.org/projects/jambo">Jambo</a> by Drunken Monkey Labs <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Monthly Archives</a> by Habari Community <sub>[<a href="#5">5</a>]</sub></li>
-<li><a href="http://habariproject.org/">Page Menu</a> by Owen Winkler <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Pingback</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
-<li><a href="http://habariproject.org/">PreApproved</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Related Posts</a> by eighty4 <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://habariproject.org/">Sitemaps</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li>SmugGal by Colin Seymour (<a href="http://colinseymour.co.uk/gallery">see it in action</a>) <sub>[<a href="#7">7</a>]</sub></li>
+<li><a href="https://github.com/lildude/HB-Audio-Player">HB Audio Player</a> by Colin Seymour (<a href="https://colinseymour.co.uk/dominic-the-italian-christmas-donkey">see it in action</a>)<sub>[<a href="#1">1</a>]</sub></li>
+<li><a href="https://habariproject.org/">AutoParagraph</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
+<li><a href="https://habariproject.org/">Autopinger</a> by  Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Comment Notifier</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Core Dash Modules</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
+<li><a href="https://habariproject.org/">Custom Query</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">FeedBurner</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Fresh Comments</a> by Joel Lee <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">GoogleAnalytics</a> by Graham Christensen and Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Habari Media Silo</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
+<li><a href="https://github.com/lildude/HB-Cumulus">HB-Cumulus</a> by Colin Seymour (<a href="https://colinseymour.co.uk/">see it in action - sidebar</a>)</li>
+<li><a href="https://drunkenmonkey.org/projects/jambo">Jambo</a> by Drunken Monkey Labs <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Monthly Archives</a> by Habari Community <sub>[<a href="#5">5</a>]</sub></li>
+<li><a href="https://habariproject.org/">Page Menu</a> by Owen Winkler <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Pingback</a> by Habari Community <sub>[<a href="#2">2</a>]</sub></li>
+<li><a href="https://habariproject.org/">PreApproved</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Related Posts</a> by eighty4 <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Sitemaps</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li>SmugGal by Colin Seymour (<a href="https://colinseymour.co.uk/gallery">see it in action</a>) <sub>[<a href="#7">7</a>]</sub></li>
 <li><a href="https://github.com/lildude/smugmug-silo">SmugMug Media Silo</a> by Colin Seymour <sub>[<a href="#7">7</a>]</sub></li>
-<li><a href="http://habariproject.org/">Spam Checker</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://drunkenmonkey.org/projects/tabasamu">Tabasamu</a> by Drunken Monkey Labs <sub>[<a href="#3">3</a>]</sub></li>
-<li><a href="http://awhitebox.com/woopra-plugin-for-habari">Woopra</a> by Ali B. <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://habariproject.org/">Spam Checker</a> by Habari Community <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://drunkenmonkey.org/projects/tabasamu">Tabasamu</a> by Drunken Monkey Labs <sub>[<a href="#3">3</a>]</sub></li>
+<li><a href="https://awhitebox.com/woopra-plugin-for-habari">Woopra</a> by Ali B. <sub>[<a href="#3">3</a>]</sub></li>
 </ul>
 <p><em>Plugin notes</em>:<br />
-<a name="1"></a>1 - My own port of the WP AudioPlayer plugin.<br />
-<a name="2"></a>2 - Provided with core Habari installation.<br />
-<a name="3"></a>3 - Available from <a href="http://trac.habariproject.org/habari-extras">habari-extras</a> or the <a href="http://www.habariproject.org/dist/plugins/">distribution directory</a>.<br />
-<a name="4"></a>4 - Modified to work with Habari SVN.<br />
-<a name="5"></a>5 - This is only temporary as the plugin I created for my archives doesn't scale well and ground to a halt.<br />
-<a name="6"></a>6 - This is far more functional than the Slimbox2 plugin in the habari-extras repo and I actually created this long before the slimbox2 plugin appeared in the habari-extras repo.<br />
-<a name="7"></a>7 - I've not published the code yet, but it's coming soon.</p>
+1 - My own port of the WP AudioPlayer plugin.<br />
+2 - Provided with core Habari installation.<br />
+3 - Available from <a href="https://trac.habariproject.org/habari-extras">habari-extras</a> or the <a href="https://www.habariproject.org/dist/plugins/">distribution directory</a>.<br />
+4 - Modified to work with Habari SVN.<br />
+5 - This is only temporary as the plugin I created for my archives doesn't scale well and ground to a halt.<br />
+6 - This is far more functional than the Slimbox2 plugin in the habari-extras repo and I actually created this long before the slimbox2 plugin appeared in the habari-extras repo.<br />
+7 - I've not published the code yet, but it's coming soon.</p>
 <p>* I've excluded several hacks that I've implemented as plugins as I'm not really proud of them and don't really want to advertise them as I will NOT be releasing the code into the wild.</p>
 <h3>Finally, the Migration</h3>
 <p>With all my plugins created and working as best I could test in my two test beds, and my theme looking good, it was time to take the leap and make the move.  </p>
@@ -94,7 +94,7 @@ RewriteRule ^(.+)/$  /$1 [R=301,L]</pre>
 <li>Finally, I added a .htaccess rule to only allow my specified IP addresses to access the old Wordpress directory structure (so I could login if I needed to).</li>
 </ol>
 <p>And the end result...</p>
-<p><a href="http://colinseymour.co.uk"><img class="center" src="https://colinseymour.co.uk/img/Habeeb.png" alt="Screenshot of ColinSeymour.co.uk running Habari" title="ColinSeymour.co.uk running Habari" /></a></p>
+<p><a href="https://colinseymour.co.uk"><img class="center" src="https://colinseymour.co.uk/img/Habeeb.png" alt="Screenshot of ColinSeymour.co.uk running Habari" title="ColinSeymour.co.uk running Habari" /></a></p>
 <p>It's not perfect yet and I'm sure I'll discover more issues, but I'll soon iron out all the niggles as I continue to use Habari on a nearly daily basis.</p>
 <p>The whole process was a great way to learn about the inner workings of Habari and how it compares to Wordpress, and I must say I'm impressed.  The more I dig around the code, the more I'm impressed.  The modularity and OOP principles make developing and troubleshooting so much easier, and the Habari community is friendly and responsive.</p>
 <p>If you're considering switching from Wordpress to Habari, or even just giving Habari a go, I couldn't encourage you more.  You'll be very impressed.</p>

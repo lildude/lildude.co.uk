@@ -12,7 +12,7 @@ tags:
 type: post
 published: true
 ---
-<p>Did you know you can now upgrade both VxVM AND Solaris using Live Upgrade without reverting to underlying devices?  I didn't, until today when I discovered a document on exactly this topic from Symantec: <a href="http://sfdoccentral.symantec.com/sf/5.0/solaris/html/sf_install/ig_ch_install_sol_vm_fs15.html">Upgrading VxVM and/or Solaris using Live Upgrade</a>.</p>
+<p>Did you know you can now upgrade both VxVM AND Solaris using Live Upgrade without reverting to underlying devices?  I didn't, until today when I discovered a document on exactly this topic from Symantec: <a href="https://sfdoccentral.symantec.com/sf/5.0/solaris/html/sf_install/ig_ch_install_sol_vm_fs15.html">Upgrading VxVM and/or Solaris using Live Upgrade</a>.</p>
 <p>From what I can see in this document, it appears VxVM now comes with it's own wrapper scripts for the standard Live Upgrade called vxlustart and vxlufinish respectively.  BOTH commands are supplied on the VxVM 5.0 (and later media) and they both require and expect the native Live Upgrade pkgs and patches to be already applied to the system you're upgrading.</p>
 <p>The whole live upgrade process is then performed using the vxlustart and vxlufinish scripts with no direct calling of the native commands by the admin.  From an administrator's point of view, this is a good thing, but watch out when things go wrong as I suspect some finger pointing may start to take place.</p>
 <p>Naturally, as these scripts are supplied by Symantec, Symantec would be the ones to offer support if anything goes wrong.</p>

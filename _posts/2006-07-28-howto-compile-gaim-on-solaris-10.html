@@ -10,25 +10,25 @@ published: true
 ---
 <p><!--redirect_msg--></p>
 <div class="alert">
-<strong>Update</strong>: I was going to provide details on compiling GAIM 2/Pidgin on Solaris 10, but this is no longer required as GAIM is upgraded to Pidgin on Solaris 10 when patch <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-119548-11-1">119548-11</a> (SPARC) or <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-21-119549-11-1">119549-11</a> (x86) is applied.
+<strong>Update</strong>: I was going to provide details on compiling GAIM 2/Pidgin on Solaris 10, but this is no longer required as GAIM is upgraded to Pidgin on Solaris 10 when patch <a href="https://sunsolve.sun.com/search/document.do?assetkey=1-21-119548-11-1">119548-11</a> (SPARC) or <a href="https://sunsolve.sun.com/search/document.do?assetkey=1-21-119549-11-1">119549-11</a> (x86) is applied.
 </div>
 <p><img class="alignleft" src="/img/gaim-logo.png" alt="Gaim Logo" />These instructions come courtesy of <a href="https://blogs.sun.com/roller/page/torrey">Torrey McMahon</a> from his internal page (almost verbatim).  These instructions were so helpful to me, I thought I'd put the details here for later reference and for anyone else to use as the details out on the web are a bit thin for Solaris. </p>
 <p><strong>NOTE:</strong> These are Solaris 10 specific instructions, but you should find with a bit of knob twiddling, you can get the procedure to work on earlier releases.</p>
 <p>These details are for Gaim 1.3.0 to 1.5. I'm still in the process of documenting and getting Gaim 2.0.0 Beta# to cleanly compile with gcc.  Once Gaim 2.0 is officially released, I'll work on getting it to compile cleanly with Sun Studio, and then I'll post the details.</p>
 <p><!--more--></p>
 <h3>For the Not So Brave...</h3>
-<p>... see our friends at <a href="http://www.blastwave.org/">Blastwave</a>. Be warned through, this may be the easiest method, but it does fill <code>/opt/csw/</code> with loads of duplicate files and unnecessary crap. You should probably also go this route if you aren't running Solaris 10.</p>
+<p>... see our friends at <a href="https://www.blastwave.org/">Blastwave</a>. Be warned through, this may be the easiest method, but it does fill <code>/opt/csw/</code> with loads of duplicate files and unnecessary crap. You should probably also go this route if you aren't running Solaris 10.</p>
 <h3>Dependencies</h3>
 <p>You'll need the following before you start trying to build gaim:</p>
 <ul>
-<li><a href="http://www.sun.com/software/solaris/get.jsp">Solaris 10</a> or <a href="https://www.opensolaris.org/">OpenSolaris</a>. If you aren't running Solaris 10 then you'll need to do all sorts of things to get around libraries and programs that were never part of Solaris 8 or Solaris 9. Upgrade to Solaris 10 and come back.</li>
-<li>AO libraries and gmake program from either the companion CD, <a href="http://www.sun.com/software/solaris/freeware/">the external download centre</a>, or a compilation of your own devising. The pkgnames are SFWoggl and SFWgmake if you use the SFW bits.</li>
+<li><a href="https://www.sun.com/software/solaris/get.jsp">Solaris 10</a> or <a href="https://www.opensolaris.org/">OpenSolaris</a>. If you aren't running Solaris 10 then you'll need to do all sorts of things to get around libraries and programs that were never part of Solaris 8 or Solaris 9. Upgrade to Solaris 10 and come back.</li>
+<li>AO libraries and gmake program from either the companion CD, <a href="https://www.sun.com/software/solaris/freeware/">the external download centre</a>, or a compilation of your own devising. The pkgnames are SFWoggl and SFWgmake if you use the SFW bits.</li>
 <li>The location of your C compiler - these instructions assume you're using the Sun Studio 10 or later compilers (now free for all - get it <a href="https://www.opensolaris.org/os/community/tools/sun_studio_tools/">here</a>)</li>
 <li>Perl, TCL/TK, and GNOME2 installed as Solaris meant them to be or be prepared to hack some of the instructions below.</li>
 <li>The required header and development packages on your system.</li>
-<li>The gaim source code from <a href="http://gaim.sourceforge.net/">SourceForge</a>. The link on the upper right hand side of the white frame always has the latest stable release.</li>
+<li>The gaim source code from <a href="https://gaim.sourceforge.net/">SourceForge</a>. The link on the upper right hand side of the white frame always has the latest stable release.</li>
 <li>A location that you can write to that will hold the gaim binaries and libraries.</li>
-<li>If you want spell checking to work you'll need the <a href="http://gtkspell.sourceforge.net/">gtkspell</a> libraries installed.  The short version of how I did this is:
+<li>If you want spell checking to work you'll need the <a href="https://gtkspell.sourceforge.net/">gtkspell</a> libraries installed.  The short version of how I did this is:
 <ul>
 <li>Set your path to include the <code>/usr/css/bin/make</code> command and the Sun compiler tools.</li>
 <li>Change into the gtkspell dir</li>
@@ -103,7 +103,7 @@ published: true
 
            UI Library.................... : GTK 2.x
            SSL Library/Libraries......... : GNUTLS
-           
+
            Build with Plugin support..... : yes
            Build with Perl support....... : yes
            Build with Tcl support........ : yes
@@ -111,19 +111,19 @@ published: true
            Build with Audio support...... : yes
            Build with NAS support........ : no
            Build with GtkSpell support... : yes
-           
+
            Use kerberos 4 with zephyr.... : no
            Use external libzephyr........ : no
-           
+
            Use XScreenSaver Extension.... : yes
            Use X Session Management...... : yes
            Use startup notification.......: yes
-           
+
            Print debugging messages...... : no
-           
+
            Gaim will be installed in /usr/local/bin.
            Warning: You have an old copy of gaim at /usr/local/bin/gaim.
-           
+
            configure complete, now type 'make'
            $
 </pre>

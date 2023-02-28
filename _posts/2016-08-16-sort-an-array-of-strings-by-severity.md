@@ -11,7 +11,7 @@ published: true
 
 I'm a bit of a pedant when it comes to ordering things and today I had the need to sort an array of strings that contain severity levels, in descending order of severity, that is in the order "CRITICAL", "HIGH", "MEDIUM", "LOW".
 
-I'm a bit of a Ruby noob and had a general idea of how it could be done, but like everyone else, I turned to [Stackoverflow](http://stackoverflow.com/) and whilst a lot of the results were useful, none quite did what I wanted.  The useful ones did however give me enough to come up with my own solution.  
+I'm a bit of a Ruby noob and had a general idea of how it could be done, but like everyone else, I turned to [Stackoverflow](https://stackoverflow.com/) and whilst a lot of the results were useful, none quite did what I wanted.  The useful ones did however give me enough to come up with my own solution.  
 
 This is what I've got, how I did it, and what I ended up with.
 

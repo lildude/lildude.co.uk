@@ -13,7 +13,7 @@ tags:
 type: post
 published: true
 ---
-<p>Updating the firmware on an <a href="http://www.sun.com/desktop/workstation/ultra20/" target="_blank">Ultra 20</a> is a really simple matter: download the "Tools and Drivers" ISO image, burn it to DVD (as it's about 1.3GB), boot from the DVD and select option 2 to perform the update. </p>
+<p>Updating the firmware on an <a href="https://www.sun.com/desktop/workstation/ultra20/" target="_blank">Ultra 20</a> is a really simple matter: download the "Tools and Drivers" ISO image, burn it to DVD (as it's about 1.3GB), boot from the DVD and select option 2 to perform the update. </p>
 <p>However, it very quickly becomes way more complicated if you don't have a DVD burner or spare DVD-R, or even a DVD drive.  So what other option do you have? Boot CD?  Yes, but its way too complicated for the time and effort. Boot Network? Ditto.  Boot USB? Bingo!!! </p>
 <p><!--more-->The "Tools and Drivers" ISO image comes in at about 1.3GB because it includes things like network and graphics drivers for Solaris, Linux and Windows, diagnostic tools and loads of other stuff we really don't need in order to perform the BIOS update.  In fact, all we need is one 79Mb file - the <code>boot.img</code> file.  This is a simple Linux <code>boot.img</code> file so we can create the bootable USB stick as you would on Linux, but from a Solaris/OpenSolaris system...</p>
 <ol>
@@ -39,6 +39,6 @@ $</div>
 </ol>
 <p>That's it.  You now have a bootable USB stick with just enough on it to perform the BIOS update.  Reboot your system, press F8 and select the USB disk from the list of boot options.</p>
 <p>Everything should now appear as if you'd booted from the DVD and you can quickly and easily update your BIOS.</p>
-<p><strong>Update - 27 Jan 2011</strong>: Since Oracle have taken over Sun, locating the "Tools and Drivers" ISO image has become a bit of a challenge.  I've removed the link above as it's not valid.  You now need to use <a href="http://support.oracle.com" target="_blank">My Oracle Support</a> under the "Patches  & Updates" tab.  Select "Product or Family (Advanced Search) and enter the fields as follows:</p>
+<p><strong>Update - 27 Jan 2011</strong>: Since Oracle have taken over Sun, locating the "Tools and Drivers" ISO image has become a bit of a challenge.  I've removed the link above as it's not valid.  You now need to use <a href="https://support.oracle.com" target="_blank">My Oracle Support</a> under the "Patches  & Updates" tab.  Select "Product or Family (Advanced Search) and enter the fields as follows:</p>
 <p><img class="center" alt="Ultra 20 M2 Download on My Oracle Support" src="/img/U20Download.jpg" width="677" height="217" /></p>
 <p>... and click search.  This will return one result which is the ISO image.</p>

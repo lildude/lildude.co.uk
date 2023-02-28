@@ -8,7 +8,7 @@ tags:
 type: post
 published: true
 ---
-<p>This week an announcement was made on <a href="http://seclists.org/fulldisclosure/2011/Sep/101" target="_blank">Seclist.org about a XSS and HTML Injection vulnerability</a> in all the plugins that use the original <code>tagcloud.swf</code> from WP-Cumulus (which includes <a href="https://github.com/lildude/HB-Cumulus">HB-Cumulus</a>).</p>
+<p>This week an announcement was made on <a href="https://seclists.org/fulldisclosure/2011/Sep/101" target="_blank">Seclist.org about a XSS and HTML Injection vulnerability</a> in all the plugins that use the original <code>tagcloud.swf</code> from WP-Cumulus (which includes <a href="https://github.com/lildude/HB-Cumulus">HB-Cumulus</a>).</p>
 <p class="alertbox">The XSS vulnerability was fixed a long long time ago in HB-Cumulus - 19 December 2009 to be precise - so if you are running HB-Cumulus 1.4 or earlier, you <strong>MUST</strong> upgrade.</p>
 <p>The HTML Injection issue hasn't and can't be resolved due to the way the plugin works.  That said, I'm not sure this is really much of an issue.</p>
 <p>In short, the way the tagcloud.swf works is it takes input in the form of a string (as an argument) or from a xml file.  The only HTML tag that are used and accepted by the plugin is the <code>&lt;a&gt;</code> tag.  This is how the tag cloud knows that to display and link to without actually having to rebuild the Flash file repeatedly.</p>

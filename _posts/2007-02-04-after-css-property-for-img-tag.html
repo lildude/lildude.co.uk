@@ -14,9 +14,9 @@ tags:
 type: post
 published: true
 ---
-<p>Did you know that very few browsers implement the <a href="http://www.w3.org/TR/CSS-access#Alt">:after CSS property</a> for the "img" HTML tag?</p>
+<p>Did you know that very few browsers implement the <a href="https://www.w3.org/TR/CSS-access#Alt">:after CSS property</a> for the "img" HTML tag?</p>
 <p>Nope, neither did I until I wanted to use it.</p>
-<p>I'm in the process of redesigning my <a href="http://colinseymour.co.uk">personal site</a>, and one of the things I wanted to do was use CSS to place the Flickr logo after any image I include in a post that is stored on Flick.  I do this already with a bit of HTML & CSS, but I need to remember to add the snippet of code everytime I include a Flickr image.  By implementing it in CSS, all I would have to do is ensure I use the correct class name and it would appear automatically. </p>
+<p>I'm in the process of redesigning my <a href="https://colinseymour.co.uk">personal site</a>, and one of the things I wanted to do was use CSS to place the Flickr logo after any image I include in a post that is stored on Flick.  I do this already with a bit of HTML & CSS, but I need to remember to add the snippet of code everytime I include a Flickr image.  By implementing it in CSS, all I would have to do is ensure I use the correct class name and it would appear automatically. </p>
 <p><!--more--></p>
 <p>So with this in mind, I got testing. First, the HTML:</p>
 <p><code>&lt;img class="flickr-srcd" src="https://farm1.static.flickr.com/121/276074021_43bc40b104_m.jpg" /&gt;</code></p>
@@ -28,6 +28,6 @@ published: true
 <p>This should should result in something like this (screenshot):</p>
 <p><img class="center" src="/img/CSSFlickrLogo.png" alt="How img:after should look" /></p>
 <p>Hmmm, in Opera: yes (that's how I got the screenshot above).  Everything else I've tested on the Mac: Nope - they don't show the logo image.  Using this exact CSS on something like h3 works a treat. </p>
-<p>I know most browsers don't pass the <a href="http://www.webstandards.org/action/acid2/">Acid2 test</a>, but I was kind of hoping something like this would work. What's more interesting is Safari is meant to pass the acid test, but it doesn't seem to implement this property correctly either.  </p>
+<p>I know most browsers don't pass the <a href="https://www.webstandards.org/action/acid2/">Acid2 test</a>, but I was kind of hoping something like this would work. What's more interesting is Safari is meant to pass the acid test, but it doesn't seem to implement this property correctly either.  </p>
 <p>I've created this <a href="/shared/examples/css-after-prop.html">simple example</a> to illustrate this.</p>
 <p>Oh well, I guess I'm stuck with remembering to add the HTML each time, or maybe a bit of Javascript.</p>

@@ -14,12 +14,12 @@ tags:
 type: post
 published: true
 ---
-<p>I've been using <a href="http://burtonini.com/blog/computers/devilspie">Devilspie</a> for quite some time, and detailed steps on <a href="/compiling-devilspie-010-on-solaris-10">compiling rev 0.10 to run on Solaris 10</a>.  Well, I'm now using a OpenSolaris/Nevada Sunray server on x86, so I can no longer use my old binary.</p>
+<p>I've been using <a href="https://burtonini.com/blog/computers/devilspie">Devilspie</a> for quite some time, and detailed steps on <a href="/compiling-devilspie-010-on-solaris-10">compiling rev 0.10 to run on Solaris 10</a>.  Well, I'm now using a OpenSolaris/Nevada Sunray server on x86, so I can no longer use my old binary.</p>
 <p>Devilspie has had a complete overhaul since I last built it, so my old instructions don't quite apply anymore.  What's more, Nevada has a little bug that will trip up compiling devilspie without a little bit of work.</p>
-<p>This post will detail how to compile <a href="http://www.burtonini.com/blog/computers/devilspie/devilspie-0.22">Devilspie 0.22</a> on OpenSolaris/Nevada.</p>
+<p>This post will detail how to compile <a href="https://www.burtonini.com/blog/computers/devilspie/devilspie-0.22">Devilspie 0.22</a> on OpenSolaris/Nevada.</p>
 <p><!--more--></p>
 <ol>
-<li>Download the source code tarball - <a href="http://burtonini.com/computing/devilspie-0.22.tar.gz">devilspie-0.22.tar.gz</a> - and extract it to a directory of your choice.</li>
+<li>Download the source code tarball - <a href="https://burtonini.com/computing/devilspie-0.22.tar.gz">devilspie-0.22.tar.gz</a> - and extract it to a directory of your choice.</li>
 <li>Unfortunately, there is an outstanding bug on Nevada in that there is no x11.pc file required for pkg-config.  We can resolve this by creating one of our own.
 <p>Create a file called x11.pc and place the following into it:</p>
 <pre>
@@ -85,4 +85,4 @@ make: Fatal error: Command failed for target `devilspie'
 <li>If all goes well, you should now be able to run make install to install Devilspie.</li>
 </ol>
 <p>Remember, if you've used a version prior to 0.13, you will need to recreate your configuration file.  The old xml configuration file format has been replaced with the much simpler s-expressions style.</p>
-<p>You can find some very good documentation and examples <a href="http://www.chimeric.de/snippets/linux/devilspie">here</a>.</p>
+<p>You can find some very good documentation and examples <a href="https://www.chimeric.de/snippets/linux/devilspie">here</a>.</p>

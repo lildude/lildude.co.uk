@@ -11,8 +11,8 @@ tags:
 type: post
 published: true
 ---
-<p>Did you know Wordpress is one major memory hog?  No?  Neither did I until I started getting "500 Internal Server" errors after having my hosting account at <a href="http://www.joyent.com">Joyent</a> moved from FreeBSD to OpenSolaris, with it's resource management functionality being used to it's full extent.</p>
-<p>You'll be surprised to hear this appears to be a topic that isn't really discussed much out in the open.  The closest indication of anyone else encountering memory issues with Wordpress is this <a href="http://wordpress.org/support/topic/168336#post-731636">this post</a> on the Wordpress support forum.</p>
+<p>Did you know Wordpress is one major memory hog?  No?  Neither did I until I started getting "500 Internal Server" errors after having my hosting account at <a href="https://www.joyent.com">Joyent</a> moved from FreeBSD to OpenSolaris, with it's resource management functionality being used to it's full extent.</p>
+<p>You'll be surprised to hear this appears to be a topic that isn't really discussed much out in the open.  The closest indication of anyone else encountering memory issues with Wordpress is this <a href="https://wordpress.org/support/topic/168336#post-731636">this post</a> on the Wordpress support forum.</p>
 <p>This is a great post and provides a good example that illustrates how much memory Wordpress really uses, and an good explanation as to why.  In short, it seems Wordpress loads pretty much the entire options table into $GLOBALS when it initialises. This causes the memory usage to jump significantly.</p>
 <p>I tested the suggestions in the forum post on a relatively clean installation and sure enough, the memory usage goes from a mere 50 Kb before Wordpress initialises to a massive 5.79 Mb after Wordpress has initialised, and then finally a maximum of 5.81 Mb once it's all done.</p>
 <p>What a jump.  OVER 5 Mb of memory attributed to Wordpress alone, and most of this is consumed by the vast amount of crap loaded into $GLOBALS.   </p>

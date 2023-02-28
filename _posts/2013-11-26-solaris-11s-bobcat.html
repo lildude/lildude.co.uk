@@ -10,11 +10,11 @@ type: post
 published: true
 ---
 <p>Here's an interesting little thing a colleague noticed in Solaris 11's <code>pkg verify -v</code> output...</p>
-<pre class="terminal">$ pkg verify -v library/ncurses 
-PACKAGE                                                                 STATUS 
+<pre class="terminal">$ pkg verify -v library/ncurses
+PACKAGE                                                                 STATUS
 pkg://solaris/library/ncurses                                               OK
 	file: usr/gnu/share/terminfo/b/bobcat
-		Warning: package may contain bobcat!  (http://xkcd.com/325/)
+		Warning: package may contain bobcat!  (https://xkcd.com/325/)
 $</pre>
 <p>This is perfectly harmless and only visible when using the <code>-v</code> flag.</p>
-<p>Seems we have some Solaris devs who like <a href="http://xkcd.com" target="_blank">xkcd</a> :-)  Lets just hope the humour police don't complain and ruin all the fun... techies like this kind of stuff.</p>
+<p>Seems we have some Solaris devs who like <a href="https://xkcd.com" target="_blank">xkcd</a> :-)  Lets just hope the humour police don't complain and ruin all the fun... techies like this kind of stuff.</p>

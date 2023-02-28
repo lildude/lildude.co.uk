@@ -23,7 +23,7 @@ published: true
 <p><!--more--></p>
 <h3>The Partition Table</h3>
 <p>First, the partition/slice table.  As we're installing several operating systems on the one disk, we need to do a bit of planning.  What's more, the current Solaris and OpenSolaris installer will only allow one Solaris partition (primary or extended) per disk.  You can actually cheat and work around this <a href="https://blogs.sun.com/bobn/entry/a_grub_configuration_for_multiple">using GRUB to change the partition types on the fly</a>, but I haven't gone this route.</p>
-<p>This is what I've gone for:<a name="part"></a></p>
+<p>This is what I've gone for:</p>
 <table style="min-width:500px">
 <tr>
 <th>Part #</th>
@@ -92,7 +92,7 @@ published: true
 </ol>
 <p><!--wsa:LongPostMiddle--></p>
 <h3>Additional Notes</h3>
-<p><a name="#"></a><strong>Linux Using the Solaris SWAP slice:</strong></p>
+<p><strong>Linux Using the Solaris SWAP slice:</strong></p>
 <p>Now you may be curious to know how Linux is going to be able to use the Solaris swap slice for it's own swap partition.</p>
 <p>Well, when Linux creates the devices for each partition, it will detect the presence of the Solaris fdisk partition table on partition 2, and will process this too and create the appropriate devices.  The pseudo-partition numbers start immediately after the last physical partition. This can be seen in <code>/var/log/messages</code> or the <code>dmesg</code> output with lines that look similar to this (your output may differ):</p>
 <p><code>sda: sda1 sda2 sda3 &lt; sda5 sda6 sda7 &gt;<br />
@@ -106,5 +106,5 @@ sda2: &lt;solaris: [s0] sda8 [s1] sda9 [s2] sda10 [s3] sda11 [s4] sda12 [s5] sda
 <h3>Screenshots</h3>
 <p>Of course we need some screenshots too.  I personally think the SLES desktop is the cleanest and most pleasing on the eye with Nevada coming in a close 2nd.  Solaris 10 is horrible.</p>
 <div class="center">
-<a href="http://www.flickr.com/photos/lildude/513760008/" title="RHEL 4u4"><img src="https://farm1.static.flickr.com/203/513760008_e9f8838cf8_t.jpg" width="100" height="75" alt="RHEL 4 update 4" /></a><a href="http://www.flickr.com/photos/lildude/513760012/" title="SLES 10"><img src="https://farm1.static.flickr.com/197/513760012_4091011957_t.jpg" width="100" height="75" alt="SLES 10" /></a><a href="http://www.flickr.com/photos/lildude/513760018/" title="Solaris 10 11/06"><img src="https://farm1.static.flickr.com/200/513760018_e402df926a_t.jpg" width="100" height="75" alt="Solaris 10 11/06" /></a><a href="http://www.flickr.com/photos/lildude/513760016/" title="Nevada B64"><img src="https://farm1.static.flickr.com/190/513760016_71bd35c5cd_t.jpg" width="100" height="75" alt="Nevada Build 64" /></a>
+<a href="https://www.flickr.com/photos/lildude/513760008/" title="RHEL 4u4"><img src="https://farm1.static.flickr.com/203/513760008_e9f8838cf8_t.jpg" width="100" height="75" alt="RHEL 4 update 4" /></a><a href="https://www.flickr.com/photos/lildude/513760012/" title="SLES 10"><img src="https://farm1.static.flickr.com/197/513760012_4091011957_t.jpg" width="100" height="75" alt="SLES 10" /></a><a href="https://www.flickr.com/photos/lildude/513760018/" title="Solaris 10 11/06"><img src="https://farm1.static.flickr.com/200/513760018_e402df926a_t.jpg" width="100" height="75" alt="Solaris 10 11/06" /></a><a href="https://www.flickr.com/photos/lildude/513760016/" title="Nevada B64"><img src="https://farm1.static.flickr.com/190/513760016_71bd35c5cd_t.jpg" width="100" height="75" alt="Nevada Build 64" /></a>
 </div>

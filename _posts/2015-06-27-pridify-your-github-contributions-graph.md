@@ -11,7 +11,7 @@ published: true
 ---
 I saw this Tweet...
 
-<blockquote class="twitter-tweet tw-align-center " data-partner="tweetdeck"><p lang="en" dir="ltr">Saw today&#39;s <a href="https://twitter.com/hashtag/Github?src=hash">#Github</a> logo and wanted my contribution graph to match with it... <a href="https://t.co/fzAlzP1474">https://t.co/fzAlzP1474</a> <a href="http://t.co/7FwZ0OlIdr">pic.twitter.com/7FwZ0OlIdr</a></p>&mdash; Noel Delgado (@pixelia_me) <a href="https://twitter.com/pixelia_me/status/614533965194530816">June 26, 2015</a></blockquote>
+<blockquote class="twitter-tweet tw-align-center " data-partner="tweetdeck"><p lang="en" dir="ltr">Saw today&#39;s <a href="https://twitter.com/hashtag/Github?src=hash">#Github</a> logo and wanted my contribution graph to match with it... <a href="https://t.co/fzAlzP1474">https://t.co/fzAlzP1474</a> <a href="https://t.co/7FwZ0OlIdr">pic.twitter.com/7FwZ0OlIdr</a></p>&mdash; Noel Delgado (@pixelia_me) <a href="https://twitter.com/pixelia_me/status/614533965194530816">June 26, 2015</a></blockquote>
 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ... and thought I wanted some of that too. So here you go, my "pridified" GitHub contributions graph:

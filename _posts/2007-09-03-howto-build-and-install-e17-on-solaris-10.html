@@ -8,13 +8,13 @@ tags:
 type: post
 published: true
 ---
-<p><img class="alignleft" src="/img/elogo.png" alt="E Logo" />These details come following a request by <a href="http://sujithemmanuel.blogspot.com/">Sujith Emmanuel</a> following a post I made about <a href="/e17-running-on-solaris-10">getting E17 working on Solaris 10</a> Sunray servers.</p>
+<p><img class="alignleft" src="/img/elogo.png" alt="E Logo" />These details come following a request by <a href="https://sujithemmanuel.blogspot.com/">Sujith Emmanuel</a> following a post I made about <a href="/e17-running-on-solaris-10">getting E17 working on Solaris 10</a> Sunray servers.</p>
 <p>None of these details are Sunray specific.  Thankfully e17 is relocatable and is intelligent enough to workout if it's been moved.  I detail installing the files in my home directory as this is the only directory that is common on ALL the Sunray servers, and is the only one I have write permissions to.</p>
 <p>I've used these same details to install E17 on Nevada (snv 70) into /opt/e17 on an Ultra 20 (x86), so these instructions will work for both SPARC and x86 hosts.</p>
 <p>These instructions only detail building the basic window manager.  Once you've got this built, you can then go ahead and try building the rest of the components.  You will need to check the README files and work out the dependencies. I'll update this post when I get a chance to do this.<br />
 <!--more--><br />
 <h3>Download</h3>
-<p>I'm building from the snapshots provided at <a href="http://download.enlightenment.org/snapshots/">http://download.enlightenment.org/snapshots/</a>. At the time of writing, the LATEST snapshot was 2007-08-26, which is what I have used. Your filenames will vary depending on the snapshot used, but the actual component names will remain the same.</p>
+<p>I'm building from the snapshots provided at <a href="https://download.enlightenment.org/snapshots/">https://download.enlightenment.org/snapshots/</a>. At the time of writing, the LATEST snapshot was 2007-08-26, which is what I have used. Your filenames will vary depending on the snapshot used, but the actual component names will remain the same.</p>
 <p>Download the following files:</p>
 <ul>
 <li>imlib2-1.4.0.003.tar.gz</li>
@@ -39,7 +39,7 @@ published: true
 <li>elightenment</li>
 </ul>
 <h3>Build Environment</h3>
-<p>To ensure consistency, and ease the build process, whilst at the same time removing the need to use LD_LIBRARY_PATH when running E17, you need to configure your environment. If you've compiled software correctly on Solaris, there really should be no need to set LD_LIBRARY_PATH for anything, unless you're developing a new version of a library. See <a href="http://developers.sun.com/solaris/articles/build_sw_on_solaris.html">Building Software on the Solaris OS</a> for more details.</p>
+<p>To ensure consistency, and ease the build process, whilst at the same time removing the need to use LD_LIBRARY_PATH when running E17, you need to configure your environment. If you've compiled software correctly on Solaris, there really should be no need to set LD_LIBRARY_PATH for anything, unless you're developing a new version of a library. See <a href="https://developers.sun.com/solaris/articles/build_sw_on_solaris.html">Building Software on the Solaris OS</a> for more details.</p>
 <p>I set the following environment variables.</p>
 <pre lang="text">EPATH=$HOME/apps/sparc/e17-041
 PATH=/usr/sfw/bin:/usr/bin:/sbin:/usr/sbin:/usr/ccs/bin:/usr/dt/bin:\
@@ -65,7 +65,7 @@ $ ./configure --prefix=${EPATH}
 $ make
 $ make install</pre>
 <h3>Bugs</h3>
-<p>At the time of writing there appears to only be 1 bug that stops the build and installation process - <a href="http://bugs.enlightenment.org/show_bug.cgi?id=186">Bug 186</a> - which stops Enlightenment from building with the following error:</p>
+<p>At the time of writing there appears to only be 1 bug that stops the build and installation process - <a href="https://bugs.enlightenment.org/show_bug.cgi?id=186">Bug 186</a> - which stops Enlightenment from building with the following error:</p>
 <pre lang="text">Undefined symbol        first referenced in file
 MAX                     e_actions.o</pre>
 <p>In order to resolve this bug, and allow Enlightenment to compile, you need to modify enlightenment-0.16.999.041/src/bin/e_actions.c and add the following lines above the first "define" line:</p>
@@ -94,7 +94,7 @@ MAX                     e_actions.o</pre>
 <p>To reverse these steps, remove the "Startup Programs" entry you added to the Gnome Sessions and then run the following in a terminal...</p>
 <p><code>pkill enlightenment; sleep 2; nautilus &; metacity &</code></p>
 <p>... and then save your session in the Gnome sessions dialog window.		</p>
-<p>If you have root access, you can add an entry to dtlogin by following <a href="http://gene.chat.ru/e/solaris.html">these instructions</a>, making the necessary path changes where appropriate.  Other sources are available which detail the same procedure.</p>
+<p>If you have root access, you can add an entry to dtlogin by following <a href="https://gene.chat.ru/e/solaris.html">these instructions</a>, making the necessary path changes where appropriate.  Other sources are available which detail the same procedure.</p>
 <p>Once you're all up and running, you can start to configure your desktop to your heart's content.</p>
 <div class="alert">
 Please note, E17 is not even considered "Alpha" software yet.  Things can and will change, and there will be bugs. If things are not working for you, try a different snapshot.

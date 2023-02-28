@@ -15,7 +15,7 @@ published: true
 <p>This morning was the first time I've used Ubuntu 11.10 to connect to work via the Cisco AnyConnect VPN client.  It used to work on 11.04 so I was very surprised to find it didn't work this morning.  All attempts to connect failed with...</p>
 <p><img class="center" alt="Useless Cisco error message" src="/img/cisco.png" width="333" height="439" /></p>
 <p>Note the message at the bottom of the window... "Unable to process response from...". Not very useful at all.</p>
-<p>A quick search around Google revealed nothing.  I downloaded and re-installed the client.  No go.  By now, I'd wasted about 30 mins and was now technically late for my shift, so I quickly installed <a href="http://www.infradead.org/openconnect/" target="_blank">OpenConnect</a> and it worked a treat and worked all day.  Performance was a bit poor at times, but I don't know if that was OpenConnect, work or my broadband.</p>
+<p>A quick search around Google revealed nothing.  I downloaded and re-installed the client.  No go.  By now, I'd wasted about 30 mins and was now technically late for my shift, so I quickly installed <a href="https://www.infradead.org/openconnect/" target="_blank">OpenConnect</a> and it worked a treat and worked all day.  Performance was a bit poor at times, but I don't know if that was OpenConnect, work or my broadband.</p>
 <p>This evening, once I'd finished my shift, I investigated why the AnyConnect client wasn't connecting.  Rather than trawl through Google even more, I decided to trace executing the client from the command line...</p>
 <div class="terminal">
 <pre>$ strace /opt/cisco/vpn/bin/vpn connect [my.vpn.servername] 2>/tmp/error.log

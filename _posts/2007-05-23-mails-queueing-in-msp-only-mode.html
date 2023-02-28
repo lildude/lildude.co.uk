@@ -11,9 +11,9 @@ type: post
 published: true
 ---
 <p>This week I stumbled upon some behaviour I wasn't expecting from Sendmail.</p>
-<p>First, what we already know... since Sendmail 8.12.0, Sendmail has split the MTA and MSP functions into 2 different processes using two different config files (<code>sendmail.cf</code> and <code>submit.cf</code> respectively).  Many companies still have archaic security policies that have NOT been updated to accommodate this change, and thus they still require absolutely NO Sendmail processes running, despite the fact that Sendmail can be configured to <a href="http://www.sendmail.org/faq/section3.html#3.44">ONLY allow connections from the MSP on the local host</a>.</p>
-<p>This is perfectly understandable, and doable by stopping all Sendmail daemons and then configuring the MSP (via the <code>submit.cf</code> file) to <a href="http://www.sendmail.org/faq/section3.html#3.44">pass mails directly to a SMARTHOST</a> or a different MTAhost, thus effectively running in MSP only mode.</p>
-<p>Generally this does the trick and the security auditors get the functionality they want, at the expense of not being able to deliver ANY mail locally (not even root) or perform any aliasing (<a href="http://www.sendmail.org/m4/msp.html">brief summary of caveats</a>).</p>
+<p>First, what we already know... since Sendmail 8.12.0, Sendmail has split the MTA and MSP functions into 2 different processes using two different config files (<code>sendmail.cf</code> and <code>submit.cf</code> respectively).  Many companies still have archaic security policies that have NOT been updated to accommodate this change, and thus they still require absolutely NO Sendmail processes running, despite the fact that Sendmail can be configured to <a href="https://www.sendmail.org/faq/section3.html#3.44">ONLY allow connections from the MSP on the local host</a>.</p>
+<p>This is perfectly understandable, and doable by stopping all Sendmail daemons and then configuring the MSP (via the <code>submit.cf</code> file) to <a href="https://www.sendmail.org/faq/section3.html#3.44">pass mails directly to a SMARTHOST</a> or a different MTAhost, thus effectively running in MSP only mode.</p>
+<p>Generally this does the trick and the security auditors get the functionality they want, at the expense of not being able to deliver ANY mail locally (not even root) or perform any aliasing (<a href="https://www.sendmail.org/m4/msp.html">brief summary of caveats</a>).</p>
 <p>This week I stumbled upon a problem where running Sendmail in MSP only mode was causing emails to be queued on some hosts, but not others, despite all hosts using exactly the same <code>submit.cf</code>.</p>
 <p>Well, a lot of investigating pursued and I worked out what was causing this odd behaviour...</p>
 <p><!--more-->... <strong>the system load</strong>.</p>
@@ -69,4 +69,4 @@ fi</pre>
 <p>Please bear in mind, you'll need to weigh up the risks of increasing this value too high as setting this value too high can result in Sendmail bogging down the host if it starts sending a lot of emails for some unknown reason.  </p>
 <p>It's generally advisable to set this value to a sane level, eg 50, and then run a periodic client queue checker. </p>
 <p>FYI: This is all briefly discussed at<br />
-<a href="http://www.sendmail.org/~ca/email/doc8.12/op-sh-4.html#sh-4.4">http://www.sendmail.org/~ca/email/doc8.12/op-sh-4.html#sh-4.4</a></p>
+<a href="https://www.sendmail.org/~ca/email/doc8.12/op-sh-4.html#sh-4.4">https://www.sendmail.org/~ca/email/doc8.12/op-sh-4.html#sh-4.4</a></p>

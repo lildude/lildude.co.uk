@@ -18,7 +18,7 @@ This is a "test" post with all the markdown and HTML I'm likely to use in my wri
 
 If these two don't match, there will be :warning: for those items that are known to be {{ page.expected_markdown }}-specific or known to be specific to another engine, eg RedCarpet (Denoted :red_circle:)
 
-[Kramdown quick ref](http://kramdown.gettalong.org/quickref.html)
+[Kramdown quick ref](https://kramdown.gettalong.org/quickref.html)
 
 # Syntax
 
@@ -41,23 +41,23 @@ If these two don't match, there will be :warning: for those items that are known
 
 - An email <example@example.com> link.
 
-- Simple inline link <http://chenluois.com>, another inline link [Smaller](http://smallerapp.com), one more inline link with title [Resize](http://resizesafari.com "a Safari extension").
+- Simple inline link <https://chenluois.com>, another inline link [Smaller](https://smallerapp.com), one more inline link with title [Resize](https://resizesafari.com "a Safari extension").
 
 - A [reference style][id] link. Input id, then anywhere in the doc, define the link with corresponding id:
 
-  [id]: http://mouapp.com "Markdown editor on Mac OS X"
+  [id]: https://mouapp.com "Markdown editor on Mac OS X"
 
   Titles/tool tips in the links are optional.
 
-- {% if site.markdown != "redcarpet" %}:red_circle: **Requires `autolink` Redcarpet extension.**{% endif %} Autolinked? => http://colinseymour.co.uk
+- {% if site.markdown != "redcarpet" %}:red_circle: **Requires `autolink` Redcarpet extension.**{% endif %} Autolinked? => https://colinseymour.co.uk
 
 ## Images
 
-- An inline image ![Smaller icon](http://smallerapp.com/favicon.ico "Title here"), title is optional.
+- An inline image ![Smaller icon](https://smallerapp.com/favicon.ico "Title here"), title is optional.
 
 - A ![Resize icon][2] reference style image.
 
-  [2]: http://resizesafari.com/favicon.ico "Title"
+  [2]: https://resizesafari.com/favicon.ico "Title"
 
 - {% if site.markdown != "kramdown" %}:warning:{% endif %} A resized centre-aligned image using kramdown syntax:
   `![Bigger centered](/img/profile.png){:height="200" width="200" class="center"}`

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE service_bundle SYSTEM "/usr/share/lib/xml/dtd/service_bundle.dtd.1">
-<!-- 
+<!--
 #
 # Copyright 2006 Sun Microsystems, Inc.  All rights reserved.
 # Use is subject to license terms.
@@ -13,7 +13,7 @@
 # with the License.
 #
 # You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
-# or http://www.opensolaris.org/os/licensing.
+# or https://www.opensolaris.org/os/licensing.
 # See the License for the specific language governing permissions
 # and limitations under the License.
 #
@@ -37,7 +37,7 @@ Service manifest for mainting dynamic ipfilter rules
 	    <service_fmri value="svc:/network/ipfilter:default"/>
         </dependency>
 
-  
+
       <!-- dsmonitor full mode instnace -->
       <instance name="rpcbind" enabled="true">
 	      <dependency name="rpc_bind" grouping="require_all" restart_on="refresh" type="service">
@@ -78,7 +78,7 @@ Service manifest for mainting dynamic ipfilter rules
 
 		      Manually clearing and reloading ipfilter rules with ipf will not
 		      trigger this service to restart/refresh.
-		      e.g. ipf -Fa -f /etc/ipf/ipf.conf 
+		      e.g. ipf -Fa -f /etc/ipf/ipf.conf
               </loctext>
             </description>
             <documentation>
@@ -88,7 +88,7 @@ Service manifest for mainting dynamic ipfilter rules
             </documentation>
         </template>
       </instance>
-  
+
       <stability value="Unstable"/>
   </service>
 

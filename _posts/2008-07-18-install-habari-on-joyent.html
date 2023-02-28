@@ -11,7 +11,7 @@ tags:
 type: post
 published: true
 ---
-<p><a href="http://www.habariproject.org">Habari</a> has some pretty stringent <a href="http://wiki.habariproject.org/en/Installation#Server_Requirements">requirements</a> that need to be met.  Thankfully <a href="http://www.joyent.com">Joyent's</a> Shared Accelerator (and I believe all other) accounts meets all of these already so there's no need to install any additional software or log tickets to get software updated.  You will however need to make some configuration changes which I'll detail here.</p>
+<p><a href="https://www.habariproject.org">Habari</a> has some pretty stringent <a href="https://wiki.habariproject.org/en/Installation#Server_Requirements">requirements</a> that need to be met.  Thankfully <a href="https://www.joyent.com">Joyent's</a> Shared Accelerator (and I believe all other) accounts meets all of these already so there's no need to install any additional software or log tickets to get software updated.  You will however need to make some configuration changes which I'll detail here.</p>
 <p><!--more-->First, ensure you are using PHP 5.  This is the default, but you may have changed it for your main or virtual domain. Go to <em>Virtualmin -&gt; &lt;select virtual domain&gt; -&gt; Server Configuration -&gt; PHP Versions</em> and either make sure "Default HTML directory" is set to "5" or add a directory specific directive for the directory in which you plan to install Habari and save your changes.</p>
 <p>Next, you need to enable support for the MySQL PDO and JSON drivers.  The drivers already exist, they just need enabling within PHP which can be done within Virtualmin.  Whilst still viewing any virtual domain within Virtualmin, go to <em>Webmin Modules -&gt; PHP Configuration</em> and click "Edit manually" for the PHP 5 configuration file for your domain.</p>
 <p>This will open the php.ini file into a text box for editing.  Locate and uncomment (remove the semi-colon from the beginning of the line) the following:</p>
@@ -20,5 +20,5 @@ published: true
 <p>... and save your changes.  </p>
 <p>If you prefer, you can make these changes directly to the relevant php.ini file via a SSH login.</p>
 <p>These changes may not take effect immediately, so give it a couple of minutes or login to your account via SSH and kill all your PHP processes using <code>"pkill php"</code>.</p>
-<p>Once you've made these changes you can continue with the rest of the <a href="http://wiki.habariproject.org/en/Installation">Habari installation instructions</a>.</p>
-<p>I've managed to get Habari's <a href="http://wiki.habariproject.org/en/Multisite">Multisite</a> functionality working too, and without using up one of my allowed virtual domains.  I'll document this in the next couple of days.</p>
+<p>Once you've made these changes you can continue with the rest of the <a href="https://wiki.habariproject.org/en/Installation">Habari installation instructions</a>.</p>
+<p>I've managed to get Habari's <a href="https://wiki.habariproject.org/en/Multisite">Multisite</a> functionality working too, and without using up one of my allowed virtual domains.  I'll document this in the next couple of days.</p>

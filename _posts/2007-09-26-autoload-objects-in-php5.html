@@ -13,7 +13,7 @@ tags:
 type: post
 published: true
 ---
-<p>I was reading through <a href="http://www.oreillynet.com/pub/au/1841">Derek Sivers'</a> article on why he <a href="http://www.oreillynet.com/ruby/blog/2007/09/7_reasons_i_switched_back_to_p_1.html">switched back to PHP</a> after slogging away are Ruby on Rails for two years, when I stumbled upon something I didn't know and have actually been looking for (though I haven't put much effort into it yet)... autoloading objects in PHP.</p>
+<p>I was reading through <a href="https://www.oreillynet.com/pub/au/1841">Derek Sivers'</a> article on why he <a href="https://www.oreillynet.com/ruby/blog/2007/09/7_reasons_i_switched_back_to_p_1.html">switched back to PHP</a> after slogging away are Ruby on Rails for two years, when I stumbled upon something I didn't know and have actually been looking for (though I haven't put much effort into it yet)... autoloading objects in PHP.</p>
 <p><!--more-->To my surprise, I've just discovered that PHP 5 introduced just this functionality with the advent of the <code>__autoload()</code> function.</p>
 <p>To quote the PHP documentation...</p>
 <blockquote><p>
@@ -27,7 +27,7 @@ In PHP 5, [...] You may define an __autoload function which is automatically cal
 
           $obj  = new MyClass1();
           $obj2 = new MyClass2();
-          ?&gt; 
+          ?&gt;
 </pre>
 <p>Effectively this will attempt to load the MyClass1 and MyClass2 classes from files names MyClass1.php and MyClass2.php respectively.</p>
-<p>As you can imagine, this function can be further enhanced with additional code, and there are some examples in the notes on the <a href="http://www.php.net/autoload">__autoload() documentation page</a> in the PHP docs.</p>
+<p>As you can imagine, this function can be further enhanced with additional code, and there are some examples in the notes on the <a href="https://www.php.net/autoload">__autoload() documentation page</a> in the PHP docs.</p>

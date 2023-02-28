@@ -22,7 +22,7 @@ pkg install: No matching version of compatibility/ucb can be installed:
            pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.0.0.0.2.1</span>:20111019T053003Z
            pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.0.10.1.0.0</span>:20120918T160038Z
            pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.0.0.24.2</span>:20120919T184131Z
-  Reason:  This version is excluded by installed incorporation 
+  Reason:  This version is excluded by installed incorporation
 pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.9.0.5.2</span>:20130704T025151Z
 #</pre>
 <p>This is the general format of the most important part of most of the failure messages you get from pkg(1M) and they're actually surprisingly easy to interpret when you know what to look out for.</p>
@@ -58,15 +58,15 @@ The following indicates why the system cannot update to the latest version:
 <p><strong>Cause:</strong>  The IPS repository the client is referring to is incomplete and most likely offering only a partial IPS repository image.  This commonly occurs when the repository has been incorrectly configured to only provide the contents of a service repository update (SRU) image or the client is referring directly to the SRU IPS ISO image without access to a full IPS repository.  This fails because the SRU IPS images are not complete images; they are partial images.</p>
 <p>A client needs to have access to both a complete IPS repository and any SRUs or repositories containing those updates that the client has installed.</p>
 <p><strong>Solution:</strong>  Ensure the repository your client is references contains the full IPS repository image and any service repository updates (SRUs) you have or wish to install onto your clients.</p>
-<p>Details on creating a local IPS repository can be found in <a href="http://docs.oracle.com/cd/E26502_01/html/E28985/copyrepo.html#scrolltoc" target="_blank">Copying IPS Package Repositories</a>.  The README file supplied with the SRU download and <a href="http://docs.oracle.com/cd/E26502_01/html/E28985/maintainrepo.html#scrolltoc" target="_blank">Maintaining Your Local IPS Package Repository</a> contain details on how you update your local repository with the SRU.</p>
-<p>The full IPS repository image can be downloaded from <a href="http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html" target="_blank">http://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html</a></p>
+<p>Details on creating a local IPS repository can be found in <a href="https://docs.oracle.com/cd/E26502_01/html/E28985/copyrepo.html#scrolltoc" target="_blank">Copying IPS Package Repositories</a>.  The README file supplied with the SRU download and <a href="https://docs.oracle.com/cd/E26502_01/html/E28985/maintainrepo.html#scrolltoc" target="_blank">Maintaining Your Local IPS Package Repository</a> contain details on how you update your local repository with the SRU.</p>
+<p>The full IPS repository image can be downloaded from <a href="https://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html" target="_blank">https://www.oracle.com/technetwork/server-storage/solaris11/downloads/index.html</a></p>
 <p></p>
 <h2>Scenario 3: A pkg fails to install because of a version dependency lock</h2>
 <pre class="terminal"># pkg install compatibility/ucb
 Creating Plan (Solver setup): /
 pkg install: No matching version of compatibility/ucb can be installed:
   Reject:  pkg://solaris/compatibility/ucb@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.6.0.3.2</span>:20130322T212735Z
-  Reason:  This version is excluded by installed incorporation 
+  Reason:  This version is excluded by installed incorporation
 pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,<span style="color:#F00;font-weight:bold">5.11-0.175.1.5.0.4.2</span>:20130228T222858Z
 #</pre>
 <p><strong>Cause:</strong>  The pkg you are attempting to install is dependent on a later of a pkg that is not installed. </p>
@@ -83,7 +83,7 @@ pkg://solaris/consolidation/osnet/osnet-incorporation@0.5.11,<span style="color:
 </ol>
 <p></p>
 <h2>Scenario 4:  Missing support repository certificate</h2>
-<pre class="terminal"># pkg set-publisher -G http://pkg.oracle.com/solaris/release -g https://pkg.oracle.com/solaris/support solaris
+<pre class="terminal"># pkg set-publisher -G https://pkg.oracle.com/solaris/release -g https://pkg.oracle.com/solaris/support solaris
 pkg set-publisher: The origin URIs for 'solaris' do not appear to point to a valid pkg repository.
 Please verify the repository's location and the client's network configuration.
 Additional details:

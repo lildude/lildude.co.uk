@@ -13,9 +13,9 @@ published: true
 ---
 <p>So your Raspberry Pi has just arrived in the post and you're anxious to get playing, but alas, you don't have a spare keyboard, mouse and monitor at hand or you can't use any of the monitors and TVs available to you.  This post details how you can use a single computer and network cable to get your Raspberry Pi up and running with VNC without ever having to connect a keyboard, mouse or monitor to it.</p>
 <ol>
-<li>Download the latest Raspberry Pi SD Card image.  I'm using <code>2012-07-15-wheezy-raspbian.zip</code> directly from <a href="http://www.raspberrypi.org/downloads" target="_blank">Raspberry Pi's download page</a>.</li>
+<li>Download the latest Raspberry Pi SD Card image.  I'm using <code>2012-07-15-wheezy-raspbian.zip</code> directly from <a href="https://www.raspberrypi.org/downloads" target="_blank">Raspberry Pi's download page</a>.</li>
 <li>
-<p>Install the OS onto the SD Card as per the <a href="http://elinux.org/RPi_Easy_SD_Card_Setup" target="_blank">RPi Easy SD Card Setup</a> instructions.</p>
+<p>Install the OS onto the SD Card as per the <a href="https://elinux.org/RPi_Easy_SD_Card_Setup" target="_blank">RPi Easy SD Card Setup</a> instructions.</p>
 <p>My Dell E6410 laptop has an SD Card slot and I run Ubuntu on it, so this was a simple case of running:</p>
 <pre class="terminal">$ sudo dd bs=1M if=./2012-07-15-wheezy-raspbian.img of=/dev/mmcblk0</pre>
 </li>
@@ -36,7 +36,7 @@ netmask 255.255.255.0
 network 192.168.1.0
 broadcast 192.168.1.255
 gateway 192.168.1.1</pre>
-<p>Full network configuration instructions can be found on the <a href="http://wiki.debian.org/NetworkConfiguration" target="_blank">Debian wiki</a>.</li>
+<p>Full network configuration instructions can be found on the <a href="https://wiki.debian.org/NetworkConfiguration" target="_blank">Debian wiki</a>.</li>
 <li>Umount your SD card and insert it into your RPi</li>
 </ol>
 </li>

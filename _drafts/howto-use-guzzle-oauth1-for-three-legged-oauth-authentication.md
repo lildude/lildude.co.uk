@@ -8,9 +8,9 @@ type: post
 published: true
 ---
 
-Whilst updating [phpSmug](http://phpsmug.com) to use the latest and greatest [SmugMug API](https://api.smugmug.com/api/v2/doc/index.html), I decided to switch to using [Guzzle 6](http://guzzlephp.org/) for my HTTP requests rather than continuing maintaining my own code (Guzzle is used by a load of other projects and maintained by way smarter people than me).
+Whilst updating [phpSmug](https://phpsmug.com) to use the latest and greatest [SmugMug API](https://api.smugmug.com/api/v2/doc/index.html), I decided to switch to using [Guzzle 6](https://guzzlephp.org/) for my HTTP requests rather than continuing maintaining my own code (Guzzle is used by a load of other projects and maintained by way smarter people than me).
 
-As part of this update, I needed to implement the [three-legged OAuth 1.0a procedure](http://oauthbible.com/#oauth-10a-three-legged) used by SmugMug, and many other sites, but I couldn't find a publicly documented procedure to so do.  I found [Guzzle oauth-subscriber](https://github.com/guzzle/oauth-subscriber) which seemed to tick all the boxes by I couldn't find how to use it for a three-legged OAuth authentication process.
+As part of this update, I needed to implement the [three-legged OAuth 1.0a procedure](https://oauthbible.com/#oauth-10a-three-legged) used by SmugMug, and many other sites, but I couldn't find a publicly documented procedure to so do.  I found [Guzzle oauth-subscriber](https://github.com/guzzle/oauth-subscriber) which seemed to tick all the boxes by I couldn't find how to use it for a three-legged OAuth authentication process.
 
 Well, I'm pleased to say after a lot of code diving and testing, phpSmug now has a [public implementation](https://github.com/lildude/phpSmug/blob/master/examples/example-oauth.php).  phpSmug implements this using a few helper functions to make devs' lives easier which may not be instantly obvious, so here it is in a single simplified representation, without phpSmug's helper functions or specifics:
 
@@ -24,7 +24,7 @@ require_once 'vendor/autoload.php';
 $APIKey = 'YOUR_API_KEY';
 $OAuthSecret = 'YOUR_OAUTH_SECRET';
 $AppName = 'YOUR_APP_NAME/VER (URL)';
-$callbackUrl = 'http://YOUR_CALL_BACK_URL';
+$callbackUrl = 'https://YOUR_CALL_BACK_URL';
 $authorisationUrl = 'https://YOUR_DESTINATION_SERVICE_AUTHORISATION_URL';
 ?>
 <html>
@@ -63,7 +63,7 @@ try {
 
 
 ```php
-$me = 'http://local.wordpress.dev/wp-json/wp/v2/users/me';
+$me = 'https://local.wordpress.dev/wp-json/wp/v2/users/me';
 $oauth_key = 'YOURKEY';
 $oauth_secret = 'YOURSECRET';
 
@@ -93,10 +93,10 @@ if(!$oauth_token){
 	$client = new GuzzleHttp\Client([
 	    'handler' => $stack
 	]);
-	$callback = 'http://local.wordpress.dev/wp-api-examples/oauth1/index.php';
+	$callback = 'https://local.wordpress.dev/wp-api-examples/oauth1/index.php';
 	//Note we are using Try/Catch in this example as Oauth1 has lots of places to break ;)
 	try {
-		$token = $client->post('http://local.wordpress.dev/oauth1/request', [
+		$token = $client->post('https://local.wordpress.dev/oauth1/request', [
 		    'form_params' => [
 		    	'oauth_callback' => $callback
 		    ],
@@ -117,7 +117,7 @@ if(!$oauth_token){
 		 * Leg 2 - Redirect user and return token to verify
 		 *
 		 */
-	    header("Location: http://local.wordpress.dev/oauth1/authorize?oauth_token={$token_array[0]}&oauth_callback=".$callback);
+	    header("Location: https://local.wordpress.dev/oauth1/authorize?oauth_token={$token_array[0]}&oauth_callback=".$callback);
 
 	} catch (Exception $e) {
     	var_dump($e);
@@ -148,7 +148,7 @@ else{
 	    'handler' => $stack
 	]);
 	try {
-		$verify = $client->post('http://local.wordpress.dev/oauth1/access', [
+		$verify = $client->post('https://local.wordpress.dev/oauth1/access', [
 		    'form_params' => [
 		    	'oauth_verifier' => $oauth_verify
 		    ],
