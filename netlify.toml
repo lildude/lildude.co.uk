@@ -2,6 +2,10 @@
   publish = "_site/"
   command = "bundle exec jekyll build"
 
+# OVerrides the UI setting, whilst it exists as Netlify has deprecated this. Not sure it gave me much benefit.
+[build.processing]
+  skip_processing = true
+
 [context.production.environment]
   JEKYLL_ENV = "production"
 
@@ -42,7 +46,7 @@
   package = "netlify-plugin-jekyll-cache"
   [plugins.inputs]
     # This is only required if you have defined a source directory in Jekyll
-    # At some point this will become automated, but for now it must be specified 
+    # At some point this will become automated, but for now it must be specified
     # jekyllSource = "/jekyll"
 
 # Gone AWOL
